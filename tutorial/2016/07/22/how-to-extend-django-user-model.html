@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:37:44 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Extend Django User Model</title>
+<meta name="description" content="The Django’s built-in authentication system is great. For the most part we can use it out-of-the-box, saving a lot ofdevelopment and testing effort. It fits ...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="how-to-extend-django-user-model.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'how-to-extend-django-user-model.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="How to Extend Django User Model">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2016-07-22-how-to-extend-django-user-model/featured-facebook.jpg">
+<meta property="og:description" content="The Django’s built-in authentication system is great. For the most part we can use it out-of-the-box, saving a lot ofdevelopment and testing effort. It fits ...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2016-07-22T00:00:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Extend Django User Model">
+<meta name="twitter:description" content="The Django’s built-in authentication system is great. For the most part we can use it out-of-the-box, saving a lot ofdevelopment and testing effort. It fits most of the use cases and is very safe. ...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2016-07-22-how-to-extend-django-user-model/featured-facebook.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="models">
+  
+    <meta property="article:tag" content="auth">
+  
+    <meta property="article:tag" content="contrib">
+  
+    <meta property="article:tag" content="user">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tutorial
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Extend Django User Model</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Jul 22, 2016
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    18 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/tutorial/2016/07/22/how-to-extend-django-user-model">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="how-to-extend-django-user-model.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" class="featured-image">
+    
+  </div>
+
+
+            <article>
+              <p>The Django’s built-in authentication system is great. For the most part we can use it out-of-the-box, saving a lot of
+development and testing effort. It fits most of the use cases and is very safe. But sometimes we need to do some fine
+adjustment so to fit our Web application.</p>
+
+<p>Commonly we want to store a few more data related to our User. If your Web
+application have an social appeal, you might want to store a short bio, the location of the user, and other things like
+that.</p>
+
+<p>In this tutorial I will present the strategies you can use to simply extend the default Django User Model, so you don’t
+need to implement everything from scratch.</p>
+
+<hr />
+
+<h4 id="ways-to-extend-the-existing-user-model">Ways to Extend the Existing User Model</h4>
+
+<p>Generally speaking, there are four different ways to extend the existing User model. Read below why and when to use
+them.</p>
+
+<h5 id="option-1-using-a-proxy-model"><strong>Option 1:</strong> Using a Proxy Model</h5>
+
+<p><strong>What is a Proxy Model?</strong><br />
+It is a model inheritance without creating a new table in the database. It is used to
+change the behaviour of an existing model (e.g. default ordering, add new methods, etc.) without affecting the existing
+database schema.</p>
+
+<p><strong>When should I use a Proxy Model?</strong><br />
+You should use a Proxy Model to extend the existing User model when you don’t need to store extra information in the
+database, but simply add extra methods or change the model’s query Manager.</p>
+
+<p>That’s what I need! <a href="#proxy">Take me to the instructions</a>.</p>
+
+<h5 id="option-2-using-one-to-one-link-with-a-user-model-profile"><strong>Option 2:</strong> Using One-To-One Link With a User Model (Profile)</h5>
+
+<p><strong>What is a One-To-One Link?</strong><br />
+It is a regular Django model that’s gonna have it’s own database table and will hold a One-To-One relationship with the
+existing User Model through a <code class="highlighter-rouge">OneToOneField</code>.</p>
+
+<p><strong>When should I use a One-To-One Link?</strong><br />
+You should use a One-To-One Link when you need to store extra information about the existing User Model that’s not
+related to the authentication process. We usually call it a User Profile.</p>
+
+<p>That’s what I need! <a href="#onetoone">Take me to the instructions</a>.</p>
+
+<h5 id="option-3-creating-a-custom-user-model-extending-abstractbaseuser"><strong>Option 3:</strong> Creating a Custom User Model Extending AbstractBaseUser</h5>
+
+<p><strong>What is a Custom User Model Extending AbstractBaseUser?</strong><br />
+It is an entirely new User model that inherit from <code class="highlighter-rouge">AbstractBaseUser</code>. It requires a special care and to update some
+references through the <code class="highlighter-rouge">settings.py</code>. Ideally it should be done in the begining of the project, since it will
+dramatically impact the database schema. Extra care while implementing it.</p>
+
+<p><strong>When should I use a Custom User Model Extending AbstractBaseUser?</strong><br />
+You should use a Custom User Model when your application have specific requirements in relation to the authentication
+process. For example, in some cases it makes more sense to use an email address as your identification token instead of
+a username.</p>
+
+<p>That’s what I need! <a href="#abstractbaseuser">Take me to the instructions</a>.</p>
+
+<h5 id="option-4-creating-a-custom-user-model-extending-abstractuser"><strong>Option 4:</strong> Creating a Custom User Model Extending AbstractUser</h5>
+
+<p><strong>What is a Custom User Model Extending AbstractUser?</strong><br />
+It is a new User model that inherit from <code class="highlighter-rouge">AbstractUser</code>. It requires a special care and to update some
+references through the <code class="highlighter-rouge">settings.py</code>. Ideally it should be done in the begining of the project, since it will
+dramatically impact the database schema. Extra care while implementing it.</p>
+
+<p><strong>When should I use a Custom User Model Extending AbstractUser?</strong><br />
+You should use it when you are perfectly happy with how Django handles the authentication process and you wouldn’t
+change anything on it. Yet, you want to add some extra information directly in the User model, without having to create
+an extra class (like in the <strong>Option 2</strong>).</p>
+
+<p>That’s what I need! <a href="#abstractuser">Take me to the instructions</a>.</p>
+
+<hr />
+
+<h4 id="a-nameproxyaextending-user-model-using-a-proxy-model"><a name="proxy"></a>Extending User Model Using a Proxy Model</h4>
+
+<p>This is the less intrusive way to extend the existing User model. You won’t have any drawbacks with that strategy. But
+it is very limited in many ways.</p>
+
+<p>Here is how you do it:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">.managers</span> <span class="kn">import</span> <span class="n">PersonManager</span>
+
+<span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">User</span><span class="p">):</span>
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">PersonManager</span><span class="p">()</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">proxy</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span><span class="s">'first_name'</span><span class="p">,</span> <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">do_something</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="o">...</span></code></pre></figure>
+
+<p>In the example above we have defined a Proxy Model named <code class="highlighter-rouge">Person</code>. We tell Django this is a Proxy Model by
+adding the following property inside the Meta class: <code class="highlighter-rouge">proxy = True</code>.</p>
+
+<p>In this case I’ve redefined the default ordering, assigned a custom <code class="highlighter-rouge">Manager</code> to the model, and also defined a new
+method <code class="highlighter-rouge">do_something</code>.</p>
+
+<p>It is worth noting that <code class="highlighter-rouge">User.objects.all()</code> and <code class="highlighter-rouge">Person.objects.all()</code> will query the same database table. The only
+difference is in the behavior we define for the Proxy Model.</p>
+
+<p>If that’s all you need, go for it. Keep it simple.</p>
+
+<hr />
+
+<h4 id="a-nameonetooneaextending-user-model-using-a-one-to-one-link"><a name="onetoone"></a>Extending User Model Using a One-To-One Link</h4>
+
+<p>There is a good chance that this is what you want. Personally that is the method I use for the most part. We will be
+creating a new Django Model to store the extra information that relates to the User Model.</p>
+
+<p>Bear in mind that using this strategy results in additional queries or joins to retrieve the related data. Basically
+all the time you access an related data, Django will fire an additional query. But this can be avoided for the most
+cases. I will get back to that later on.</p>
+
+<p>I usually name the Django Model as <code class="highlighter-rouge">Profile</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">class</span> <span class="nc">Profile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">bio</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">birth_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></code></pre></figure>
+
+<p>Now this is where the magic happens: we will now define <strong>signals</strong> so our <code class="highlighter-rouge">Profile</code> model will be automatically
+created/updated when we create/update User instances.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
+<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+
+<span class="k">class</span> <span class="nc">Profile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">bio</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">birth_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">create_user_profile</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+        <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">save_user_profile</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></code></pre></figure>
+
+<p>Basically we are hooking the <code class="highlighter-rouge">create_user_profile</code> and <code class="highlighter-rouge">save_user_profile</code> methods to the User model, whenever a
+<strong>save</strong> event occurs. This kind of signal is called <code class="highlighter-rouge">post_save</code>.</p>
+
+<p>Great stuff. <em>Now, tell me how can I use it</em>.</p>
+
+<p>Piece of cake. Check this example in a Django Template:</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;h2&gt;</span>{{ user.get_full_name }}<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;ul&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Username: {{ user.username }}<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Location: {{ user.profile.location }}<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;li&gt;</span>Birth Date: {{ user.profile.birth_date }}<span class="nt">&lt;/li&gt;</span>
+<span class="nt">&lt;/ul&gt;</span></code></pre></figure>
+
+<p><em>How about inside a view method?</em></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">update_profile</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user_id</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">user_id</span><span class="p">)</span>
+    <span class="n">user</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">bio</span> <span class="o">=</span> <span class="s">'Lorem ipsum dolor sit amet, consectetur adipisicing elit...'</span>
+    <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></code></pre></figure>
+
+<p>Generally speaking, you will never have to call the Profile’s save method. Everything is done through the User model.</p>
+
+<p><em>What if I’m using Django Forms?</em></p>
+
+<p>Did you know that you can process more than one form at once? Check out this snippet:</p>
+
+<p><strong>forms.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">UserForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">'first_name'</span><span class="p">,</span> <span class="s">'last_name'</span><span class="p">,</span> <span class="s">'email'</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ProfileForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Profile</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">'url'</span><span class="p">,</span> <span class="s">'location'</span><span class="p">,</span> <span class="s">'company'</span><span class="p">)</span></code></pre></figure>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="nd">@login_required</span>
+<span class="nd">@transaction.atomic</span>
+<span class="k">def</span> <span class="nf">update_profile</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">user_form</span> <span class="o">=</span> <span class="n">UserForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">profile_form</span> <span class="o">=</span> <span class="n">ProfileForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">instance</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">profile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">user_form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">()</span> <span class="ow">and</span> <span class="n">profile_form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">user_form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">profile_form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s">'Your profile was successfully updated!'</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'settings:profile'</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">messages</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s">'Please correct the error below.'</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">user_form</span> <span class="o">=</span> <span class="n">UserForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">profile_form</span> <span class="o">=</span> <span class="n">ProfileForm</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="n">request</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">profile</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'profiles/profile.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'user_form'</span><span class="p">:</span> <span class="n">user_form</span><span class="p">,</span>
+        <span class="s">'profile_form'</span><span class="p">:</span> <span class="n">profile_form</span>
+    <span class="p">})</span></code></pre></figure>
+
+<p><strong>profile.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+  {% csrf_token %}
+  {{ user_form.as_p }}
+  {{ profile_form.as_p }}
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Save changes<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span></code></pre></figure>
+
+<p><em>And the extra database queries you were talking about?</em></p>
+
+<p>Oh, right. I’ve addressed this issue in another post named “Optimize Database Queries”. You can read it
+<a href="../../../../tips/2016/05/16/django-tip-3-optimize-database-queries.html">clicking here</a>.</p>
+
+<p>But, long story short: Django relationships are lazy. Meaning Django will only query the database if you access one of
+the related properties. Sometimes it causes some undesired effects, like firing hundreds or thousands of queries.
+This problem can be mitigated using the <code class="highlighter-rouge">select_related</code> method.</p>
+
+<p>Knowing beforehand you will need to access a related data, you can prefetch it in a single database query:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s">'profile'</span><span class="p">)</span></code></pre></figure>
+
+<hr />
+
+<h4 id="a-nameabstractbaseuseraextending-user-model-using-a-custom-model-extending-abstractbaseuser"><a name="abstractbaseuser"></a>Extending User Model Using a Custom Model Extending AbstractBaseUser</h4>
+
+<p>The hairy one. Well, honestly I try to avoid it at all costs. But sometimes you can’t run from it. And it is perfectly
+fine. There is hardly such a thing as best or worst solution. For the most part there is a more or less appropriate
+solution. If this is the most appropriate solution for you case, go ahead.</p>
+
+<p>I had to do it once. Honestly I don’t know if this is the cleaner way to do it, but, here goes nothing:</p>
+
+<p>I needed to use email address as auth token and in the scenario the <code class="highlighter-rouge">username</code> was completly useless for me. Also there
+was no need for the <code class="highlighter-rouge">is_staff</code> flag, as I wasn’t using the Django Admin.</p>
+
+<p>Here is how I defined my own user model:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.core.mail</span> <span class="kn">import</span> <span class="n">send_mail</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">PermissionsMixin</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.base_user</span> <span class="kn">import</span> <span class="n">AbstractBaseUser</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">ugettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
+
+<span class="kn">from</span> <span class="nn">.managers</span> <span class="kn">import</span> <span class="n">UserManager</span>
+
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">AbstractBaseUser</span><span class="p">,</span> <span class="n">PermissionsMixin</span><span class="p">):</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">'email address'</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">'first name'</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">'last name'</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">date_joined</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">'date joined'</span><span class="p">),</span> <span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">is_active</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">'active'</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">avatar</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ImageField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">'avatars/'</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">UserManager</span><span class="p">()</span>
+
+    <span class="n">USERNAME_FIELD</span> <span class="o">=</span> <span class="s">'email'</span>
+    <span class="n">REQUIRED_FIELDS</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">'user'</span><span class="p">)</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">'users'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">'''
+        Returns the first_name plus the last_name, with a space in between.
+        '''</span>
+        <span class="n">full_name</span> <span class="o">=</span> <span class="s">'</span><span class="si">%</span><span class="s">s </span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">full_name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_short_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">'''
+        Returns the short name for the user.
+        '''</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">first_name</span>
+
+    <span class="k">def</span> <span class="nf">email_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">from_email</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="s">'''
+        Sends an email to this User.
+        '''</span>
+        <span class="n">send_mail</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">from_email</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">email</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code></pre></figure>
+
+<p>I wanted to keep it as close as possible to the existing User model. Since we are inheriting from the
+<code class="highlighter-rouge">AbstractBaseUser</code> we have to follow some rules:</p>
+
+<ul>
+  <li><strong>USERNAME_FIELD</strong>: A string describing the name of the field on the User model that is used as the unique
+identifier. The field must be unique (i.e., have <code class="highlighter-rouge">unique=True</code> set in its definition);</li>
+  <li><strong>REQUIRED_FIELDS</strong>: A list of the field names that will be prompted for when creating a user via the
+<code class="highlighter-rouge">createsuperuser</code> management command;</li>
+  <li><strong>is_active</strong>: A boolean attribute that indicates whether the user is considered “active”;</li>
+  <li><strong>get_full_name():</strong> A longer formal identifier for the user. A common interpretation would be the full name of the
+user, but it can be any string that identifies the user.</li>
+  <li><strong>get_short_name():</strong> A short, informal identifier for the user. A common interpretation would be the first name of
+the user.</li>
+</ul>
+
+<p>Okay, let’s move forward. I had also to define my own <code class="highlighter-rouge">UserManager</code>. That’s because the existing manager define the
+<code class="highlighter-rouge">create_user</code> and <code class="highlighter-rouge">create_superuser</code> methods.</p>
+
+<p>So, here is what my <code class="highlighter-rouge">UserManager</code> looks like:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth.base_user</span> <span class="kn">import</span> <span class="n">BaseUserManager</span>
+
+<span class="k">class</span> <span class="nc">UserManager</span><span class="p">(</span><span class="n">BaseUserManager</span><span class="p">):</span>
+    <span class="n">use_in_migrations</span> <span class="o">=</span> <span class="bp">True</span>
+
+    <span class="k">def</span> <span class="nf">_create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_fields</span><span class="p">):</span>
+        <span class="s">"""
+        Creates and saves a User with the given email and password.
+        """</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">email</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span><span class="s">'The given email must be set'</span><span class="p">)</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">normalize_email</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_fields</span><span class="p">)</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">using</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_db</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">user</span>
+
+    <span class="k">def</span> <span class="nf">create_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_fields</span><span class="p">):</span>
+        <span class="n">extra_fields</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">'is_superuser'</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_user</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_fields</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">create_superuser</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_fields</span><span class="p">):</span>
+        <span class="n">extra_fields</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">'is_superuser'</span><span class="p">,</span> <span class="bp">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">extra_fields</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'is_superuser'</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="nb">ValueError</span><span class="p">(</span><span class="s">'Superuser must have is_superuser=True.'</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_user</span><span class="p">(</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">,</span> <span class="o">**</span><span class="n">extra_fields</span><span class="p">)</span></code></pre></figure>
+
+<p>Basically I’ve done a clean up of the existing <code class="highlighter-rouge">UserManager</code>, removing the <code class="highlighter-rouge">username</code> and the <code class="highlighter-rouge">is_staff</code> property.</p>
+
+<p>Now the final move. We have to update our settings.py. More specifically the <code class="highlighter-rouge">AUTH_USER_MODEL</code> property.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">AUTH_USER_MODEL</span> <span class="o">=</span> <span class="s">'core.User'</span></code></pre></figure>
+
+<p>This way we are telling Django to use our custom model instead the default one. In the example above, I’ve created the
+custom model inside an app named <code class="highlighter-rouge">core</code>.</p>
+
+<p><em>How should I reference this model?</em></p>
+
+<p>Well, there are two ways. Consider a model named <code class="highlighter-rouge">Course</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">testapp.core.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">class</span> <span class="nc">Course</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">tutor</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span></code></pre></figure>
+
+<p>This is perfectly okay. But if you are creating a reusable app, that you want to make available for the public, it is
+strongly advised that you use the following strategy:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="k">class</span> <span class="nc">Course</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">slug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">SlugField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+    <span class="n">tutor</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">AUTH_USER_MODEL</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span></code></pre></figure>
+
+<hr />
+
+<h4 id="a-nameabstractuseraextending-user-model-using-a-custom-model-extending-abstractuser"><a name="abstractuser"></a>Extending User Model Using a Custom Model Extending AbstractUser</h4>
+
+<p>This is pretty straighforward since the class <code class="highlighter-rouge">django.contrib.auth.models.AbstractUser</code> provides the full
+implementation of the default User as an abstract model.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">AbstractUser</span>
+
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">AbstractUser</span><span class="p">):</span>
+    <span class="n">bio</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">birth_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></code></pre></figure>
+
+<p>Then we have to update our settings.py defining the <code class="highlighter-rouge">AUTH_USER_MODEL</code> property.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">AUTH_USER_MODEL</span> <span class="o">=</span> <span class="s">'core.User'</span></code></pre></figure>
+
+<p>In a similar way as the previous method, this should be done ideally in the begining of a project and with an extra
+care. It will change the whole database schema. Also, prefer to create foreign keys to the User model importing
+the settings <code class="highlighter-rouge">from django.conf import settings</code> and referring to the <code class="highlighter-rouge">settings.AUTH_USER_MODEL</code> instead of referring
+directly to the custom User model.</p>
+
+<hr />
+
+<h4 id="conclusions">Conclusions</h4>
+
+<p>Alright! We’ve gone through four different ways to extend the existing User Model. I tried to give you as much details
+as possible. As I said before, there is no <em>best solution</em>. It will really depend on what you need to achieve.
+Keep it simple and choose wisely.</p>
+
+<ul>
+  <li><strong>Proxy Model:</strong> You are happy with everything Django User provide and don’t need to store extra information.</li>
+  <li><strong>User Profile:</strong> You are happy with the way Django handles the auth and need to add some non-auth related attributes
+to the User.</li>
+  <li><strong>Custom User Model from AbstractBaseUser:</strong> The way Django handles auth doesn’t fit your project.</li>
+  <li><strong>Custom User Model from AbstractUser:</strong> The way Django handles auth is a perfect fit for your project but still you
+want to add extra attributes without having to create a separate Model.</li>
+</ul>
+
+<p>Do NOT hesitate to ask me questions or tell what you think about this post!</p>
+
+<p>You can also <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/">join my mailing list</a>. I send exclusive tips directly to your email every week! :-)</p>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../../article/2021/07/08/what-you-should-know-about-the-django-user-model.html">
+<img src="../../../../media/2021/07/featured-user.jpg" alt="What You Should Know About The Django User Model" title="What You Should Know About The Django User Model">
+What You Should Know About The Django User Model
+</a>
+</div>
+<div class="four columns">
+<a href="../../../2018/12/19/how-to-use-jwt-authentication-with-django-rest-framework.html">
+<img src="../../../../media/2018/12/featured-jwt.jpg" alt="How to Use JWT Authentication with Django REST Framework" title="How to Use JWT Authentication with Django REST Framework">
+How to Use JWT Authentication with Django REST Framework
+</a>
+</div>
+<div class="four columns">
+<a href="../../../2018/11/22/how-to-implement-token-authentication-using-django-rest-framework.html">
+<img src="../../../../media/2018/11/featured-rest.jpg" alt="How to Implement Token Authentication using Django REST Framework" title="How to Implement Token Authentication using Django REST Framework">
+How to Implement Token Authentication using Django REST Framework
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/models/index.html"><span class="tag">models</span></a>
+    
+      <a href="../../../../tag/auth/index.html"><span class="tag">auth</span></a>
+    
+      <a href="../../../../tag/contrib/index.html"><span class="tag">contrib</span></a>
+    
+      <a href="../../../../tag/user/index.html"><span class="tag">user</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2o89KIV"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Extend%20Django%20User%20Model&amp;url=http://sibt.co/2o80MeD&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2ng6P3h"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2o7XbNX&amp;title=How%20to%20Extend%20Django%20User%20Model&amp;summary=The%20Django%E2%80%99s%20built-in%20authentication%20system%20is%20great.%20For%20the%20most%20part%20we%20can%20use%20it%20out-of-the-box,%20saving%20a%20lot%20ofdevelopment%20and%20testing%20effort.%20It%20fits%20most%20of%20the%20use%20cases%20and%20is%20very%20safe.%20...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'how-to-extend-django-user-model.html';
+        this.page.identifier = '/tutorial/2016/07/22/how-to-extend-django-user-model';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html",
+  "headline": "How to Extend Django User Model",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2016-07-22T00:00:00+03:00",
+  "dateModified": "2017-03-24T12:09:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "The Django’s built-in authentication system is great. For the most part we can use it out-of-the-box, saving a lot ofdevelopment and testing effort. It fits most of the use cases and is very safe. ..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2016/07/22/how-to-extend-django-user-model.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:37:44 GMT -->
+</html>

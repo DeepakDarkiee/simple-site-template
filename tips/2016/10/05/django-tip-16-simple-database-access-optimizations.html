@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tips/2016/10/05/django-tip-16-simple-database-access-optimizations.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:43:50 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>Django Tips #16 Simple Database Access Optimizations</title>
+<meta name="description" content="So, I just wanted to share a few straightforward tips about database access optimization. For the most those tips arenot something you should go to your code...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="django-tip-16-simple-database-access-optimizations.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'django-tip-16-simple-database-access-optimizations.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="Django Tips #16 Simple Database Access Optimizations">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tips/2016/10/05/django-tip-16-simple-database-access-optimizations.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2016/10/featured-tip16.jpg">
+<meta property="og:description" content="So, I just wanted to share a few straightforward tips about database access optimization. For the most those tips arenot something you should go to your code...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2016-10-05T17:18:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="Django Tips #16 Simple Database Access Optimizations">
+<meta name="twitter:description" content="So, I just wanted to share a few straightforward tips about database access optimization. For the most those tips arenot something you should go to your code base and start refactoring. Actually fo...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2016/10/featured-tip16.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="models">
+  
+    <meta property="article:tag" content="database">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tips
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">Django Tips #16 Simple Database Access Optimizations</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Oct 5, 2016
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    4 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/tips/2016/10/05/django-tip-16-simple-database-access-optimizations">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="django-tip-16-simple-database-access-optimizations.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2016/10/featured-tip16.jpg" alt="Django Tips #16 Simple Database Access Optimizations" class="featured-image">
+    
+  </div>
+
+
+            <article>
+              <p>So, I just wanted to share a few straightforward tips about database access optimization. For the most those tips are
+not something you should go to your code base and start refactoring. Actually for existing code it’s a better idea to
+profile first (with Django Debug Toolbar for example). But those tips are very easy to start applying, so keep them
+in mind when writing new code!</p>
+
+<hr />
+
+<h4 id="accessing-foreign-key-values">Accessing Foreign Key Values</h4>
+
+<p>If you only need the ID of the Foreign Key:</p>
+
+<div class="panel panel-success">
+  <div class="panel-header">Do</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">post</span><span class="o">.</span><span class="n">author_id</span></code></pre></figure>
+
+</div>
+
+<div class="panel panel-danger">
+  <div class="panel-header">Don't</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">post</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="nb">id</span></code></pre></figure>
+
+</div>
+
+<p>If you have a foreign key named <strong>author</strong>, Django will automatically store the primary key in the property
+<strong>author_id</strong>, while in the <strong>author</strong> property will be stored a lazy database reference. So if you access the id via
+the <strong>author</strong> instance, like this <code class="highlighter-rouge">post.author.id</code>, it will cause an additional query.</p>
+
+<hr />
+
+<h4 id="bulk-insert-on-many-to-many-fields">Bulk Insert on Many to Many Fields</h4>
+
+<div class="panel panel-success">
+  <div class="panel-header">Do</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">user</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">administrators</span><span class="p">,</span> <span class="n">managers</span><span class="p">)</span></code></pre></figure>
+
+</div>
+
+<div class="panel panel-danger">
+  <div class="panel-header">Don't</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">user</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">administrators</span><span class="p">)</span>
+<span class="n">user</span><span class="o">.</span><span class="n">groups</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">managers</span><span class="p">)</span></code></pre></figure>
+
+</div>
+
+<hr />
+
+<h4 id="counting-querysets">Counting QuerySets</h4>
+
+<p>If you only need the count:</p>
+
+<div class="panel panel-success">
+  <div class="panel-header">Do</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+<span class="n">users</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+<span class="c"># Or in template...</span>
+<span class="p">{{</span> <span class="n">users</span><span class="o">.</span><span class="n">count</span> <span class="p">}}</span></code></pre></figure>
+
+</div>
+
+<div class="panel panel-danger">
+  <div class="panel-header">Don't</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+<span class="nb">len</span><span class="p">(</span><span class="n">users</span><span class="p">)</span>
+
+<span class="c"># Or in template...</span>
+<span class="p">{{</span> <span class="n">users</span><span class="o">|</span><span class="n">length</span> <span class="p">}}</span></code></pre></figure>
+
+</div>
+
+<hr />
+
+<h3 id="empty-querysets">Empty QuerySets</h3>
+
+<p>If you only need to know if the queryset is empty:</p>
+
+<div class="panel panel-success">
+  <div class="panel-header">Do</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">groups</span> <span class="o">=</span> <span class="n">Group</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">groups</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+    <span class="c"># Do something...</span></code></pre></figure>
+
+</div>
+
+<div class="panel panel-danger">
+  <div class="panel-header">Don't</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">groups</span> <span class="o">=</span> <span class="n">Group</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">groups</span><span class="p">:</span>
+    <span class="c"># Do something...</span></code></pre></figure>
+
+</div>
+
+<hr />
+
+<h4 id="reduce-query-counts">Reduce Query Counts</h4>
+
+<div class="panel panel-success">
+  <div class="panel-header">Do</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">review</span> <span class="o">=</span> <span class="n">Review</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">select_related</span><span class="p">(</span><span class="s">'author'</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>  <span class="c"># Select the Review and the Author in a single query</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">first_name</span></code></pre></figure>
+
+</div>
+
+<div class="panel panel-danger">
+  <div class="panel-header">Don't</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">review</span> <span class="o">=</span> <span class="n">Review</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>  <span class="c"># Select the Review</span>
+<span class="n">name</span> <span class="o">=</span> <span class="n">review</span><span class="o">.</span><span class="n">author</span><span class="o">.</span><span class="n">first_name</span>  <span class="c"># Additional query to select the Author</span></code></pre></figure>
+
+</div>
+
+<hr />
+
+<h4 id="select-only-what-you-need">Select Only What You Need</h4>
+
+<p>Let’s say the <strong>Invoice</strong> model has 50 fields and you want to create a view to display just a summary, with the
+<strong>number</strong>, <strong>date</strong> and <strong>value</strong>:</p>
+
+<div class="panel panel-success">
+  <div class="panel-header">Do</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># views.py</span>
+<span class="c"># If you don't need the model instance, go for:</span>
+<span class="n">invoices</span> <span class="o">=</span> <span class="n">Invoice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">'number'</span><span class="p">,</span> <span class="s">'date'</span><span class="p">,</span> <span class="s">'value'</span><span class="p">)</span>  <span class="c"># Returns a dict</span>
+
+<span class="c"># If you still need to access some instance methods, go for:</span>
+<span class="n">invoices</span> <span class="o">=</span> <span class="n">Invoice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">only</span><span class="p">(</span><span class="s">'number'</span><span class="p">,</span> <span class="s">'date'</span><span class="p">,</span> <span class="s">'value'</span><span class="p">)</span>  <span class="c"># Returns a queryset</span>
+
+<span class="c"># invoices.html</span>
+<span class="o">&lt;</span><span class="n">table</span><span class="o">&gt;</span>
+  <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">invoice</span> <span class="ow">in</span> <span class="n">invoices</span> <span class="o">%</span><span class="p">}</span>
+    <span class="o">&lt;</span><span class="n">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">invoice</span><span class="o">.</span><span class="n">number</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">invoice</span><span class="o">.</span><span class="n">date</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">invoice</span><span class="o">.</span><span class="n">value</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">tr</span><span class="o">&gt;</span>
+  <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+<span class="o">&lt;/</span><span class="n">table</span><span class="o">&gt;</span></code></pre></figure>
+
+</div>
+
+<div class="panel panel-danger">
+  <div class="panel-header">Don't</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># views.py</span>
+<span class="n">invoices</span> <span class="o">=</span> <span class="n">Invoice</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+
+<span class="c"># invoices.html</span>
+<span class="o">&lt;</span><span class="n">table</span><span class="o">&gt;</span>
+  <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">invoice</span> <span class="ow">in</span> <span class="n">invoices</span> <span class="o">%</span><span class="p">}</span>
+    <span class="o">&lt;</span><span class="n">tr</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">invoice</span><span class="o">.</span><span class="n">number</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">invoice</span><span class="o">.</span><span class="n">date</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+      <span class="o">&lt;</span><span class="n">td</span><span class="o">&gt;</span><span class="p">{{</span> <span class="n">invoice</span><span class="o">.</span><span class="n">value</span> <span class="p">}}</span><span class="o">&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">tr</span><span class="o">&gt;</span>
+  <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+<span class="o">&lt;/</span><span class="n">table</span><span class="o">&gt;</span></code></pre></figure>
+
+</div>
+
+<hr />
+
+<h4 id="bulk-updates">Bulk Updates</h4>
+
+<div class="panel panel-success">
+  <div class="panel-header">Do</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">F</span>
+
+<span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">price</span><span class="o">=</span><span class="n">F</span><span class="p">(</span><span class="s">'price'</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.2</span><span class="p">)</span></code></pre></figure>
+
+</div>
+
+<div class="panel panel-danger">
+  <div class="panel-header">Don't</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">products</span> <span class="o">=</span> <span class="n">Product</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">product</span> <span class="ow">in</span> <span class="n">products</span><span class="p">:</span>
+    <span class="n">product</span><span class="o">.</span><span class="n">price</span> <span class="o">*=</span> <span class="mf">1.2</span>
+    <span class="n">product</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></code></pre></figure>
+
+</div>
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../2018/02/10/django-tip-22-designing-better-models.html">
+<img src="../../../../media/2018/02/featured-tip22.jpg" alt="Django Tips #22 Designing Better Models" title="Django Tips #22 Designing Better Models">
+Django Tips #22 Designing Better Models
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../tutorial/2017/09/26/how-to-create-django-data-migrations.html">
+<img src="../../../../media/2017/09/featured-data-migrations.jpg" alt="How to Create Django Data Migrations" title="How to Create Django Data Migrations">
+How to Create Django Data Migrations
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../series/2017/09/11/a-complete-beginners-guide-to-django-part-2.html">
+<img src="../../../../media/series/beginners-guide/1.11/part-2/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 2" title="A Complete Beginner's Guide to Django - Part 2">
+A Complete Beginner's Guide to Django - Part 2
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/models/index.html"><span class="tag">models</span></a>
+    
+      <a href="../../../../tag/database/index.html"><span class="tag">database</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mSJyVa"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Django%20Tips%20%2316%20Simple%20Database%20Access%20Optimizations&amp;url=http://sibt.co/2mxLq2R&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nvAsvw"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nvDgc7&amp;title=Django%20Tips%20%2316%20Simple%20Database%20Access%20Optimizations&amp;summary=So,%20I%20just%20wanted%20to%20share%20a%20few%20straightforward%20tips%20about%20database%20access%20optimization.%20For%20the%20most%20those%20tips%20arenot%20something%20you%20should%20go%20to%20your%20code%20base%20and%20start%20refactoring.%20Actually%20fo...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'django-tip-16-simple-database-access-optimizations.html';
+        this.page.identifier = '/tips/2016/10/05/django-tip-16-simple-database-access-optimizations';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tips/2016/10/05/django-tip-16-simple-database-access-optimizations.html",
+  "headline": "Django Tips #16 Simple Database Access Optimizations",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2016/10/featured-tip16.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2016-10-05T17:18:00+03:00",
+  "dateModified": "2016-10-05T17:18:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "So, I just wanted to share a few straightforward tips about database access optimization. For the most those tips arenot something you should go to your code base and start refactoring. Actually fo..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tips/2016/10/05/django-tip-16-simple-database-access-optimizations.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:43:51 GMT -->
+</html>

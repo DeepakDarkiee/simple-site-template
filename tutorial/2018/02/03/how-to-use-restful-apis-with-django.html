@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2018/02/03/how-to-use-restful-apis-with-django.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:44:15 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Use RESTful APIs with Django</title>
+<meta name="description" content="First, let’s get those terms out of our way. The REST acronym stands for Representational State Transfer,which is an architectural design. Usually when we us...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="how-to-use-restful-apis-with-django.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'how-to-use-restful-apis-with-django.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="How to Use RESTful APIs with Django">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tutorial/2018/02/03/how-to-use-restful-apis-with-django.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2018/02/thumbnail-rest.jpg">
+<meta property="og:description" content="First, let’s get those terms out of our way. The REST acronym stands for Representational State Transfer,which is an architectural design. Usually when we us...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2018-02-03T16:02:00+02:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Use RESTful APIs with Django">
+<meta name="twitter:description" content="First, let’s get those terms out of our way. The REST acronym stands for Representational State Transfer,which is an architectural design. Usually when we use the term RESTful, we are referring to ...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2018/02/thumbnail-rest.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="views">
+  
+    <meta property="article:tag" content="rest">
+  
+    <meta property="article:tag" content="api">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tutorial
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Use RESTful APIs with Django</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Feb 3, 2018
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    24 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/tutorial/2018/02/03/how-to-use-restful-apis-with-django">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="how-to-use-restful-apis-with-django.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2018/02/featured-rest.jpg" alt="How to Use RESTful APIs with Django" class="featured-image">
+    
+      <small>(Picture: <a href="https://www.pexels.com/photo/green-circuit-board-with-clear-glass-case-163073/" target="_blank">https://www.pexels.com/photo/green-circuit-board-with-clear-glass-case-163073/</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>First, let’s get those terms out of our way. The <strong>REST</strong> acronym stands for <strong>Representational State Transfer</strong>,
+which is an architectural design. Usually when we use the term <strong>RESTful</strong>, we are referring to an application that
+implements the <strong>REST</strong> architectural design. API stands for <strong>Application Programming Interface</strong>, which is a software
+application that we interact programmatically, instead of using a graphical interface. In other words, we interact
+with it at a lower level at the source code, writing functions and routines.</p>
+
+<p>In the context of Web development, usually when we are talking about a <strong>RESTful API</strong> we are referring to
+<strong>Web Services</strong> (or Web APIs). It’s a common way to expose parts of your application to third-parties (external
+applications and Websites). It can be data-oriented, in a sense that your Web service (the RESTful API), simply make
+available the information you store in your databases using a common format, such as XML or JSON. This way, an external
+application can interact with your application and your data, without having to connect directly into your database.
+This way, it doesn’t matter if your database is MySQL or PostgreSQL, or if your application was written in Java or
+Python. But RESTful APIs can also be used to modify data</p>
+
+<p>As developers, we can be at either sides of the equation. We can be both the <em>provider</em> or the <em>consumer</em> of an API.
+However, in this tutorial we are going to explore the consumption part of the equation. We are going to write some code
+that consume public APIs. You will see that the process is very similar, and that’s something that once you learn you
+can apply to many problems.</p>
+
+<p>Now, if you want to provide a REST API, the <a href="http://www.django-rest-framework.org/" target="_blank" rel="noopener">Django REST Framework</a>
+is the best option. It make easy to expose parts of your application as a REST API. But, that’s a topic for another
+tutorial (I will publish it soon!)</p>
+
+<p>Below, an outline of what I’m going to explore in this tutorial:</p>
+
+<ul>
+  <li><a href="#important-concepts">Important Concepts</a></li>
+  <li><a href="#implementation">Implementation</a>
+    <ul>
+      <li><a href="#basic-example-geo-location-api">Basic Example: GEO Location API</a></li>
+      <li><a href="#caching-api-result">Caching API Result</a></li>
+      <li><a href="#passing-parameters-to-an-api-github-public-api">Passing Parameters to an API: GitHub Public API</a></li>
+      <li><a href="#using-a-client-github-public-api">Using a Client: GitHub Public API</a></li>
+      <li><a href="#managing-api-keys-oxford-dictionaries-api">Managing API Keys: Oxford Dictionaries API</a></li>
+    </ul>
+  </li>
+  <li><a href="#conclusions">Conclusions</a></li>
+</ul>
+
+<p>If you want to have a look on what we are going to build in this tutorial, see the code live at <a href="https://restful-apis-example.herokuapp.com/" target="_blank" rel="noopener">restful-apis-example.herokuapp.com</a>.</p>
+
+<hr />
+
+<h4 id="important-concepts">Important Concepts</h4>
+
+<p>If you are planning to integrate your Django application with a third-party REST API, it’s important to keep a few
+things in mind:</p>
+
+<p><strong>Consuming an API is slow.</strong></p>
+
+<p>We have to implement them carefully because it’s an extra HTTP request performed in the server side, so it can increase
+considerably the time consumed during the request/response cycle. Caching is fundamental to assure the performance of
+the application.</p>
+
+<p><strong>You have no control over the API.</strong></p>
+
+<p>It’s a third-party API, it may stop working without any notice. Something could change, the API server may go down.
+So be prepare to handle exception cases.</p>
+
+<p><strong>APIs are usually limited by number of requests you can make.</strong></p>
+
+<p>Usually, the API provider only let use do a handful of requests per hour. This limit can vary, but usually it’s there.
+So, we have to take it into account when implementing the integration. Caching usually is the solution for the rate
+limits.</p>
+
+<p><strong>Secure your API keys.</strong></p>
+
+<p>Some APIs will required authentication, meaning you will have deal with sensitive data. Never commit this kind of
+information to public repositories.</p>
+
+<p><strong>There’s probably a Python client for it.</strong></p>
+
+<p>Using a native Python client to access an API is usually a good idea. It makes the authentication process and the usage
+of its resources easier. Always check first if there is a Python client available. In some cases there will be even
+multiple options. In such cases, check their repositories first and pick the one with most active development.</p>
+
+<p><strong>Documentation is gold.</strong></p>
+
+<p>APIs are pretty much useless without a proper documentation. It’s about your only guidance when using one. Unless the
+API server is open source, but then searching for endpoints and services directly in the source code can be very hard
+time consuming. So, before jumping into the implementation, make sure the provider has a reliable documentation.</p>
+
+<hr />
+
+<h4 id="implementation">Implementation</h4>
+
+<p>We are going to explore next a few implementations of public APIs so you can have an idea of how it works under the
+hoods. In the end of this post you will find the source code of the examples so you can explore and try it yourself.</p>
+
+<h5 id="basic-example-geo-location-api">Basic Example: GEO Location API</h5>
+
+<p>The first example is going to be an application that consumes the GEO API <a href="https://freegeoip.net/" target="_blank" rel="noopener">freegeoip.net</a>.
+It’s a simple API that provides geo location information (country, timezone, latitude, longitude, etc) based on IP
+addresses. It’s a very simple API that doesn’t require a client or authentication.</p>
+
+<p>A nice thing about some RESTful APIs is that we can debug using our browser. Others may need authentication so it is
+little bit trickier, but can be done in the terminal using tools like <strong>cURL</strong> for example.</p>
+
+<p>If we access the endpoint <code class="highlighter-rouge">http://freegeoip.net/json/</code> in our browser (without providing any parameter) it will show
+the information for your IP address:</p>
+
+<p><img src="../../../../media/2018/02/geolocation.png" alt="Free Geo IP" /></p>
+
+<p>Here is a very simple view using the <a href="http://docs.python-requests.org/en/master/" target="_blank">requests</a> Python
+library. Install it using pip:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install requests</code></pre></figure>
+
+<p>Below, the code:</p>
+
+<p><strong>urls.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.urls</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">path</span><span class="p">(</span><span class="s">''</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'home'</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://freegeoip.net/json/'</span><span class="p">)</span>
+    <span class="n">geodata</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/home.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'ip'</span><span class="p">:</span> <span class="n">geodata</span><span class="p">[</span><span class="s">'ip'</span><span class="p">],</span>
+        <span class="s">'country'</span><span class="p">:</span> <span class="n">geodata</span><span class="p">[</span><span class="s">'country_name'</span><span class="p">]</span>
+    <span class="p">})</span></code></pre></figure>
+
+<p>In the view above, we are performing a GET request to this URL (endpoint) and reading the data in JSON format into
+the <code class="highlighter-rouge">geodata</code> variable. We could have returned it directly to the template, but I opted to just pass the information
+that we need, so you can see how to read the data.</p>
+
+<p>You can “debug” it inside the view, adding a <code class="highlighter-rouge">print</code> statement inside the view and print the <code class="highlighter-rouge">geodata</code> variable so
+you can see all the available information we could potentially use.</p>
+
+<p><strong>core/home.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h2&gt;</span>GEO API<span class="nt">&lt;/h2&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Your ip address is <span class="nt">&lt;strong&gt;</span><span class="cp">{{</span> <span class="nv">ip</span> <span class="cp">}}</span><span class="nt">&lt;/strong&gt;</span>, and you are probably in <span class="nt">&lt;strong&gt;</span><span class="cp">{{</span> <span class="nv">country</span> <span class="cp">}}</span><span class="nt">&lt;/strong&gt;</span> right now.<span class="nt">&lt;/p&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span></code></pre></figure>
+
+<p>And here is what the view looks like:</p>
+
+<p><img src="../../../../media/2018/02/geolocation-1.png" alt="Geo location" /></p>
+
+<p>We can use this information in many ways. For example, we can get a <a href="https://developers.google.com/maps/documentation/embed/" target="_blank">Google Maps API key</a>
+and render the current location using a Google Maps iframe:</p>
+
+<div class="danger">
+  <p>
+    <strong><i class="fa fa-warning"></i> Attention:</strong>
+    This is just an example! Do <strong>NOT</strong> store API Keys directly in the source code or commit them to public repositories!
+    To learn more about how to handle sensitive information refer to those articles I published previously:
+    <a href="../../../../tips/2016/11/01/django-tip-19-protecting-sensitive-information.html">Protecting Sensitive Information</a>
+    and <a href="../../../../2015/11/26/package-of-the-week-python-decouple.html">How to Use Python Decouple</a>.
+  </p>
+</div>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">ip_address</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">META</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'HTTP_X_FORWARDED_FOR'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://freegeoip.net/json/</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">ip_address</span><span class="p">)</span>
+    <span class="n">geodata</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/home.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'ip'</span><span class="p">:</span> <span class="n">geodata</span><span class="p">[</span><span class="s">'ip'</span><span class="p">],</span>
+        <span class="s">'country'</span><span class="p">:</span> <span class="n">geodata</span><span class="p">[</span><span class="s">'country_name'</span><span class="p">],</span>
+        <span class="s">'latitude'</span><span class="p">:</span> <span class="n">geodata</span><span class="p">[</span><span class="s">'latitude'</span><span class="p">],</span>
+        <span class="s">'longitude'</span><span class="p">:</span> <span class="n">geodata</span><span class="p">[</span><span class="s">'longitude'</span><span class="p">],</span>
+        <span class="s">'api_key'</span><span class="p">:</span> <span class="s">'AIzaSyC1UpCQp9zHokhNOBK07AvZTiO09icwD8I'</span>  <span class="c"># Don't do this! This is just an example. Secure your keys properly.</span>
+    <span class="p">})</span></code></pre></figure>
+
+<div class="info">
+  <p>
+    <strong><i class="fa fa-info-circle"></i> Note:</strong>
+    There is a small "hack" in the code above. When we are developing locally, our machine is both the server and the client.
+    Basically, the <code>HTTP_X_FORWARDED_FOR</code> won't be set on the local machine, causing the request URL to be only <code>http://freegeoip.net/json/</code>
+    instead of something like <code>http://freegeoip.net/json/95.175.104.31</code>. It will work because as I showed you previously, the <code>http://freegeoip.net/json/</code>
+    URL return the result for your ip address. BUT! It wouldn't work in production, because it would show the location of the server instead of the visitor location.
+    The difference is that the <code>HTTP_X_FORWARDED_FOR</code> will be set with the client's IP address so everything will work as expected.
+  </p>
+</div>
+
+<p><strong>core/home.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h2&gt;</span>GEO API<span class="nt">&lt;/h2&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Your ip address is <span class="nt">&lt;strong&gt;</span><span class="cp">{{</span> <span class="nv">ip</span> <span class="cp">}}</span><span class="nt">&lt;/strong&gt;</span>, and you are probably in <span class="nt">&lt;strong&gt;</span><span class="cp">{{</span> <span class="nv">country</span> <span class="cp">}}</span><span class="nt">&lt;/strong&gt;</span> right now.<span class="nt">&lt;/p&gt;</span>
+
+  <span class="nt">&lt;iframe</span> <span class="na">width=</span><span class="s">"600"</span>
+          <span class="na">height=</span><span class="s">"450"</span>
+          <span class="na">frameborder=</span><span class="s">"0"</span>
+          <span class="na">style=</span><span class="s">"border:0"</span>
+          <span class="na">src=</span><span class="s">"https://www.google.com/maps/embed/v1/view?center=</span><span class="cp">{{</span> <span class="nv">latitude</span> <span class="cp">}}</span><span class="s">,</span><span class="cp">{{</span> <span class="nv">longitude</span> <span class="cp">}}</span><span class="s">&amp;zoom=8&amp;key=</span><span class="cp">{{</span> <span class="nv">api_key</span> <span class="cp">}}</span><span class="s">"</span>
+          <span class="na">allowfullscreen</span><span class="nt">&gt;&lt;/iframe&gt;</span>
+
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span></code></pre></figure>
+
+<p><img src="../../../../media/2018/02/geolocation-2.png" alt="Google Maps API Finland" /></p>
+
+<p>If I change my IP address using a VPN, we can see the changes just by refreshing the browser:</p>
+
+<p><img src="../../../../media/2018/02/germany.png" alt="Google Maps API Germany" /></p>
+
+<p>To try it yourself locally, go to <a href="https://developers.google.com/maps/web/" target="_blank">developers.google.com/maps/web/</a>
+and click on “Get a Key”, generate an API for yourself.</p>
+
+<h5 id="caching-api-result">Caching API Result</h5>
+
+<p>If you tried it locally probably you noticed it takes a little bit longer for the view to respond. If we reload the
+page, it will make an additional request to the API server again. But in this case, this information doesn’t generally
+change that quick (unless you moved geographically or connected to a VPN like I did). So, depending on the use case we
+can cache the result.</p>
+
+<p>In this case, since every visitor is likely to have a different result, a solution could be to store the result in a
+session, like this:</p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">is_cached</span> <span class="o">=</span> <span class="p">(</span><span class="s">'geodata'</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_cached</span><span class="p">:</span>
+        <span class="n">ip_address</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">META</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'HTTP_X_FORWARDED_FOR'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://freegeoip.net/json/</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">ip_address</span><span class="p">)</span>
+        <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">'geodata'</span><span class="p">]</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="n">geodata</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">session</span><span class="p">[</span><span class="s">'geodata'</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/home.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'ip'</span><span class="p">:</span> <span class="n">geodata</span><span class="p">[</span><span class="s">'ip'</span><span class="p">],</span>
+        <span class="s">'country'</span><span class="p">:</span> <span class="n">geodata</span><span class="p">[</span><span class="s">'country_name'</span><span class="p">],</span>
+        <span class="s">'latitude'</span><span class="p">:</span> <span class="n">geodata</span><span class="p">[</span><span class="s">'latitude'</span><span class="p">],</span>
+        <span class="s">'longitude'</span><span class="p">:</span> <span class="n">geodata</span><span class="p">[</span><span class="s">'longitude'</span><span class="p">],</span>
+        <span class="s">'api_key'</span><span class="p">:</span> <span class="s">'AIzaSyC1UpCQp9zHokhNOBK07AvZTiO09icwD8I'</span><span class="p">,</span>  <span class="c"># Don't do this! This is just an example. Secure your keys properly.</span>
+        <span class="s">'is_cached'</span><span class="p">:</span> <span class="n">is_cached</span>
+    <span class="p">})</span></code></pre></figure>
+
+<p><strong>core/home.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h2&gt;</span>GEO API<span class="nt">&lt;/h2&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Your ip address is <span class="nt">&lt;strong&gt;</span><span class="cp">{{</span> <span class="nv">ip</span> <span class="cp">}}</span><span class="nt">&lt;/strong&gt;</span>, and you are probably in <span class="nt">&lt;strong&gt;</span><span class="cp">{{</span> <span class="nv">country</span> <span class="cp">}}</span><span class="nt">&lt;/strong&gt;</span> right now.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span>This information <span class="cp">{{</span> <span class="nv">is_cached</span><span class="o">|</span><span class="nf">yesno</span><span class="err">:</span><span class="s2">"was,wasn't"</span> <span class="cp">}}</span> cached.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;iframe</span> <span class="na">width=</span><span class="s">"600"</span>
+          <span class="na">height=</span><span class="s">"450"</span>
+          <span class="na">frameborder=</span><span class="s">"0"</span>
+          <span class="na">style=</span><span class="s">"border:0"</span>
+          <span class="na">src=</span><span class="s">"https://www.google.com/maps/embed/v1/view?center=</span><span class="cp">{{</span> <span class="nv">latitude</span> <span class="cp">}}</span><span class="s">,</span><span class="cp">{{</span> <span class="nv">longitude</span> <span class="cp">}}</span><span class="s">&amp;zoom=8&amp;key=</span><span class="cp">{{</span> <span class="nv">api_key</span> <span class="cp">}}</span><span class="s">"</span>
+          <span class="na">allowfullscreen</span><span class="nt">&gt;&lt;/iframe&gt;</span>
+
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span></code></pre></figure>
+
+<p><img src="../../../../media/2018/02/cache.png" alt="Cached Request" /></p>
+
+<p>It is worth mentioning that there are several ways to cache an API result. It doesn’t mean you have to use a proper
+machinery like Memcached or Redis. You can cache it in your database, in a session, in a file. Depends on the use case.
+There is always a trade-off. Sometimes a simple solution is more than enough.</p>
+
+<h5 id="passing-parameters-to-an-api-github-public-api">Passing Parameters to an API: GitHub Public API</h5>
+
+<p>Next, we are going to explore GitHub’s Public API. For some resources we won’t need to authenticated. But the limits
+are very low in those cases.</p>
+
+<p>You can find GitHub’s API documentation at <a href="https://developer.github.com/" target="_blank" rel="noopener">developer.github.com</a>
+Let’s make a simple app that search for a GitHub user and displays their names and the number of open source
+repositories they have.</p>
+
+<p>First, go to the docs.</p>
+
+<p><img src="../../../../media/2018/02/docs.png" alt="GitHub Docs" /></p>
+
+<p>From the documentation we know what is the endpoint of the resource we want to get, which is <code class="highlighter-rouge">/users/:username</code>. It
+will be used to build the logic of our application.</p>
+
+<p>Now, let’s debug the API endpoint using our browser:</p>
+
+<p><img src="../../../../media/2018/02/github-api.png" alt="GitHub User Endpoint" /></p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="k">def</span> <span class="nf">github</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s">'username'</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s">'username'</span><span class="p">]</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s">'https://api.github.com/users/</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">username</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/github.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'user'</span><span class="p">:</span> <span class="n">user</span><span class="p">})</span></code></pre></figure>
+
+<p><strong>core/github.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h2&gt;</span>GitHub API<span class="nt">&lt;/h2&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"get"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"username"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>search on github<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+  <span class="cp">{%</span> <span class="k">if</span> <span class="nv">user</span> <span class="cp">%}</span>
+    <span class="nt">&lt;p&gt;&lt;strong&gt;</span><span class="cp">{{</span> <span class="nv">user.name</span> <span class="cp">}}</span><span class="nt">&lt;/strong&gt;</span> has <span class="nt">&lt;strong&gt;</span><span class="cp">{{</span> <span class="nv">user.public_repos</span> <span class="cp">}}</span><span class="nt">&lt;/strong&gt;</span> public repositories.<span class="nt">&lt;/p&gt;</span>
+  <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span></code></pre></figure>
+
+<p>The result you can see below:</p>
+
+<p><img src="../../../../media/2018/02/github-search.png" alt="GitHub API Search" /></p>
+
+<p>We can improve the code by treating searches for non-existing username (or empty username) by checking the status of
+the request (also taking the time to check the number of requests left):</p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">github</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">search_result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s">'username'</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s">'username'</span><span class="p">]</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="s">'https://api.github.com/users/</span><span class="si">%</span><span class="s">s'</span> <span class="o">%</span> <span class="n">username</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">search_was_successful</span> <span class="o">=</span> <span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">)</span>  <span class="c"># 200 = SUCCESS</span>
+        <span class="n">search_result</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="n">search_result</span><span class="p">[</span><span class="s">'success'</span><span class="p">]</span> <span class="o">=</span> <span class="n">search_was_successful</span>
+        <span class="n">search_result</span><span class="p">[</span><span class="s">'rate'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">'limit'</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">'X-RateLimit-Limit'</span><span class="p">],</span>
+            <span class="s">'remaining'</span><span class="p">:</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s">'X-RateLimit-Remaining'</span><span class="p">],</span>
+        <span class="p">}</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/github.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'search_result'</span><span class="p">:</span> <span class="n">search_result</span><span class="p">})</span></code></pre></figure>
+
+<p><strong>core/github.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h2&gt;</span>GitHub API<span class="nt">&lt;/h2&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"get"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"username"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>search on github<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+  <span class="cp">{%</span> <span class="k">if</span> <span class="nv">search_result</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="k">if</span> <span class="nv">search_result.success</span> <span class="cp">%}</span>
+      <span class="nt">&lt;p&gt;</span>
+        <span class="nt">&lt;strong&gt;</span><span class="cp">{{</span> <span class="nv">search_result.name</span><span class="o">|</span><span class="nf">default_if_none</span><span class="err">:</span><span class="nv">search_result.login</span> <span class="cp">}}</span><span class="nt">&lt;/strong&gt;</span> has
+        <span class="nt">&lt;strong&gt;</span><span class="cp">{{</span> <span class="nv">search_result.public_repos</span> <span class="cp">}}</span><span class="nt">&lt;/strong&gt;</span> public repositories.
+      <span class="nt">&lt;/p&gt;</span>
+    <span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span>
+      <span class="nt">&lt;p&gt;&lt;em&gt;</span><span class="cp">{{</span> <span class="nv">search_result.message</span> <span class="cp">}}</span><span class="nt">&lt;/em&gt;&lt;/p&gt;</span>
+    <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+    <span class="nt">&lt;p&gt;</span>Rate limit: <span class="cp">{{</span> <span class="nv">search_result.rate.remaining</span> <span class="cp">}}</span>/<span class="cp">{{</span> <span class="nv">search_result.rate.limit</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+  <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span></code></pre></figure>
+
+<p>A small detail here is that I’m using the <code class="highlighter-rouge">default_if_none</code> template filter to fallback to the user “login” when there
+is no “name”.</p>
+
+<p>Here is how it looks like now:</p>
+
+<p><img src="../../../../media/2018/02/github-api-error.png" alt="GitHub API Error" /></p>
+
+<h5 id="using-a-client-github-public-api">Using a Client: GitHub Public API</h5>
+
+<p>Another way to interact with GitHub services is through an API client. A client is a library implemented in a specific
+programming language. It’s the bridge between your application and the third-party application you are integrating.
+What an API client does under the hood is basically what we did in the previous sections.</p>
+
+<p>A good Python client for the GitHub API is the <a href="https://github.com/PyGithub/PyGithub" target="_blank" rel="noopener">PyGithub</a>.
+You can install it using pip:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install PyGithub</code></pre></figure>
+
+<p>A similar implementation with the same results using the API client:</p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">github</span> <span class="kn">import</span> <span class="n">Github</span><span class="p">,</span> <span class="n">GithubException</span>
+
+<span class="k">def</span> <span class="nf">github_client</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">search_result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s">'username'</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">:</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">[</span><span class="s">'username'</span><span class="p">]</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">Github</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_user</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+            <span class="n">search_result</span><span class="p">[</span><span class="s">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">name</span>
+            <span class="n">search_result</span><span class="p">[</span><span class="s">'login'</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">login</span>
+            <span class="n">search_result</span><span class="p">[</span><span class="s">'public_repos'</span><span class="p">]</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">public_repos</span>
+            <span class="n">search_result</span><span class="p">[</span><span class="s">'success'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">except</span> <span class="n">GithubException</span> <span class="k">as</span> <span class="n">ge</span><span class="p">:</span>
+            <span class="n">search_result</span><span class="p">[</span><span class="s">'message'</span><span class="p">]</span> <span class="o">=</span> <span class="n">ge</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">'message'</span><span class="p">]</span>
+            <span class="n">search_result</span><span class="p">[</span><span class="s">'success'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="n">rate_limit</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_rate_limit</span><span class="p">()</span>
+        <span class="n">search_result</span><span class="p">[</span><span class="s">'rate'</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">'limit'</span><span class="p">:</span> <span class="n">rate_limit</span><span class="o">.</span><span class="n">rate</span><span class="o">.</span><span class="n">limit</span><span class="p">,</span>
+            <span class="s">'remaining'</span><span class="p">:</span> <span class="n">rate_limit</span><span class="o">.</span><span class="n">rate</span><span class="o">.</span><span class="n">remaining</span><span class="p">,</span>
+        <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/github.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'search_result'</span><span class="p">:</span> <span class="n">search_result</span><span class="p">})</span></code></pre></figure>
+
+<p>The main difference here is that we use the methods <code class="highlighter-rouge">get_user()</code> and <code class="highlighter-rouge">get_rate_limit()</code> to perform the requests.</p>
+
+<p>Also, it provides an easy interface to authenticate using username and password or an access token:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">github</span> <span class="kn">import</span> <span class="n">Github</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">Github</span><span class="p">(</span><span class="s">'user'</span><span class="p">,</span> <span class="s">'password'</span><span class="p">)</span>
+
+<span class="c"># or using an access token</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">Github</span><span class="p">(</span><span class="s">'access_token'</span><span class="p">)</span></code></pre></figure>
+
+<h5 id="managing-api-keys-oxford-dictionaries-api">Managing API Keys: Oxford Dictionaries API</h5>
+
+<p>The example below is to show how to interact with an API that requires authentication using and API Key. Usually, the
+API provider will ask you to register your application and provide some information. This can vary a lot from provider
+to provider.</p>
+
+<p>Here I’m going to use the <a href="https://developer.oxforddictionaries.com/" target="_blank" rel="noopener">Oxford Dictionary API</a>.
+It’s mainly a paid API, but they also offer a free plan that let’s use do a few requests per hour. After you register
+you will see the information below:</p>
+
+<p><img src="../../../../media/2018/02/oxford.png" alt="Oxford API" /></p>
+
+<p>Here we have all the necessary information to connect with their API. To understand better how the authentication
+process works it’s usually a good idea to refer to their documentation. In this case, we need to provide this
+information in the header of each request we perform.</p>
+
+<p>There is a slight difference between those keys and the Google Maps API key for example. Even though I recommended
+several time to protect your keys and everything, fact is the Google Maps API key is a different type of key which
+is meant to be used in the client side (inside the iframe). But in such cases the provider (Google), give you
+mechanisms to protect your key (for example whitelisting domains that can use this particular key). But that’s not the
+case with the Oxford API keys (and majority of the keys you will work). Those are only supposed to be used on the
+server side.</p>
+
+<p>Here is how I usually protect my keys:</p>
+
+<p>First, install <strong>python-decouple</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install python-decouple</code></pre></figure>
+
+<p>Now, create a <strong>.env</strong> file in the project root:</p>
+
+<p><img src="../../../../media/2018/02/project-folder.png" alt="Project Folder .env File" /></p>
+
+<p>In this file, create two environment variables to store the application ID and the application key:</p>
+
+<p><strong>.env</strong></p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">OXFORD_APP_ID=EIiHAFqo
+OXFORD_APP_KEY=nJzxp5Fk21v7D9ASIWd8Vkhs47C0j6cS</code></pre></figure>
+
+<p>Now, in the <strong>settings.py</strong> module, we import the <strong>python-decouple</strong> library and create two settings variables to
+store this information:</p>
+
+<p><strong>settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">decouple</span> <span class="kn">import</span> <span class="n">config</span>
+
+<span class="c"># other settings... SECRET_KEY, DEBUG, INSTALLED_APPS etc etc</span>
+
+<span class="c"># at the bottom of the settings.py file:</span>
+
+<span class="n">OXFORD_APP_ID</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'OXFORD_APP_ID'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+<span class="n">OXFORD_APP_KEY</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'OXFORD_APP_KEY'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">''</span><span class="p">)</span></code></pre></figure>
+
+<p>Here the <code class="highlighter-rouge">config()</code> function will search for a <strong>.env</strong> file in the project root, if there is no <strong>.env</strong> file it will
+fallback to the OS environment variables, if there is no environment variable, it will fallback to the <code class="highlighter-rouge">default</code> value
+in the <code class="highlighter-rouge">config()</code> function. In this case the default value is just an empty string to avoid the application breaking
+in case you have no API key.</p>
+
+<p>Below, an example implementation of an application that search for words in English and displays its definitions:</p>
+
+<p><strong>forms.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="k">class</span> <span class="nc">DictionaryForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">word</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">word</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">[</span><span class="s">'word'</span><span class="p">]</span>
+        <span class="n">endpoint</span> <span class="o">=</span> <span class="s">'https://od-api.oxforddictionaries.com/api/v1/entries/{source_lang}/{word_id}'</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">endpoint</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">source_lang</span><span class="o">=</span><span class="s">'en'</span><span class="p">,</span> <span class="n">word_id</span><span class="o">=</span><span class="n">word</span><span class="p">)</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s">'app_id'</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">OXFORD_APP_ID</span><span class="p">,</span> <span class="s">'app_key'</span><span class="p">:</span> <span class="n">settings</span><span class="o">.</span><span class="n">OXFORD_APP_KEY</span><span class="p">}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>  <span class="c"># SUCCESS</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="n">result</span><span class="p">[</span><span class="s">'success'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s">'success'</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>  <span class="c"># NOT FOUND</span>
+                <span class="n">result</span><span class="p">[</span><span class="s">'message'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'No entry found for "</span><span class="si">%</span><span class="s">s"'</span> <span class="o">%</span> <span class="n">word</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span><span class="p">[</span><span class="s">'message'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'The Oxford API is not available at the moment. Please try again later.'</span>
+        <span class="k">return</span> <span class="n">result</span></code></pre></figure>
+
+<p>This time we are working inside a form class, which usually is a good place to move processing from the views. The code
+to consume the API is now inside a form class, where this <code class="highlighter-rouge">search</code> method will be called only after the form data is
+validated.</p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">DictionaryForm</span>
+
+<span class="k">def</span> <span class="nf">oxford</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">search_result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s">'word'</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">DictionaryForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">search_result</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">search</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">DictionaryForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/oxford.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">,</span> <span class="s">'search_result'</span><span class="p">:</span> <span class="n">search_result</span><span class="p">})</span></code></pre></figure>
+
+<p>Finally, the template to display the results:</p>
+
+<p><strong>core/oxford.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h2&gt;</span>Oxford Dictionary<span class="nt">&lt;/h2&gt;</span>
+
+  <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"get"</span><span class="nt">&gt;</span>
+    <span class="cp">{{</span> <span class="nv">form.as_p</span> <span class="cp">}}</span>
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>search<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+
+  <span class="cp">{%</span> <span class="k">if</span> <span class="nv">search_result</span> <span class="cp">%}</span>
+    <span class="nt">&lt;hr&gt;</span>
+    <span class="cp">{%</span> <span class="k">if</span> <span class="nv">search_result.success</span> <span class="cp">%}</span>
+      <span class="cp">{%</span> <span class="k">for</span> <span class="nv">result</span> <span class="ow">in</span> <span class="nv">search_result.results</span> <span class="cp">%}</span>
+        <span class="nt">&lt;h3&gt;</span><span class="cp">{{</span> <span class="nv">result.word</span> <span class="cp">}}</span><span class="nt">&lt;/h3&gt;</span>
+        <span class="cp">{%</span> <span class="k">for</span> <span class="nv">lexicalentry</span> <span class="ow">in</span> <span class="nv">result.lexicalEntries</span> <span class="cp">%}</span>
+          <span class="nt">&lt;h4&gt;</span><span class="cp">{{</span> <span class="nv">lexicalentry.lexicalCategory</span> <span class="cp">}}</span><span class="nt">&lt;/h4&gt;</span>
+          <span class="nt">&lt;ul&gt;</span>
+            <span class="cp">{%</span> <span class="k">for</span> <span class="nv">entry</span> <span class="ow">in</span> <span class="nv">lexicalentry.entries</span> <span class="cp">%}</span>
+              <span class="cp">{%</span> <span class="k">for</span> <span class="nv">sense</span> <span class="ow">in</span> <span class="nv">entry.senses</span> <span class="cp">%}</span>
+                <span class="cp">{%</span> <span class="k">for</span> <span class="nv">definition</span> <span class="ow">in</span> <span class="nv">sense.definitions</span> <span class="cp">%}</span>
+                  <span class="nt">&lt;li&gt;</span><span class="cp">{{</span> <span class="nv">definition</span> <span class="cp">}}</span><span class="nt">&lt;/li&gt;</span>
+                <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+              <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+            <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+          <span class="nt">&lt;/ul&gt;</span>
+        <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+      <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="k">else</span> <span class="cp">%}</span>
+      <span class="nt">&lt;p&gt;&lt;em&gt;</span><span class="cp">{{</span> <span class="nv">search_result.message</span> <span class="cp">}}</span><span class="nt">&lt;/em&gt;&lt;/p&gt;</span>
+    <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+  <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span></code></pre></figure>
+
+<p>The template looks complicated but that’s how we work out the data returned by the API. We can check its format in
+the documentation:</p>
+
+<p><img src="../../../../media/2018/02/oxford-docs.png" alt="Oxford API Docs" /></p>
+
+<p>And the final result is this:</p>
+
+<p><img src="../../../../media/2018/02/dictionary.png" alt="Oxford API Docs" /></p>
+
+<hr />
+
+<h4 id="conclusions">Conclusions</h4>
+
+<p>In this tutorial we explored a few concepts of consuming third-party APIs in a Django application. I just wanted to
+share some general advices and show some practical code that integrates with external resources. With small amount of
+code we can already achieve some fun results.</p>
+
+<p>You can see those examples live at <a href="https://restful-apis-example.herokuapp.com/" target="_blank" rel="noopener">restful-apis-example.herokuapp.com</a>.</p>
+
+<p>For the source code, go to <a href="https://github.com/sibtc/restful-apis-example" target="_blank" rel="noopener">github.com/sibtc/restful-apis-example</a>.</p>
+
+<p>If you want some inspiration, or want to build something using some public API, you can visit this list on GitHub which
+provides a <a href="https://github.com/toddmotto/public-apis" target="_blank" rel="noopener">curated list of public APIs</a>.</p>
+
+<p>Be safe and happy coding!</p>
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../12/19/how-to-use-jwt-authentication-with-django-rest-framework.html">
+<img src="../../../../media/2018/12/featured-jwt.jpg" alt="How to Use JWT Authentication with Django REST Framework" title="How to Use JWT Authentication with Django REST Framework">
+How to Use JWT Authentication with Django REST Framework
+</a>
+</div>
+<div class="four columns">
+<a href="../../11/22/how-to-implement-token-authentication-using-django-rest-framework.html">
+<img src="../../../../media/2018/11/featured-rest.jpg" alt="How to Implement Token Authentication using Django REST Framework" title="How to Implement Token Authentication using Django REST Framework">
+How to Implement Token Authentication using Django REST Framework
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../series/2017/10/09/a-complete-beginners-guide-to-django-part-6.html">
+<img src="../../../../media/series/beginners-guide/1.11/part-6/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 6" title="A Complete Beginner's Guide to Django - Part 6">
+A Complete Beginner's Guide to Django - Part 6
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/views/index.html"><span class="tag">views</span></a>
+    
+      <a href="../../../../tag/rest/index.html"><span class="tag">rest</span></a>
+    
+      <a href="../../../../tag/api/index.html"><span class="tag">api</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2DVpJ9A"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Use%20RESTful%20APIs%20with%20Django&amp;url=http://sibt.co/2DVpLye&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2DVpMlM"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2DVpMCi&amp;title=How%20to%20Use%20RESTful%20APIs%20with%20Django&amp;summary=First,%20let%E2%80%99s%20get%20those%20terms%20out%20of%20our%20way.%20The%20REST%20acronym%20stands%20for%20Representational%20State%20Transfer,which%20is%20an%20architectural%20design.%20Usually%20when%20we%20use%20the%20term%20RESTful,%20we%20are%20referring%20to%20...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'how-to-use-restful-apis-with-django.html';
+        this.page.identifier = '/tutorial/2018/02/03/how-to-use-restful-apis-with-django';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tutorial/2018/02/03/how-to-use-restful-apis-with-django.html",
+  "headline": "How to Use RESTful APIs with Django",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2018/02/featured-rest.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2018-02-03T16:02:00+02:00",
+  "dateModified": "2018-02-03T16:02:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "First, let’s get those terms out of our way. The REST acronym stands for Representational State Transfer,which is an architectural design. Usually when we use the term RESTful, we are referring to ..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2018/02/03/how-to-use-restful-apis-with-django.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:44:29 GMT -->
+</html>

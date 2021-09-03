@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/page7/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:48:00 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>Simple is Better Than Complex</title>
+<meta name="description" content="This is a blog about Python, Django and Web Development. New posts every week.">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="index.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../feed.xml" />
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="mask-icon" href="../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'index.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="Simple is Better Than Complex">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/page7/">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/img/facebook_banner.jpg">
+<meta property="og:description" content="This is a blog about Python, Django and Web Development. New posts every week.">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="Simple is Better Than Complex">
+<meta name="twitter:description" content="This is a blog about Python, Django and Web Development. New posts every week.">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/img/facebook_banner.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="website">
+</head>
+<body>
+  <div itemscope="" itemtype="http://schema.org/Blog">
+    <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+    <div class="container masthead">
+      <h1 itemprop="name" content="Simple is Better Than Complex">
+        <a href="../index.html" class="logo">
+          simple <span>is</span> better <span>than</span> complex
+        </a>
+      </h1>
+      <h5>Stories about Python, Django and Web Development</h5>
+      
+        <div id="ad">
+          <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+        </div>
+      
+    </div>
+    <main>
+      <div class="container">
+        <div class="row">
+          <div class="eight columns content">
+            
+  <div class="card post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Simple is Better Than Complex">
+    <meta itemprop="url" content="https://simpleisbetterthancomplex.com">
+    <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <meta itemprop="url" content="https://simpleisbetterthancomplex.com/img/gplus_logo.png">
+      <meta itemprop="height" content="60">
+      <meta itemprop="width" content="600">
+    </div>
+  </div>
+  
+    <h5 class="post-category">
+      
+        tips
+      
+    </h5>
+    <hr class="dashed">
+  
+  <h3 class="post-title">
+    <a href="../tips/2016/10/05/django-tip-16-simple-database-access-optimizations.html" itemprop="url mainEntityOfPage">
+      <span itemprop="headline name">Django Tips #16 Simple Database Access Optimizations</span>
+    </a>
+  </h3>
+  <ul class="post-meta">
+    <li>
+      <i class="fa fa-calendar"></i>
+      <time itemprop="datePublished" content="2016-10-05T17:18:00+03:00">Oct 5, 2016</time>
+      
+        <time itemprop="dateModified" content="2016-10-05T17:18:00+03:00"></time>
+      
+    </li>
+    <li>
+      <i class="fa fa-user"></i>
+      <a href="../about/index.html" rel="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Vitor Freitas</span>
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-clock-o"></i>
+      4 minutes read
+    </li>
+    <li>
+      <i class="fa fa-comments"></i>
+      <a href="../tips/2016/10/05/django-tip-16-simple-database-access-optimizations.html#disqus_thread" data-disqus-identifier="/tips/2016/10/05/django-tip-16-simple-database-access-optimizations">
+        comments
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-eye"></i>
+      <span class="ga-page-views" data-ga-identifier="/tips/2016/10/05/django-tip-16-simple-database-access-optimizations.html"></span> views
+    </li>
+    
+  </ul>
+  
+    <a href="../tips/2016/10/05/django-tip-16-simple-database-access-optimizations.html" title="Django Tips #16 Simple Database Access Optimizations">
+      <img src="../media/2016/10/featured-tip16.jpg" alt="Django Tips #16 Simple Database Access Optimizations" class="featured-image" itemprop="image">
+    </a>
+  
+  <div itemprop="description"><p>So, I just wanted to share a few straightforward tips about database access optimization. For the most those tips are
+not something you should go to your code base and start refactoring. Actually for existing code it’s a better idea to
+profile first (with Django Debug Toolbar for example). But those tips are very easy to start applying, so keep them
+in mind when writing new code!</p>
+
+</div>
+  <p class="post-read-more">
+    <a href="../tips/2016/10/05/django-tip-16-simple-database-access-optimizations.html">Read more</a>
+  </p>
+  <hr class="dashed">
+  <div class="row">
+    <div class="five columns post-tags" itemprop="keywords">
+      
+        <a href="../tag/django/index.html"><span class="tag">django</span></a>
+      
+        <a href="../tag/models/index.html"><span class="tag">models</span></a>
+      
+        <a href="../tag/database/index.html"><span class="tag">database</span></a>
+      
+    </div>
+    <div class="seven columns post-share">
+      <div class="social">
+  
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mSJyVa"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Django%20Tips%20%2316%20Simple%20Database%20Access%20Optimizations&amp;url=http://sibt.co/2mxLq2R&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nvAsvw"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nvDgc7&amp;title=Django%20Tips%20%2316%20Simple%20Database%20Access%20Optimizations&amp;summary=So,%20I%20just%20wanted%20to%20share%20a%20few%20straightforward%20tips%20about%20database%20access%20optimization.%20For%20the%20most%20those%20tips%20arenot%20something%20you%20should%20go%20to%20your%20code%20base%20and%20start%20refactoring.%20Actually%20fo...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="card post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Simple is Better Than Complex">
+    <meta itemprop="url" content="https://simpleisbetterthancomplex.com">
+    <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <meta itemprop="url" content="https://simpleisbetterthancomplex.com/img/gplus_logo.png">
+      <meta itemprop="height" content="60">
+      <meta itemprop="width" content="600">
+    </div>
+  </div>
+  
+    <h5 class="post-category">
+      
+        tutorial
+      
+    </h5>
+    <hr class="dashed">
+  
+  <h3 class="post-title">
+    <a href="../tutorial/2016/10/04/how-to-use-django-flatpages-app.html" itemprop="url mainEntityOfPage">
+      <span itemprop="headline name">How to Use Django's Flatpages App</span>
+    </a>
+  </h3>
+  <ul class="post-meta">
+    <li>
+      <i class="fa fa-calendar"></i>
+      <time itemprop="datePublished" content="2016-10-04T13:06:00+03:00">Oct 4, 2016</time>
+      
+        <time itemprop="dateModified" content="2016-10-04T13:06:00+03:00"></time>
+      
+    </li>
+    <li>
+      <i class="fa fa-user"></i>
+      <a href="../about/index.html" rel="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Vitor Freitas</span>
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-clock-o"></i>
+      4 minutes read
+    </li>
+    <li>
+      <i class="fa fa-comments"></i>
+      <a href="../tutorial/2016/10/04/how-to-use-django-flatpages-app.html#disqus_thread" data-disqus-identifier="/tutorial/2016/10/04/how-to-use-django-flatpages-app">
+        comments
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-eye"></i>
+      <span class="ga-page-views" data-ga-identifier="/tutorial/2016/10/04/how-to-use-django-flatpages-app.html"></span> views
+    </li>
+    
+  </ul>
+  
+    <a href="../tutorial/2016/10/04/how-to-use-django-flatpages-app.html" title="How to Use Django's Flatpages App">
+      <img src="../media/2016/10/featured-flatpages.jpg" alt="How to Use Django's Flatpages App" class="featured-image" itemprop="image">
+    </a>
+  
+  <div itemprop="description"><p>Django ships with a Flatpages application that enables the user to create flat HTML pages and store it in the database.
+It can be very handy for pages like About, Privacy Policy, Cookies Policy and so on.</p>
+
+</div>
+  <p class="post-read-more">
+    <a href="../tutorial/2016/10/04/how-to-use-django-flatpages-app.html">Read more</a>
+  </p>
+  <hr class="dashed">
+  <div class="row">
+    <div class="five columns post-tags" itemprop="keywords">
+      
+        <a href="../tag/django/index.html"><span class="tag">django</span></a>
+      
+        <a href="../tag/contrib/index.html"><span class="tag">contrib</span></a>
+      
+        <a href="../tag/flatpages/index.html"><span class="tag">flatpages</span></a>
+      
+    </div>
+    <div class="seven columns post-share">
+      <div class="social">
+  
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mwclLB"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Use%20Django's%20Flatpages%20App&amp;url=http://sibt.co/2mxwKRv&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2mw3hqg"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2m4YhNC&amp;title=How%20to%20Use%20Django's%20Flatpages%20App&amp;summary=Django%20ships%20with%20a%20Flatpages%20application%20that%20enables%20the%20user%20to%20create%20flat%20HTML%20pages%20and%20store%20it%20in%20the%20database.It%20can%20be%20very%20handy%20for%20pages%20like%20About,%20Privacy%20Policy,%20Cookies%20Policy%20and%20...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="card post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Simple is Better Than Complex">
+    <meta itemprop="url" content="https://simpleisbetterthancomplex.com">
+    <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <meta itemprop="url" content="https://simpleisbetterthancomplex.com/img/gplus_logo.png">
+      <meta itemprop="height" content="60">
+      <meta itemprop="width" content="600">
+    </div>
+  </div>
+  
+    <h5 class="post-category">
+      
+        article
+      
+    </h5>
+    <hr class="dashed">
+  
+  <h3 class="post-title">
+    <a href="../article/2016/10/03/effort-estimation.html" itemprop="url mainEntityOfPage">
+      <span itemprop="headline name">Estimating the Effort of Development of a Django Application</span>
+    </a>
+  </h3>
+  <ul class="post-meta">
+    <li>
+      <i class="fa fa-calendar"></i>
+      <time itemprop="datePublished" content="2016-10-03T10:44:00+03:00">Oct 3, 2016</time>
+      
+        <time itemprop="dateModified" content="2016-10-03T10:44:00+03:00"></time>
+      
+    </li>
+    <li>
+      <i class="fa fa-user"></i>
+      <a href="../about/index.html" rel="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Vitor Freitas</span>
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-clock-o"></i>
+      15 minutes read
+    </li>
+    <li>
+      <i class="fa fa-comments"></i>
+      <a href="../article/2016/10/03/effort-estimation.html#disqus_thread" data-disqus-identifier="/article/2016/10/03/effort-estimation">
+        comments
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-eye"></i>
+      <span class="ga-page-views" data-ga-identifier="/article/2016/10/03/effort-estimation.html"></span> views
+    </li>
+    
+  </ul>
+  
+    <a href="../article/2016/10/03/effort-estimation.html" title="Estimating the Effort of Development of a Django Application">
+      <img src="../media/2016/10/featured-estimation.jpg" alt="Estimating the Effort of Development of a Django Application" class="featured-image" itemprop="image">
+    </a>
+  
+  <div itemprop="description"><p>This is a very common problem that every developer will eventually face at some point. Your boss or a client comes with
+a set of requirements and asks you to estimate how long it will take to implement them.</p>
+
+</div>
+  <p class="post-read-more">
+    <a href="../article/2016/10/03/effort-estimation.html">Read more</a>
+  </p>
+  <hr class="dashed">
+  <div class="row">
+    <div class="five columns post-tags" itemprop="keywords">
+      
+        <a href="../tag/django/index.html"><span class="tag">django</span></a>
+      
+        <a href="../tag/effort/index.html"><span class="tag">effort</span></a>
+      
+        <a href="../tag/estimation/index.html"><span class="tag">estimation</span></a>
+      
+    </div>
+    <div class="seven columns post-share">
+      <div class="social">
+  
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mSKbxI"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Estimating%20the%20Effort%20of%20Development%20of%20a%20Django%20Application&amp;url=http://sibt.co/2n2Wt75&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2ndEDz2"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nrtU4i&amp;title=Estimating%20the%20Effort%20of%20Development%20of%20a%20Django%20Application&amp;summary=This%20is%20a%20very%20common%20problem%20that%20every%20developer%20will%20eventually%20face%20at%20some%20point.%20Your%20boss%20or%20a%20client%20comes%20witha%20set%20of%20requirements%20and%20asks%20you%20to%20estimate%20how%20long%20it%20will%20take%20to%20implem...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="card post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Simple is Better Than Complex">
+    <meta itemprop="url" content="https://simpleisbetterthancomplex.com">
+    <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <meta itemprop="url" content="https://simpleisbetterthancomplex.com/img/gplus_logo.png">
+      <meta itemprop="height" content="60">
+      <meta itemprop="width" content="600">
+    </div>
+  </div>
+  
+    <h5 class="post-category">
+      
+        tips
+      
+    </h5>
+    <hr class="dashed">
+  
+  <h3 class="post-title">
+    <a href="../tips/2016/09/27/django-tip-15-cbv-mixins.html" itemprop="url mainEntityOfPage">
+      <span itemprop="headline name">Django Tips #15 Using Mixins With Class-Based Views</span>
+    </a>
+  </h3>
+  <ul class="post-meta">
+    <li>
+      <i class="fa fa-calendar"></i>
+      <time itemprop="datePublished" content="2016-09-27T20:49:00+03:00">Sep 27, 2016</time>
+      
+        <time itemprop="dateModified" content="2016-09-27T20:49:00+03:00"></time>
+      
+    </li>
+    <li>
+      <i class="fa fa-user"></i>
+      <a href="../about/index.html" rel="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Vitor Freitas</span>
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-clock-o"></i>
+      2 minutes read
+    </li>
+    <li>
+      <i class="fa fa-comments"></i>
+      <a href="../tips/2016/09/27/django-tip-15-cbv-mixins.html#disqus_thread" data-disqus-identifier="/tips/2016/09/27/django-tip-15-cbv-mixins">
+        comments
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-eye"></i>
+      <span class="ga-page-views" data-ga-identifier="/tips/2016/09/27/django-tip-15-cbv-mixins.html"></span> views
+    </li>
+    
+  </ul>
+  
+    <a href="../tips/2016/09/27/django-tip-15-cbv-mixins.html" title="Django Tips #15 Using Mixins With Class-Based Views">
+      <img src="../media/2016/09/featured-mixins.jpg" alt="Django Tips #15 Using Mixins With Class-Based Views" class="featured-image" itemprop="image">
+    </a>
+  
+  <div itemprop="description"><p>I was reading today the book
+<a target="_blank" href="https://www.amazon.com/gp/product/0692915729/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0692915729&amp;linkCode=as2&amp;tag=vitorfs0b-20&amp;linkId=52a868dd1a777fe3156f69dfa5510ff0" title="See on Amazon.com" rel="nofollow">Two Scoops of Django</a> <small>(affiliate link)</small>
+by Audrey and Daniel Roy Greenfeld and found some interesting tips about using class-based views with mixins.</p>
+
+</div>
+  <p class="post-read-more">
+    <a href="../tips/2016/09/27/django-tip-15-cbv-mixins.html">Read more</a>
+  </p>
+  <hr class="dashed">
+  <div class="row">
+    <div class="five columns post-tags" itemprop="keywords">
+      
+        <a href="../tag/django/index.html"><span class="tag">django</span></a>
+      
+        <a href="../tag/views/index.html"><span class="tag">views</span></a>
+      
+        <a href="../tag/mixins/index.html"><span class="tag">mixins</span></a>
+      
+    </div>
+    <div class="seven columns post-share">
+      <div class="social">
+  
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mPNaW6"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Django%20Tips%20%2315%20Using%20Mixins%20With%20Class-Based%20Views&amp;url=http://sibt.co/2mC2kxi&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nyOLPW"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nyKcW4&amp;title=Django%20Tips%20%2315%20Using%20Mixins%20With%20Class-Based%20Views&amp;summary=I%20was%20reading%20today%20the%20bookTwo%20Scoops%20of%20Django%20(affiliate%20link)by%20Audrey%20and%20Daniel%20Roy%20Greenfeld%20and%20found%20some%20interesting%20tips%20about%20using%20class-based%20views%20with%20mixins.&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="card post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Simple is Better Than Complex">
+    <meta itemprop="url" content="https://simpleisbetterthancomplex.com">
+    <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <meta itemprop="url" content="https://simpleisbetterthancomplex.com/img/gplus_logo.png">
+      <meta itemprop="height" content="60">
+      <meta itemprop="width" content="600">
+    </div>
+  </div>
+  
+    <h5 class="post-category">
+      
+        tutorial
+      
+    </h5>
+    <hr class="dashed">
+  
+  <h3 class="post-title">
+    <a href="../tutorial/2016/09/19/how-to-create-password-reset-view.html" itemprop="url mainEntityOfPage">
+      <span itemprop="headline name">How to Create a Password Reset View</span>
+    </a>
+  </h3>
+  <ul class="post-meta">
+    <li>
+      <i class="fa fa-calendar"></i>
+      <time itemprop="datePublished" content="2016-09-19T21:26:00+03:00">Sep 19, 2016</time>
+      
+        <time itemprop="dateModified" content="2016-09-19T21:26:00+03:00"></time>
+      
+    </li>
+    <li>
+      <i class="fa fa-user"></i>
+      <a href="../about/index.html" rel="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Vitor Freitas</span>
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-clock-o"></i>
+      4 minutes read
+    </li>
+    <li>
+      <i class="fa fa-comments"></i>
+      <a href="../tutorial/2016/09/19/how-to-create-password-reset-view.html#disqus_thread" data-disqus-identifier="/tutorial/2016/09/19/how-to-create-password-reset-view">
+        comments
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-eye"></i>
+      <span class="ga-page-views" data-ga-identifier="/tutorial/2016/09/19/how-to-create-password-reset-view.html"></span> views
+    </li>
+    
+  </ul>
+  
+    <a href="../tutorial/2016/09/19/how-to-create-password-reset-view.html" title="How to Create a Password Reset View">
+      <img src="../media/2016/09/featured-reset.jpg" alt="How to Create a Password Reset View" class="featured-image" itemprop="image">
+    </a>
+  
+  <div itemprop="description"><p>For this short tutorial we will be using the <code class="highlighter-rouge">django.contrib.auth</code> views to add a password reset functionality to your
+Django application. The process of reseting passwords involves sending emails. For that matter we will be using console
+email backend to debug and check if everything is working. In the end of this tutorial I will also provide resources
+to properly configure a prodution-quality email server.</p>
+
+</div>
+  <p class="post-read-more">
+    <a href="../tutorial/2016/09/19/how-to-create-password-reset-view.html">Read more</a>
+  </p>
+  <hr class="dashed">
+  <div class="row">
+    <div class="five columns post-tags" itemprop="keywords">
+      
+        <a href="../tag/django/index.html"><span class="tag">django</span></a>
+      
+        <a href="../tag/auth/index.html"><span class="tag">auth</span></a>
+      
+        <a href="../tag/contrib/index.html"><span class="tag">contrib</span></a>
+      
+        <a href="../tag/password/index.html"><span class="tag">password</span></a>
+      
+    </div>
+    <div class="seven columns post-share">
+      <div class="social">
+  
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mzjieS"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Create%20a%20Password%20Reset%20View&amp;url=http://sibt.co/2m9sMCc&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nuEJmc"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2m9mTEY&amp;title=How%20to%20Create%20a%20Password%20Reset%20View&amp;summary=For%20this%20short%20tutorial%20we%20will%20be%20using%20the%20django.contrib.auth%20views%20to%20add%20a%20password%20reset%20functionality%20to%20yourDjango%20application.%20The%20process%20of%20reseting%20passwords%20involves%20sending%20emails.%20Fo...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="card post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Simple is Better Than Complex">
+    <meta itemprop="url" content="https://simpleisbetterthancomplex.com">
+    <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <meta itemprop="url" content="https://simpleisbetterthancomplex.com/img/gplus_logo.png">
+      <meta itemprop="height" content="60">
+      <meta itemprop="width" content="600">
+    </div>
+  </div>
+  
+    <h5 class="post-category">
+      
+        article
+      
+    </h5>
+    <hr class="dashed">
+  
+  <h3 class="post-title">
+    <a href="../article/2016/09/12/shortcuts.html" itemprop="url mainEntityOfPage">
+      <span itemprop="headline name">Django Shortcuts</span>
+    </a>
+  </h3>
+  <ul class="post-meta">
+    <li>
+      <i class="fa fa-calendar"></i>
+      <time itemprop="datePublished" content="2016-09-12T23:29:00+03:00">Sep 12, 2016</time>
+      
+        <time itemprop="dateModified" content="2016-09-12T23:29:00+03:00"></time>
+      
+    </li>
+    <li>
+      <i class="fa fa-user"></i>
+      <a href="../about/index.html" rel="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Vitor Freitas</span>
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-clock-o"></i>
+      2 minutes read
+    </li>
+    <li>
+      <i class="fa fa-comments"></i>
+      <a href="../article/2016/09/12/shortcuts.html#disqus_thread" data-disqus-identifier="/article/2016/09/12/shortcuts">
+        comments
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-eye"></i>
+      <span class="ga-page-views" data-ga-identifier="/article/2016/09/12/shortcuts.html"></span> views
+    </li>
+    
+  </ul>
+  
+    <a href="../article/2016/09/12/shortcuts.html" title="Django Shortcuts">
+      <img src="../media/2016/09/featured-shortcuts.jpg" alt="Django Shortcuts" class="featured-image" itemprop="image">
+    </a>
+  
+  <div itemprop="description"><p>This module is a collection of helper classes generally used in view functions/classes. All the shortcuts are available
+in the module <code class="highlighter-rouge">django.shortcuts</code>.</p>
+
+</div>
+  <p class="post-read-more">
+    <a href="../article/2016/09/12/shortcuts.html">Read more</a>
+  </p>
+  <hr class="dashed">
+  <div class="row">
+    <div class="five columns post-tags" itemprop="keywords">
+      
+        <a href="../tag/django/index.html"><span class="tag">django</span></a>
+      
+        <a href="../tag/shortcuts/index.html"><span class="tag">shortcuts</span></a>
+      
+        <a href="../tag/views/index.html"><span class="tag">views</span></a>
+      
+        <a href="../tag/urls/index.html"><span class="tag">urls</span></a>
+      
+    </div>
+    <div class="seven columns post-share">
+      <div class="social">
+  
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mPUVLz"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Django%20Shortcuts&amp;url=http://sibt.co/2nyZ9aG&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2mBTnnx"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nyMUux&amp;title=Django%20Shortcuts&amp;summary=This%20module%20is%20a%20collection%20of%20helper%20classes%20generally%20used%20in%20view%20functions/classes.%20All%20the%20shortcuts%20are%20availablein%20the%20module%20django.shortcuts.&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="card post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Simple is Better Than Complex">
+    <meta itemprop="url" content="https://simpleisbetterthancomplex.com">
+    <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <meta itemprop="url" content="https://simpleisbetterthancomplex.com/img/gplus_logo.png">
+      <meta itemprop="height" content="60">
+      <meta itemprop="width" content="600">
+    </div>
+  </div>
+  
+    <h5 class="post-category">
+      
+        tips
+      
+    </h5>
+    <hr class="dashed">
+  
+  <h3 class="post-title">
+    <a href="../tips/2016/09/06/django-tip-14-messages-framework.html" itemprop="url mainEntityOfPage">
+      <span itemprop="headline name">Django Tips #14 Using the Messages Framework</span>
+    </a>
+  </h3>
+  <ul class="post-meta">
+    <li>
+      <i class="fa fa-calendar"></i>
+      <time itemprop="datePublished" content="2016-09-06T16:51:00+03:00">Sep 6, 2016</time>
+      
+        <time itemprop="dateModified" content="2016-09-06T16:51:00+03:00"></time>
+      
+    </li>
+    <li>
+      <i class="fa fa-user"></i>
+      <a href="../about/index.html" rel="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Vitor Freitas</span>
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-clock-o"></i>
+      5 minutes read
+    </li>
+    <li>
+      <i class="fa fa-comments"></i>
+      <a href="../tips/2016/09/06/django-tip-14-messages-framework.html#disqus_thread" data-disqus-identifier="/tips/2016/09/06/django-tip-14-messages-framework">
+        comments
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-eye"></i>
+      <span class="ga-page-views" data-ga-identifier="/tips/2016/09/06/django-tip-14-messages-framework.html"></span> views
+    </li>
+    
+  </ul>
+  
+    <a href="../tips/2016/09/06/django-tip-14-messages-framework.html" title="Django Tips #14 Using the Messages Framework">
+      <img src="../media/2016/09/featured-messages.jpg" alt="Django Tips #14 Using the Messages Framework" class="featured-image" itemprop="image">
+    </a>
+  
+  <div itemprop="description"><p>Keeping the users of your application aware of what is going on makes a huge difference in the user experience. If
+there is something users hate more than slow applications, it is applications that does not communicate with them.</p>
+
+</div>
+  <p class="post-read-more">
+    <a href="../tips/2016/09/06/django-tip-14-messages-framework.html">Read more</a>
+  </p>
+  <hr class="dashed">
+  <div class="row">
+    <div class="five columns post-tags" itemprop="keywords">
+      
+        <a href="../tag/django/index.html"><span class="tag">django</span></a>
+      
+        <a href="../tag/contrib/index.html"><span class="tag">contrib</span></a>
+      
+        <a href="../tag/messages/index.html"><span class="tag">messages</span></a>
+      
+    </div>
+    <div class="seven columns post-share">
+      <div class="social">
+  
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mCdMZK"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Django%20Tips%20%2314%20Using%20the%20Messages%20Framework&amp;url=http://sibt.co/2nyMg0j&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2ngI6wD"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2mzDgpN&amp;title=Django%20Tips%20%2314%20Using%20the%20Messages%20Framework&amp;summary=Keeping%20the%20users%20of%20your%20application%20aware%20of%20what%20is%20going%20on%20makes%20a%20huge%20difference%20in%20the%20user%20experience.%20Ifthere%20is%20something%20users%20hate%20more%20than%20slow%20applications,%20it%20is%20applications%20that%20...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="card post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Simple is Better Than Complex">
+    <meta itemprop="url" content="https://simpleisbetterthancomplex.com">
+    <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <meta itemprop="url" content="https://simpleisbetterthancomplex.com/img/gplus_logo.png">
+      <meta itemprop="height" content="60">
+      <meta itemprop="width" content="600">
+    </div>
+  </div>
+  
+    <h5 class="post-category">
+      
+        tutorial
+      
+    </h5>
+    <hr class="dashed">
+  
+  <h3 class="post-title">
+    <a href="../tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html" itemprop="url mainEntityOfPage">
+      <span itemprop="headline name">How to Work With AJAX Request With Django</span>
+    </a>
+  </h3>
+  <ul class="post-meta">
+    <li>
+      <i class="fa fa-calendar"></i>
+      <time itemprop="datePublished" content="2016-08-29T22:11:00+03:00">Aug 29, 2016</time>
+      
+        <time itemprop="dateModified" content="2016-08-29T22:11:00+03:00"></time>
+      
+    </li>
+    <li>
+      <i class="fa fa-user"></i>
+      <a href="../about/index.html" rel="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Vitor Freitas</span>
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-clock-o"></i>
+      8 minutes read
+    </li>
+    <li>
+      <i class="fa fa-comments"></i>
+      <a href="../tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html#disqus_thread" data-disqus-identifier="/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django">
+        comments
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-eye"></i>
+      <span class="ga-page-views" data-ga-identifier="/tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html"></span> views
+    </li>
+    
+  </ul>
+  
+    <a href="../tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html" title="How to Work With AJAX Request With Django">
+      <img src="../media/2016/08/featured-ajax.jpg" alt="How to Work With AJAX Request With Django" class="featured-image" itemprop="image">
+    </a>
+  
+  <div itemprop="description"><p>There are many scenarios where you may want to use AJAX requests in your web application. It is a great resource that
+enables web applications to be faster and more dynamic. For this short tutorial I will be using jQuery to ease the
+implementation.</p>
+
+</div>
+  <p class="post-read-more">
+    <a href="../tutorial/2016/08/29/how-to-work-with-ajax-request-with-django.html">Read more</a>
+  </p>
+  <hr class="dashed">
+  <div class="row">
+    <div class="five columns post-tags" itemprop="keywords">
+      
+        <a href="../tag/django/index.html"><span class="tag">django</span></a>
+      
+        <a href="../tag/ajax/index.html"><span class="tag">ajax</span></a>
+      
+        <a href="../tag/jquery/index.html"><span class="tag">jquery</span></a>
+      
+    </div>
+    <div class="seven columns post-share">
+      <div class="social">
+  
+  <a href="http://vk.com/share.php?url=http://sibt.co/2m9j42J"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Work%20With%20AJAX%20Request%20With%20Django&amp;url=http://sibt.co/2nMdAHp&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2mPXVaN"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nyRx7N&amp;title=How%20to%20Work%20With%20AJAX%20Request%20With%20Django&amp;summary=There%20are%20many%20scenarios%20where%20you%20may%20want%20to%20use%20AJAX%20requests%20in%20your%20web%20application.%20It%20is%20a%20great%20resource%20thatenables%20web%20applications%20to%20be%20faster%20and%20more%20dynamic.%20For%20this%20short%20tutorial%20...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="card post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Simple is Better Than Complex">
+    <meta itemprop="url" content="https://simpleisbetterthancomplex.com">
+    <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <meta itemprop="url" content="https://simpleisbetterthancomplex.com/img/gplus_logo.png">
+      <meta itemprop="height" content="60">
+      <meta itemprop="width" content="600">
+    </div>
+  </div>
+  
+    <h5 class="post-category">
+      
+        tutorial
+      
+    </h5>
+    <hr class="dashed">
+  
+  <h3 class="post-title">
+    <a href="../tutorial/2016/08/24/how-to-create-one-time-link.html" itemprop="url mainEntityOfPage">
+      <span itemprop="headline name">How to Create a One Time Link</span>
+    </a>
+  </h3>
+  <ul class="post-meta">
+    <li>
+      <i class="fa fa-calendar"></i>
+      <time itemprop="datePublished" content="2016-08-24T22:18:00+03:00">Aug 24, 2016</time>
+      
+        <time itemprop="dateModified" content="2016-08-24T22:18:00+03:00"></time>
+      
+    </li>
+    <li>
+      <i class="fa fa-user"></i>
+      <a href="../about/index.html" rel="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Vitor Freitas</span>
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-clock-o"></i>
+      4 minutes read
+    </li>
+    <li>
+      <i class="fa fa-comments"></i>
+      <a href="../tutorial/2016/08/24/how-to-create-one-time-link.html#disqus_thread" data-disqus-identifier="/tutorial/2016/08/24/how-to-create-one-time-link">
+        comments
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-eye"></i>
+      <span class="ga-page-views" data-ga-identifier="/tutorial/2016/08/24/how-to-create-one-time-link.html"></span> views
+    </li>
+    
+  </ul>
+  
+    <a href="../tutorial/2016/08/24/how-to-create-one-time-link.html" title="How to Create a One Time Link">
+      <img src="../media/2016/08/featured-one-time-link.jpg" alt="How to Create a One Time Link" class="featured-image" itemprop="image">
+    </a>
+  
+  <div itemprop="description"><p>Django uses a very interesting approach to generate the Password reset tokens. I’m not really a security expert,
+neither I’m very familiar with cryptography algorithms, but it is very safe and reliable.</p>
+
+</div>
+  <p class="post-read-more">
+    <a href="../tutorial/2016/08/24/how-to-create-one-time-link.html">Read more</a>
+  </p>
+  <hr class="dashed">
+  <div class="row">
+    <div class="five columns post-tags" itemprop="keywords">
+      
+        <a href="../tag/django/index.html"><span class="tag">django</span></a>
+      
+        <a href="../tag/security/index.html"><span class="tag">security</span></a>
+      
+    </div>
+    <div class="seven columns post-share">
+      <div class="social">
+  
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mWy1E4"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Create%20a%20One%20Time%20Link&amp;url=http://sibt.co/2nM833F&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2mzqw2s"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2mCh8fi&amp;title=How%20to%20Create%20a%20One%20Time%20Link&amp;summary=Django%20uses%20a%20very%20interesting%20approach%20to%20generate%20the%20Password%20reset%20tokens.%20I%E2%80%99m%20not%20really%20a%20security%20expert,neither%20I%E2%80%99m%20very%20familiar%20with%20cryptography%20algorithms,%20but%20it%20is%20very%20safe%20and%20relia...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+  <div class="card post-summary" itemprop="blogPost" itemscope itemtype="http://schema.org/BlogPosting">
+  <div itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Simple is Better Than Complex">
+    <meta itemprop="url" content="https://simpleisbetterthancomplex.com">
+    <div itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <meta itemprop="url" content="https://simpleisbetterthancomplex.com/img/gplus_logo.png">
+      <meta itemprop="height" content="60">
+      <meta itemprop="width" content="600">
+    </div>
+  </div>
+  
+    <h5 class="post-category">
+      
+        tips
+      
+    </h5>
+    <hr class="dashed">
+  
+  <h3 class="post-title">
+    <a href="../tips/2016/08/23/django-tip-13-f-expressions.html" itemprop="url mainEntityOfPage">
+      <span itemprop="headline name">Django Tips #13 Using F() Expressions</span>
+    </a>
+  </h3>
+  <ul class="post-meta">
+    <li>
+      <i class="fa fa-calendar"></i>
+      <time itemprop="datePublished" content="2016-08-23T23:49:00+03:00">Aug 23, 2016</time>
+      
+        <time itemprop="dateModified" content="2016-08-23T23:49:00+03:00"></time>
+      
+    </li>
+    <li>
+      <i class="fa fa-user"></i>
+      <a href="../about/index.html" rel="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Vitor Freitas</span>
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-clock-o"></i>
+      2 minutes read
+    </li>
+    <li>
+      <i class="fa fa-comments"></i>
+      <a href="../tips/2016/08/23/django-tip-13-f-expressions.html#disqus_thread" data-disqus-identifier="/tips/2016/08/23/django-tip-13-f-expressions">
+        comments
+      </a>
+    </li>
+    <li>
+      <i class="fa fa-eye"></i>
+      <span class="ga-page-views" data-ga-identifier="/tips/2016/08/23/django-tip-13-f-expressions.html"></span> views
+    </li>
+    
+  </ul>
+  
+    <a href="../tips/2016/08/23/django-tip-13-f-expressions.html" title="Django Tips #13 Using F() Expressions">
+      <img src="../media/2016/08/featured-f-expressions.jpg" alt="Django Tips #13 Using F() Expressions" class="featured-image" itemprop="image">
+    </a>
+  
+  <div itemprop="description"><p>In the Django QuerySet API, <strong>F()</strong> expressions are used to refer to model field values directly in the database.
+Let’s say you have a <code class="highlighter-rouge">Product</code> class with a <code class="highlighter-rouge">price</code> field, and you want to increase the price of all products in 20%.</p>
+
+</div>
+  <p class="post-read-more">
+    <a href="../tips/2016/08/23/django-tip-13-f-expressions.html">Read more</a>
+  </p>
+  <hr class="dashed">
+  <div class="row">
+    <div class="five columns post-tags" itemprop="keywords">
+      
+        <a href="../tag/django/index.html"><span class="tag">django</span></a>
+      
+        <a href="../tag/database/index.html"><span class="tag">database</span></a>
+      
+        <a href="../tag/queryset/index.html"><span class="tag">queryset</span></a>
+      
+    </div>
+    <div class="seven columns post-share">
+      <div class="social">
+  
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mzkD5v"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Django%20Tips%20%2313%20Using%20F()%20Expressions&amp;url=http://sibt.co/2nyYBBG&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nuHV1p"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2ngEeMg&amp;title=Django%20Tips%20%2313%20Using%20F()%20Expressions&amp;summary=In%20the%20Django%20QuerySet%20API,%20F()%20expressions%20are%20used%20to%20refer%20to%20model%20field%20values%20directly%20in%20the%20database.Let%E2%80%99s%20say%20you%20have%20a%20Product%20class%20with%20a%20price%20field,%20and%20you%20want%20to%20increase%20the%20pric...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+
+<ul class="pagination">
+  
+    <li><a href="../page6/index.html" class="previous">← Previous</a></li>
+    <li><a href="../index.html">First page</a></li>
+  
+  <li><span class="page_number ">Page 7 of 11</span></li>
+  
+    <li><a href="../page11/index.html">Last page</a></li>
+    <li><a href="../page8/index.html" class="next">Next →</a></li>
+  
+</ul>
+
+
+  <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+  <script id="ga-page-views" src="../js/page-views.js" async></script>
+
+
+          </div>
+          <div class="four columns sidebar">
+            <div class="widget card subscribe">
+  <h4>Subscribe now</h4>
+  <h6>Subscribe to our mailing list to receive updates from the blog</h6>
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <label for="id_email">Email Address</label>
+    <input type="email" name="email" class="u-full-width" id="id_email" placeholder="your@email.com">
+    <input type="submit" value="Subscribe" name="subscribe" class="button-primary">
+  </form>
+  <!-- Begin MailChimp Signup Form -->
+  <!--div id="mc_embed_signup">
+    <form action="//simpleisbetterthancomplex.us12.list-manage.com/subscribe/post?u=98efdfc6a91e10018aaa182b0&amp;id=a31c2b72f8&SIGNUP=Homepage" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+      <div id="mc_embed_signup_scroll">
+        <div class="mc-field-group">
+          <label for="mce-EMAIL">Email Address</label>
+          <input type="email" value="" name="EMAIL" class="u-full-width required email" id="mce-EMAIL" placeholder="your@email.com">
+        </div>
+        <div id="mce-responses" class="clear">
+          <h6 class="response" id="mce-error-response" style="display:none;color:#d9534f;font-weight:500;"></h6>
+          <h6 class="response" id="mce-success-response" style="display:none;color:#5cb85c;font-weight:500;"></h6>
+        </div>
+        <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_98efdfc6a91e10018aaa182b0_a31c2b72f8" tabindex="-1" value=""></div>
+        <div class="clear">
+          <input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button-primary">
+        </div>
+      </div>
+    </form>
+  </div>
+  <script type='text/javascript' src='//s3.amazonaws.com/downloads.mailchimp.com/js/mc-validate.js'></script>
+  <script type='text/javascript'>(function($) {window.fnames = new Array(); window.ftypes = new Array();fnames[0]='EMAIL';ftypes[0]='email';fnames[1]='FNAME';ftypes[1]='text';fnames[2]='LNAME';ftypes[2]='text';}(jQuery));var $mcj = jQuery.noConflict(true);</script-->
+  <!--End mc_embed_signup-->
+</div>
+
+<div itemscope itemtype="http://schema.org/Person">
+  <div class="widget card about">
+    <h4>About me</h4>
+    <img src="../img/picture.jpg" alt="Vitor Freitas" class="avatar" itemprop="image">
+    <p itemprop="description">
+      Hey there, my name is <strong itemprop="name"><span itemprop="givenName">Vitor</span> <span itemprop="familyName">Freitas</span></strong>. I'm a passionate <span itemprop="jobTitle">software developer</span> and researcher from
+      <span itemprop="nationality" itemscope itemtype="http://schema.org/Country"><span itemprop="name">Brazil</span></span>, currently living in Finland. I write about Python, Django and Web Development on a weekly basis.
+    </p>
+    <a href="../about/index.html" itemprop="url mainEntityOfPage">Read more</a>
+  </div>
+
+  <div class="widget card social">
+    <a itemprop="sameAs" href="https://www.youtube.com/VitorFreitas" target="_blank" title="YouTube">
+      <i class="fa fa-youtube-play"></i>
+    </a>
+    <a itemprop="sameAs" href="https://github.com/vitorfs" target="_blank" title="GitHub">
+      <i class="fa fa-github-alt"></i>
+    </a>
+    <a itemprop="sameAs" href="https://twitter.com/vitorfs" target="_blank" title="Twitter">
+      <i class="fa fa-twitter"></i>
+    </a>
+    <a itemprop="sameAs" href="https://facebook.com/vitorfs" target="_blank" title="Facebook">
+      <i class="fa fa-facebook"></i>
+    </a>
+    <a itemprop="sameAs" href="https://linkedin.com/in/vitorfs" target="_blank" title="LinkedIn">
+      <i class="fa fa-linkedin"></i>
+    </a>
+  </div>
+</div>
+
+<div class="widget card">
+  <h4>YouTube</h4>
+  <script src="https://apis.google.com/js/platform.js"></script>
+  <div class="g-ytsubscribe" data-channelid="UCS3lgmo8xYcOGTn_fv2mLgw" data-layout="full" data-count="default"></div>
+</div>
+
+<!--div class="widget card" style="text-align:center">
+  <a href="//namecheap.pxf.io/c/477033/408287/5618" rel="noopener nofollow">
+    <img src="//a.impactradius-go.com/display-ad/5618-408287" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="width:100%">
+  </a>
+  <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408287/5618" style="position:absolute;visibility:hidden;" border="0" alt="ImpactRadius">
+</div-->
+
+<div class="widget card">
+  <h4>Books</h4>
+  <p>Python & Django books I recommend</p>
+  <a target="_blank" rel="noopener nofollow" href="https://www.amazon.com/gp/product/0692915729/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=0692915729&amp;linkCode=as2&amp;tag=vitorfs0b-20&amp;linkId=f5e5ae41b256c11f4e7054f5c0e03f19">
+    <img border="0" src="http://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=0692915729&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=vitorfs0b-20" style="width:100%" alt="Two Scoops of Django 1.11: Best Practices for the Django Web Framework">
+    Two Scoops of Django 1.11: Best Practices for the Django Web Framework
+  </a>
+  <img src="http://ir-na.amazon-adsystem.com/e/ir?t=vitorfs0b-20&amp;l=am2&amp;o=1&amp;a=0692915729" width="1" height="1" border="0" alt="Amazon Ad System" style="border:none !important; margin:0px !important;" />
+
+  <hr>
+
+  <a target="_blank" rel="noopener nofollow" href="https://sibt.co/2xKetXM">
+    <img border="0" src="../media/sponsored/placeholder/django-for-beginners.png" style="width:100%" alt="Django for Beginners: Build websites with Python and Django">
+    Django for Beginners: Build websites with Python and Django
+  </a>
+
+  <hr>
+
+  <a target="_blank" rel="noopener nofollow" href="https://www.amazon.com/gp/product/1491946008/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=1491946008&amp;linkCode=as2&amp;tag=vitorfs0b-20&amp;linkId=357a2dda8bdf2f77fb03872d4252501b">
+    <img border="0" src="http://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&amp;MarketPlace=US&amp;ASIN=1491946008&amp;ServiceVersion=20070822&amp;ID=AsinImage&amp;WS=1&amp;Format=_SL250_&amp;tag=vitorfs0b-20" style="width:100%" alt="Fluent Python: Clear, Concise, and Effective Programming">
+    Fluent Python: Clear, Concise, and Effective Programming
+  </a>
+  <img src="http://ir-na.amazon-adsystem.com/e/ir?t=vitorfs0b-20&amp;l=am2&amp;o=1&amp;a=1491946008" width="1" height="1" border="0" alt="Amazon Ad System" style="border:none !important; margin:0px !important;" />
+</div>
+
+<div class="widget card">
+  <h4>Tweets</h4>
+  <a class="twitter-timeline" data-height="600" data-link-color="#1eaedb" href="https://twitter.com/vitorfs" data-chrome="noheader nofooter noborders">Tweets by vitorfs</a>
+  <script async src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
+</div>
+
+<div class="widget card">
+  <h4>Latest Comments</h4>
+  <div id="latest-comments">
+    Loading…
+  </div>
+  <script type="text/javascript" src="../js/latest-comments.js" async></script>
+</div>
+
+<div class="widget card">
+  <h4>Popular posts</h4>
+  <ul class="popular-posts">
+    
+      <li>
+        <a href="../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </li>
+    
+      <li>
+        <a href="../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </li>
+    
+      <li>
+        <a href="../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </li>
+    
+  </ul>
+</div>
+
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../about/index.html" rel="author">about</a></li>
+      <li><a href="../contact/index.html">contact</a></li>
+      <li><a href="../faq/index.html">faq</a></li>
+      <li><a href="../cookies/index.html">cookies</a></li>
+      <li><a href="../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  </div>
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/page7/ by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:48:00 GMT -->
+</html>

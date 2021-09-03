@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:47:23 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Paginate with Django</title>
+<meta name="description" content="As part of the Django’s common Web application tools, Django offers a few classes to manage paginated data. You canpass either a list/tuple of objects or an ...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="how-to-paginate-with-django.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'how-to-paginate-with-django.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="How to Paginate with Django">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2016-08-03-how-to-paginate-with-django/featured.jpg">
+<meta property="og:description" content="As part of the Django’s common Web application tools, Django offers a few classes to manage paginated data. You canpass either a list/tuple of objects or an ...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2016-08-03T11:56:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Paginate with Django">
+<meta name="twitter:description" content="As part of the Django’s common Web application tools, Django offers a few classes to manage paginated data. You canpass either a list/tuple of objects or an QuerySet. In this tutorial I will show h...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2016-08-03-how-to-paginate-with-django/featured.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="models">
+  
+    <meta property="article:tag" content="pagination">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tutorial
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Paginate with Django</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Aug 3, 2016
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    5 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/tutorial/2016/08/03/how-to-paginate-with-django">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="how-to-paginate-with-django.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2016-08-03-how-to-paginate-with-django/featured.jpg" alt="How to Paginate with Django" class="featured-image">
+    
+      <small>(Picture: <a href="https://unsplash.com/search/book?photo=X9GHkHbJIaU" target="_blank">https://unsplash.com/search/book?photo=X9GHkHbJIaU</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>As part of the Django’s common Web application tools, Django offers a few classes to manage paginated data. You can
+pass either a list/tuple of objects or an QuerySet. In this tutorial I will show how to paginate data using function
+based views and how to paginate using class-based views (ListView).</p>
+
+<hr />
+
+<h4 id="the-paginator">The Paginator</h4>
+
+<p>The paginator classes lives in <code class="highlighter-rouge">django.core.paginator</code>. We will be working mostly with the <code class="highlighter-rouge">Paginator</code> and <code class="highlighter-rouge">Page</code>
+classes.</p>
+
+<p>Consider the <code class="highlighter-rouge">auth.User</code> table has <strong>53</strong> user instances.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span>
+
+<span class="n">user_list</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+<span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">user_list</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span></code></pre></figure>
+
+<p>In the example above I’m telling <code class="highlighter-rouge">Paginator</code> to paginate the <code class="highlighter-rouge">user_list</code> <strong>QuerySet</strong> in pages of <strong>10</strong>. This will create
+a <strong>6</strong> pages result. The first <strong>5</strong> pages with <strong>10</strong> users each and the last page with <strong>3</strong> users.</p>
+
+<h5 id="debugging-the-paginator-object">Debugging the Paginator Object</h5>
+
+<table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Output</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>paginator.<strong>count</strong></td>
+      <td><strong>53</strong></td>
+      <td><code class="highlighter-rouge">&lt;type 'int'&gt;</code></td>
+    </tr>
+    <tr>
+      <td>paginator.<strong>num_pages</strong></td>
+      <td><strong>6</strong></td>
+      <td><code class="highlighter-rouge">&lt;type 'int'&gt;</code></td>
+    </tr>
+    <tr>
+      <td>paginator.<strong>page_range</strong></td>
+      <td><strong>xrange(1, 7)</strong></td>
+      <td><code class="highlighter-rouge">&lt;type 'xrange'&gt;</code></td>
+    </tr>
+    <tr>
+      <td>paginator.<strong>page(2)</strong></td>
+      <td><strong>&lt;Page 2 of 6&gt;</strong></td>
+      <td><code class="highlighter-rouge">&lt;class 'django.core.paginator.Page'&gt;</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The <code class="highlighter-rouge">Paginator.page()</code> method will return a given page of the paginated results, which is an instance of <code class="highlighter-rouge">Page</code>. This
+is what we will return to the template.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">users</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></code></pre></figure>
+
+<h5 id="debugging-the-page-object">Debugging the Page Object</h5>
+
+<table>
+  <thead>
+    <tr>
+      <th>Input</th>
+      <th>Output</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>users</td>
+      <td><strong>&lt;Page 2 of 6&gt;</strong></td>
+      <td><code class="highlighter-rouge">&lt;class 'django.core.paginator.Page'&gt;</code></td>
+    </tr>
+    <tr>
+      <td>users.<strong>has_next()</strong></td>
+      <td><strong>True</strong></td>
+      <td><code class="highlighter-rouge">&lt;type 'bool'&gt;</code></td>
+    </tr>
+    <tr>
+      <td>users.<strong>has_previous()</strong></td>
+      <td><strong>True</strong></td>
+      <td><code class="highlighter-rouge">&lt;type 'bool'&gt;</code></td>
+    </tr>
+    <tr>
+      <td>users.<strong>has_other_pages()</strong></td>
+      <td><strong>True</strong></td>
+      <td><code class="highlighter-rouge">&lt;type 'bool'&gt;</code></td>
+    </tr>
+    <tr>
+      <td>users.<strong>next_page_number()</strong></td>
+      <td><strong>3</strong></td>
+      <td><code class="highlighter-rouge">&lt;type 'int'&gt;</code></td>
+    </tr>
+    <tr>
+      <td>users.<strong>previous_page_number()</strong></td>
+      <td><strong>1</strong></td>
+      <td><code class="highlighter-rouge">&lt;type 'int'&gt;</code></td>
+    </tr>
+    <tr>
+      <td>users.<strong>start_index()</strong></td>
+      <td><strong>11</strong></td>
+      <td><code class="highlighter-rouge">&lt;type 'int'&gt;</code></td>
+    </tr>
+    <tr>
+      <td>users.<strong>end_index()</strong></td>
+      <td><strong>20</strong></td>
+      <td><code class="highlighter-rouge">&lt;type 'int'&gt;</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The <code class="highlighter-rouge">Page.next_page_number()</code> and <code class="highlighter-rouge">Page.previous_page_number()</code> methods raises InvalidPage if next/previous page
+doesn’t exist.</p>
+
+<p>The <code class="highlighter-rouge">Page.start_index()</code> and <code class="highlighter-rouge">Page.end_index()</code> are relative to the page number.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt;&gt;&gt; </span>users <span class="o">=</span> paginator.page<span class="o">(</span>6<span class="o">)</span>  <span class="c"># last page</span>
+&lt;Page 6 of 6&gt;
+<span class="gp">&gt;&gt;&gt; </span>users.start_index<span class="o">()</span>
+51
+<span class="gp">&gt;&gt;&gt; </span>users.end_index<span class="o">()</span>
+53</code></pre></figure>
+
+<p>The process is basically done by querying the database, then pass the QuerySet to the Paginator, grab a Page and return
+to the template. The rest is done in the template.</p>
+
+<p>Let’s see now some practical examples.</p>
+
+<hr />
+
+<h4 id="pagination-with-function-based-views">Pagination with Function-Based Views</h4>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.core.paginator</span> <span class="kn">import</span> <span class="n">Paginator</span><span class="p">,</span> <span class="n">EmptyPage</span><span class="p">,</span> <span class="n">PageNotAnInteger</span>
+
+<span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">user_list</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>
+    <span class="n">page</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'page'</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">paginator</span> <span class="o">=</span> <span class="n">Paginator</span><span class="p">(</span><span class="n">user_list</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">page</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">PageNotAnInteger</span><span class="p">:</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">EmptyPage</span><span class="p">:</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">paginator</span><span class="o">.</span><span class="n">page</span><span class="p">(</span><span class="n">paginator</span><span class="o">.</span><span class="n">num_pages</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/user_list.html'</span><span class="p">,</span> <span class="p">{</span> <span class="s">'users'</span><span class="p">:</span> <span class="n">users</span> <span class="p">})</span></code></pre></figure>
+
+<p><strong>user_list.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">"table table-bordered"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;thead&gt;</span>
+    <span class="nt">&lt;tr&gt;</span>
+      <span class="nt">&lt;th&gt;</span>Username<span class="nt">&lt;/th&gt;</span>
+      <span class="nt">&lt;th&gt;</span>First name<span class="nt">&lt;/th&gt;</span>
+      <span class="nt">&lt;th&gt;</span>Email<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+  <span class="nt">&lt;/thead&gt;</span>
+  <span class="nt">&lt;tbody&gt;</span>
+    {% for user in users %}
+      <span class="nt">&lt;tr&gt;</span>
+        <span class="nt">&lt;td&gt;</span>{{ user.username }}<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td&gt;</span>{{ user.first_name }}<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td&gt;</span>{{ user.email }}<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+    {% endfor %}
+  <span class="nt">&lt;/tbody&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+
+{% if users.has_other_pages %}
+  <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"pagination"</span><span class="nt">&gt;</span>
+    {% if users.has_previous %}
+      <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"?page={{ users.previous_page_number }}"</span><span class="nt">&gt;</span><span class="ni">&amp;laquo;</span><span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    {% else %}
+      <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"disabled"</span><span class="nt">&gt;&lt;span&gt;</span><span class="ni">&amp;laquo;</span><span class="nt">&lt;/span&gt;&lt;/li&gt;</span>
+    {% endif %}
+    {% for i in users.paginator.page_range %}
+      {% if users.number == i %}
+        <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"active"</span><span class="nt">&gt;&lt;span&gt;</span>{{ i }} <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"sr-only"</span><span class="nt">&gt;</span>(current)<span class="nt">&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;</span>
+      {% else %}
+        <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"?page={{ i }}"</span><span class="nt">&gt;</span>{{ i }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+      {% endif %}
+    {% endfor %}
+    {% if users.has_next %}
+      <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"?page={{ users.next_page_number }}"</span><span class="nt">&gt;</span><span class="ni">&amp;raquo;</span><span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    {% else %}
+      <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"disabled"</span><span class="nt">&gt;&lt;span&gt;</span><span class="ni">&amp;raquo;</span><span class="nt">&lt;/span&gt;&lt;/li&gt;</span>
+    {% endif %}
+  <span class="nt">&lt;/ul&gt;</span>
+{% endif %}</code></pre></figure>
+
+<p>The result is something like this:</p>
+
+<p><img src="../../../../media/2016-08-03-how-to-paginate-with-django/template.png" alt="Pagination" title="Pagination" /></p>
+
+<p>The example above is using Bootstrap 3.</p>
+
+<hr />
+
+<h4 id="pagination-with-class-based-views">Pagination with Class-Based Views</h4>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">UserListView</span><span class="p">(</span><span class="n">ListView</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s">'core/user_list.html'</span>  <span class="c"># Default: &lt;app_label&gt;/&lt;model_name&gt;_list.html</span>
+    <span class="n">context_object_name</span> <span class="o">=</span> <span class="s">'users'</span>  <span class="c"># Default: object_list</span>
+    <span class="n">paginate_by</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">queryset</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">()</span>  <span class="c"># Default: Model.objects.all()</span></code></pre></figure>
+
+<p><strong>user_list.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;table</span> <span class="na">class=</span><span class="s">"table table-bordered"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;thead&gt;</span>
+    <span class="nt">&lt;tr&gt;</span>
+      <span class="nt">&lt;th&gt;</span>Username<span class="nt">&lt;/th&gt;</span>
+      <span class="nt">&lt;th&gt;</span>First name<span class="nt">&lt;/th&gt;</span>
+      <span class="nt">&lt;th&gt;</span>Email<span class="nt">&lt;/th&gt;</span>
+    <span class="nt">&lt;/tr&gt;</span>
+  <span class="nt">&lt;/thead&gt;</span>
+  <span class="nt">&lt;tbody&gt;</span>
+    {% for user in users %}
+      <span class="nt">&lt;tr&gt;</span>
+        <span class="nt">&lt;td&gt;</span>{{ user.username }}<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td&gt;</span>{{ user.first_name }}<span class="nt">&lt;/td&gt;</span>
+        <span class="nt">&lt;td&gt;</span>{{ user.email }}<span class="nt">&lt;/td&gt;</span>
+      <span class="nt">&lt;/tr&gt;</span>
+    {% endfor %}
+  <span class="nt">&lt;/tbody&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+
+{% if is_paginated %}
+  <span class="nt">&lt;ul</span> <span class="na">class=</span><span class="s">"pagination"</span><span class="nt">&gt;</span>
+    {% if page_obj.has_previous %}
+      <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"?page={{ page_obj.previous_page_number }}"</span><span class="nt">&gt;</span><span class="ni">&amp;laquo;</span><span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    {% else %}
+      <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"disabled"</span><span class="nt">&gt;&lt;span&gt;</span><span class="ni">&amp;laquo;</span><span class="nt">&lt;/span&gt;&lt;/li&gt;</span>
+    {% endif %}
+    {% for i in paginator.page_range %}
+      {% if page_obj.number == i %}
+        <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"active"</span><span class="nt">&gt;&lt;span&gt;</span>{{ i }} <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"sr-only"</span><span class="nt">&gt;</span>(current)<span class="nt">&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;</span>
+      {% else %}
+        <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"?page={{ i }}"</span><span class="nt">&gt;</span>{{ i }}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+      {% endif %}
+    {% endfor %}
+    {% if page_obj.has_next %}
+      <span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"?page={{ page_obj.next_page_number }}"</span><span class="nt">&gt;</span><span class="ni">&amp;raquo;</span><span class="nt">&lt;/a&gt;&lt;/li&gt;</span>
+    {% else %}
+      <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"disabled"</span><span class="nt">&gt;&lt;span&gt;</span><span class="ni">&amp;raquo;</span><span class="nt">&lt;/span&gt;&lt;/li&gt;</span>
+    {% endif %}
+  <span class="nt">&lt;/ul&gt;</span>
+{% endif %}</code></pre></figure>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../../tips/2018/02/10/django-tip-22-designing-better-models.html">
+<img src="../../../../media/2018/02/featured-tip22.jpg" alt="Django Tips #22 Designing Better Models" title="Django Tips #22 Designing Better Models">
+Django Tips #22 Designing Better Models
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../series/2017/09/11/a-complete-beginners-guide-to-django-part-2.html">
+<img src="../../../../media/series/beginners-guide/1.11/part-2/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 2" title="A Complete Beginner's Guide to Django - Part 2">
+A Complete Beginner's Guide to Django - Part 2
+</a>
+</div>
+<div class="four columns">
+<a href="../../../2017/03/13/how-to-create-infinite-scroll-with-django.html">
+<img src="../../../../media/2017/03/featured-infinite-scroll.jpg" alt="How to Create Infinite Scroll With Django" title="How to Create Infinite Scroll With Django">
+How to Create Infinite Scroll With Django
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/models/index.html"><span class="tag">models</span></a>
+    
+      <a href="../../../../tag/pagination/index.html"><span class="tag">pagination</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mLBNgd"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Paginate%20with%20Django&amp;url=http://sibt.co/2mLKZkX&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nwDySR"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2mLAkXl&amp;title=How%20to%20Paginate%20with%20Django&amp;summary=As%20part%20of%20the%20Django%E2%80%99s%20common%20Web%20application%20tools,%20Django%20offers%20a%20few%20classes%20to%20manage%20paginated%20data.%20You%20canpass%20either%20a%20list/tuple%20of%20objects%20or%20an%20QuerySet.%20In%20this%20tutorial%20I%20will%20show%20h...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'how-to-paginate-with-django.html';
+        this.page.identifier = '/tutorial/2016/08/03/how-to-paginate-with-django';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html",
+  "headline": "How to Paginate with Django",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2016-08-03-how-to-paginate-with-django/featured.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2016-08-03T11:56:00+03:00",
+  "dateModified": "2016-08-03T11:56:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "As part of the Django’s common Web application tools, Django offers a few classes to manage paginated data. You canpass either a list/tuple of objects or an QuerySet. In this tutorial I will show h..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2016/08/03/how-to-paginate-with-django.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:47:24 GMT -->
+</html>

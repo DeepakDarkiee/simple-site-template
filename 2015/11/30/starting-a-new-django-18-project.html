@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/2015/11/30/starting-a-new-django-18-project.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:47:50 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>Starting a New Django 1.8 Project</title>
+<meta name="description" content="In this article you will find some useful tips regarding starting a new Django project and preparing a development environment. The steps below describes wha...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="starting-a-new-django-18-project.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../favicon.png">
+<link rel="mask-icon" href="../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'starting-a-new-django-18-project.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="Starting a New Django 1.8 Project">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/2015/11/30/starting-a-new-django-18-project.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2015-11-30-starting-a-new-django-18-project/featured-post-image.jpg">
+<meta property="og:description" content="In this article you will find some useful tips regarding starting a new Django project and preparing a development environment. The steps below describes wha...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2015-11-30T14:00:00+02:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="Starting a New Django 1.8 Project">
+<meta name="twitter:description" content="In this article you will find some useful tips regarding starting a new Django project and preparing a development environment. The steps below describes what I generally do when I’m starting a new...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2015-11-30-starting-a-new-django-18-project/featured-post-image.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="python">
+  
+    <meta property="article:tag" content="project">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tutorial
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">Starting a New Django 1.8 Project</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Nov 30, 2015
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    8 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/2015/11/30/starting-a-new-django-18-project">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="starting-a-new-django-18-project.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../media/2015-11-30-starting-a-new-django-18-project/featured-post-image.jpg" alt="Starting a New Django 1.8 Project" class="featured-image">
+    
+      <small>(Picture: <a href="https://stock.tookapic.com/photos/7003" target="_blank">https://stock.tookapic.com/photos/7003</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>In this article you will find some useful tips regarding starting a new Django project and preparing a development environment. The steps below describes what I generally do when I’m starting a new project.</p>
+
+<hr />
+
+<h4 id="step-1-python-virtual-environment">Step 1: Python Virtual Environment</h4>
+
+<p>If you have to maintain more than one Django project, at some point you will end up having problems with its dependencies, or with the Django version itself. The solution is to use <a href="http://docs.python-guide.org/en/latest/dev/virtualenvs/" target="_blank">virtualenv</a>, which is a tool to create isolated Python environments.</p>
+
+<p>It’s great because each of your Django project can live inside its own Python environment.</p>
+
+<p>If you don’t have it yet, you can install it using pip:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>pip install virtualenv</code></pre></figure>
+
+<p>The basic usage of virtualenv would be, inside the folder you want to place your project, execute the following command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>virtualenv simple_django_skeleton</code></pre></figure>
+
+<p>The instruction above will create a Python environment named <code class="highlighter-rouge">simple_django_skeleton</code>. In the end of the day, it’s just a folder with a Python installation inside. We will place our Django project folder and all its dependencies inside this folder.</p>
+
+<p>Now, inside the <code class="highlighter-rouge">simple_django_skeleton</code> folder, activate the environment:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span><span class="nb">source </span>bin/activate</code></pre></figure>
+
+<p>You will notice that the name of the active virtualenv will now appear on the left of the prompt. Your terminal should look like something like this:</p>
+
+<p><img src="../../../media/2015-11-30-starting-a-new-django-18-project/virtualenv.png" alt="virtualenv" title="Creating a python virtual environment" /></p>
+
+<hr />
+
+<h4 id="step-2-git-remote-repository">Step 2: Git Remote Repository</h4>
+
+<p>Using a version control system is a clever idea, even if you are gonna be working alone. I use <a href="https://git-scm.com/" target="_blank">Git</a> as the version control system for the projects I develop, and <a href="https://github.com/" target="_blank">GitHub</a> as the remote storage.</p>
+
+<p>I prefer to create the remote repository first on GitHub, and then clone it into my development environment. It’s cleaner this way.</p>
+
+<p>Inside the <code class="highlighter-rouge">simple_django_skeleton</code> folder, clone your recently created repository:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git clone git@github.com:sibtc/simple-django-skeleton.git</code></pre></figure>
+
+<p>Your folder structure should look like this:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">simple_django_skeleton/
+|∙∙bin/
+|∙∙include/
+|∙∙lib/
+|∙∙simple-django-skeleton/</code></pre></figure>
+
+<hr />
+
+<h4 id="step-3-install-django">Step 3: Install Django</h4>
+
+<p>With your <code class="highlighter-rouge">virtualenv</code> activated, install Django using <code class="highlighter-rouge">pip</code>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install django</code></pre></figure>
+
+<hr />
+
+<h4 id="step-4-initialize-the-project">Step 4: Initialize the Project</h4>
+
+<p>Inside the <code class="highlighter-rouge">simple-django-skeleton</code> folder, which is the git repository, initialize the Django project:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">django-admin startproject simple_skeleton .</code></pre></figure>
+
+<p>Notice the dot in the end of the <code class="highlighter-rouge">startproject</code> command. It will start the project in the current folder.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">simple_django_skeleton/
+|∙∙bin/
+|∙∙include/
+|∙∙lib/
++∙∙simple-django-skeleton/
+    |∙∙LICENSE
+    |∙∙README
+    |∙∙manage.py
+    +∙∙simple_skeleton/
+        |∙∙__init__.py
+        |∙∙settings.py
+        |∙∙urls.py
+        |∙∙wsgi.py</code></pre></figure>
+
+<hr />
+
+<h4 id="step-5-install-python-decouple-unipath-and-dj-database-url">Step 5: Install python-decouple, Unipath and dj-database-url</h4>
+
+<p>I use those three packages on all my Django projects. Python Decouple is a package to separe configuration variables from the source code (in case you missed our last week article about Python Decouple, you can <a href="../26/package-of-the-week-python-decouple.html">read it here</a>). Unipath will help you writing relative paths. Finally, dj-database-url will give you a cleaner way to write your database url.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install python-decouple
+pip install Unipath
+pip install dj-database-url</code></pre></figure>
+
+<hr />
+
+<h4 id="step-6-create-a-requirementstxt-file">Step 6: Create a requirements.txt file</h4>
+
+<p>It’s important to keep track of your project’s requirements. Specially if you are gonna make it available for the public:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip freeze &gt; requirements.txt</code></pre></figure>
+
+<hr />
+
+<h4 id="step-7-add-basic-settings">Step 7: Add basic settings</h4>
+
+<p>First, remove the <code class="highlighter-rouge">os</code> import and the <code class="highlighter-rouge">BASE_DIR</code> definition and add the following imports:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">decouple</span> <span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span> <span class="nn">unipath</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">dj_database_url</span></code></pre></figure>
+
+<p>Define the <code class="highlighter-rouge">PROJECT_DIR</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">PROJECT_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span></code></pre></figure>
+
+<p>Define the static and media stuff, so Django won’t have problems finding your css/js files:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">STATIC_ROOT</span> <span class="o">=</span> <span class="n">PROJECT_DIR</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">'static'</span><span class="p">)</span>
+<span class="n">STATIC_URL</span> <span class="o">=</span> <span class="s">'/static/'</span>
+
+<span class="n">STATICFILES_DIRS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="n">PROJECT_DIR</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">'static'</span><span class="p">),</span>
+<span class="p">)</span>
+
+<span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="n">PROJECT_DIR</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">'media'</span><span class="p">)</span>
+<span class="n">MEDIA_URL</span> <span class="o">=</span> <span class="s">'/media/'</span></code></pre></figure>
+
+<p>Define template folder, so Django will render your templates correctly:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">'BACKEND'</span><span class="p">:</span> <span class="s">'django.template.backends.django.DjangoTemplates'</span><span class="p">,</span>
+        <span class="s">'DIRS'</span><span class="p">:</span> <span class="p">[</span> <span class="n">PROJECT_DIR</span><span class="o">.</span><span class="n">child</span><span class="p">(</span><span class="s">'templates'</span><span class="p">)</span> <span class="p">],</span>
+        <span class="s">'APP_DIRS'</span><span class="p">:</span> <span class="bp">True</span><span class="p">,</span>
+        <span class="s">'OPTIONS'</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">'context_processors'</span><span class="p">:</span> <span class="p">[</span>
+                <span class="s">'django.template.context_processors.debug'</span><span class="p">,</span>
+                <span class="s">'django.template.context_processors.request'</span><span class="p">,</span>
+                <span class="s">'django.contrib.auth.context_processors.auth'</span><span class="p">,</span>
+                <span class="s">'django.contrib.messages.context_processors.messages'</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Decouple your settings params so you don’t commit any sensitive data or environment-specific param:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'SECRET_KEY'</span><span class="p">)</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'DEBUG'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'default'</span><span class="p">:</span> <span class="n">dj_database_url</span><span class="o">.</span><span class="n">config</span><span class="p">(</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'DATABASE_URL'</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Create a <code class="highlighter-rouge">.env</code> file in the project root:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">DEBUG</span><span class="o">=</span>True
+<span class="nv">SECRET_KEY</span><span class="o">=</span>3izb^ryglj<span class="o">(</span>bvrjb2_y1fZvcnbky#358_l6-nn#i8fkug4mmz!
+<span class="nv">DATABASE_URL</span><span class="o">=</span>sqlite:////Users/vitorfs/Projects/simple_django_skeleton/db.sqlite3</code></pre></figure>
+
+<p>Make a copy of your <code class="highlighter-rouge">.env</code> file, name it <code class="highlighter-rouge">.env.example</code> and add some sample data. This will help people who will run your project later on, as we will make Git ignore the <code class="highlighter-rouge">.env</code> file:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">DEBUG</span><span class="o">=</span>True
+<span class="nv">SECRET_KEY</span><span class="o">=</span>s3cr3tk3y
+<span class="nv">DATABASE_URL</span><span class="o">=</span>sqlite:////tmp/db.sqlite3</code></pre></figure>
+
+<hr />
+
+<h4 id="step-8-create-static-and-template-folders">Step 8: Create static and template folders</h4>
+
+<p>I like to create a folder to place project-wide templates (e.g. base.html) and static files inside the project folder:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">simple-django-skeleton/
+|∙∙LICENSE
+|∙∙README
+|∙∙manage.py
++∙∙simple_skeleton/
+    |∙∙static/
+        |∙∙css/
+           |∙∙app.css
+        |∙∙img/
+           |∙∙favicon.png
+        |∙∙js/
+           |∙∙app.js
+    |∙∙templates/
+        |∙∙base.html
+    |∙∙__init__.py
+    |∙∙settings.py
+    |∙∙urls.py
+    |∙∙wsgi.py</code></pre></figure>
+
+<p>To get things started I usually create a simple <code class="highlighter-rouge">base.html</code> template:</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">{% load static %}<span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;title&gt;</span>{% block title %}Simple Skeleton{% endblock %}<span class="nt">&lt;/title&gt;</span>
+  <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"icon"</span> <span class="na">type=</span><span class="s">"image/png"</span> <span class="na">href=</span><span class="s">"{% static 'img/favicon.png' %}"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"{% static 'css/app.css' %}"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  {% block content %}
+  {% endblock %}
+  <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"{% static 'js/app.js' %}"</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span></code></pre></figure>
+
+<hr />
+
+<h4 id="step-9-create-a-gitignore-file">Step 9: Create a .gitignore file</h4>
+
+<p>I use the GitHub’s <a href="https://github.com/github/gitignore/blob/master/Python.gitignore" target="_blank">Python .gitignore</a>. Then I update it with the following:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">.DS_Store
+<span class="k">*</span>.sqlite3
+.env</code></pre></figure>
+
+<p>The <code class="highlighter-rouge">.DS_Store</code> is a OSX file that’s automatically created by the OSX file explorer, Finder.</p>
+
+<hr />
+
+<h4 id="step-10-do-a-initial-commit">Step 10: Do a initial commit</h4>
+
+<p>Now we have a basic setup, we can commit our starting point:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git add .
+git commit -m <span class="s2">"Initial commit"</span></code></pre></figure>
+
+<hr />
+
+<h4 id="step-11-migrate">Step 11: Migrate</h4>
+
+<p>Migrate the Django models, in case you will be using <code class="highlighter-rouge">django.contrib.auth</code>, <code class="highlighter-rouge">django.contrib.contenttypes</code> etc:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate</code></pre></figure>
+
+<hr />
+
+<h4 id="step-12-create-first-app">Step 12: Create first App</h4>
+
+<p>If the project’s model is not clear for me in the beginning, I usually create an app called core. If it starts to grow, I refactor the app.</p>
+
+<p>One thing to keep your apps well organized, is to create a folder called <code class="highlighter-rouge">apps</code>, then you place all your Django Apps inside it. Also, I like to create my Apps inside the project folder, so it stays in the project’s namespace.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd </span>simple_skeleton
+mkdir apps <span class="o">&amp;&amp;</span> <span class="nb">cd </span>apps
+touch __init__.py
+django-admin startapp core</code></pre></figure>
+
+<p>The <code class="highlighter-rouge">__init__.py</code> is required to properly import the apps.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">simple-django-skeleton/
+|∙∙LICENSE
+|∙∙README
+|∙∙manage.py
++∙∙simple_skeleton/
+    |∙∙apps/
+       |∙∙__init__.py
+       |∙∙core/
+          |∙∙__init__.py
+          |∙∙admin.py
+          |∙∙migrations/
+          |∙∙models.py
+          |∙∙tests.py
+          |∙∙views.py
+    |∙∙static/
+    |∙∙templates/
+    |∙∙__init__.py
+    |∙∙settings.py
+    |∙∙urls.py
+    |∙∙wsgi.py</code></pre></figure>
+
+<p>Add it to <code class="highlighter-rouge">INSTALLED_APPS</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s">'django.contrib.admin'</span><span class="p">,</span>
+    <span class="s">'django.contrib.auth'</span><span class="p">,</span>
+    <span class="s">'django.contrib.contenttypes'</span><span class="p">,</span>
+    <span class="s">'django.contrib.sessions'</span><span class="p">,</span>
+    <span class="s">'django.contrib.messages'</span><span class="p">,</span>
+    <span class="s">'django.contrib.staticfiles'</span><span class="p">,</span>
+
+    <span class="s">'simple_skeleton.apps.core'</span><span class="p">,</span>
+<span class="p">)</span></code></pre></figure>
+
+<p>Edit your project’s <code class="highlighter-rouge">urls.py</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">include</span><span class="p">,</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+
+<span class="kn">from</span> <span class="nn">simple_skeleton.apps.core</span> <span class="kn">import</span> <span class="n">views</span> <span class="k">as</span> <span class="n">core_views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">core_views</span><span class="o">.</span><span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'home'</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^admin/'</span><span class="p">,</span> <span class="n">include</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">)),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Create a <code class="highlighter-rouge">template</code> folder inside the app core, and then inside create a folder named <code class="highlighter-rouge">core</code> and a file for our homepage <code class="highlighter-rouge">home.html</code>:</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">{% extends 'base.html' %}
+
+{% block content %}
+  <span class="nt">&lt;h1&gt;</span>Hello, World<span class="nt">&lt;/h1&gt;</span>
+{% endblock %}</code></pre></figure>
+
+<p>Edit the app core <code class="highlighter-rouge">views.py</code> adding our first view:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/home.html'</span><span class="p">)</span></code></pre></figure>
+
+<hr />
+
+<p>That’s it! As soon as I reach this point and got everything working fine, I start the development.</p>
+
+<p>If you want to see the source code of this sample project, you can grab the source code on GitHub <a href="https://github.com/sibtc/simple-django-skeleton" target="_blank">simple-django-skeleton</a>.</p>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../tutorial/2021/06/27/how-to-start-a-production-ready-django-project.html">
+<img src="../../../media/2021/06/featured-production.jpg" alt="How to Start a Production-Ready Django Project" title="How to Start a Production-Ready Django Project">
+How to Start a Production-Ready Django Project
+</a>
+</div>
+<div class="four columns">
+<a href="../../../series/2017/10/16/a-complete-beginners-guide-to-django-part-7.html">
+<img src="../../../media/series/beginners-guide/1.11/part-7/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 7" title="A Complete Beginner's Guide to Django - Part 7">
+A Complete Beginner's Guide to Django - Part 7
+</a>
+</div>
+<div class="four columns">
+<a href="../../../series/2017/10/09/a-complete-beginners-guide-to-django-part-6.html">
+<img src="../../../media/series/beginners-guide/1.11/part-6/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 6" title="A Complete Beginner's Guide to Django - Part 6">
+A Complete Beginner's Guide to Django - Part 6
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../tag/python/index.html"><span class="tag">python</span></a>
+    
+      <a href="../../../tag/project/index.html"><span class="tag">project</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2nMyVoe"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Starting%20a%20New%20Django%201.8%20Project&amp;url=http://sibt.co/2mTPbPx&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nUSkAm"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nMkqRA&amp;title=Starting%20a%20New%20Django%201.8%20Project&amp;summary=In%20this%20article%20you%20will%20find%20some%20useful%20tips%20regarding%20starting%20a%20new%20Django%20project%20and%20preparing%20a%20development%20environment.%20The%20steps%20below%20describes%20what%20I%20generally%20do%20when%20I%E2%80%99m%20starting%20a%20new...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'starting-a-new-django-18-project.html';
+        this.page.identifier = '/2015/11/30/starting-a-new-django-18-project';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../contact/index.html">contact</a></li>
+      <li><a href="../../../faq/index.html">faq</a></li>
+      <li><a href="../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/2015/11/30/starting-a-new-django-18-project.html",
+  "headline": "Starting a New Django 1.8 Project",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2015-11-30-starting-a-new-django-18-project/featured-post-image.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2015-11-30T14:00:00+02:00",
+  "dateModified": "2015-11-30T14:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "In this article you will find some useful tips regarding starting a new Django project and preparing a development environment. The steps below describes what I generally do when I’m starting a new..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/2015/11/30/starting-a-new-django-18-project.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:47:51 GMT -->
+</html>

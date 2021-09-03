@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:45:56 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Create User Sign Up View</title>
+<meta name="description" content="In this tutorial I will cover a few strategies to create Django user sign up/registration. Usually I implement it fromscratch. You will see it’s very straigh...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="how-to-create-user-sign-up-view.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'how-to-create-user-sign-up-view.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="How to Create User Sign Up View">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2017/02/thumbnail-signup.jpg">
+<meta property="og:description" content="In this tutorial I will cover a few strategies to create Django user sign up/registration. Usually I implement it fromscratch. You will see it’s very straigh...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2017-02-18T02:00:00+02:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Create User Sign Up View">
+<meta name="twitter:description" content="In this tutorial I will cover a few strategies to create Django user sign up/registration. Usually I implement it fromscratch. You will see it’s very straightforward.">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2017/02/thumbnail-signup.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="user">
+  
+    <meta property="article:tag" content="registration">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tutorial
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Create User Sign Up View</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Feb 18, 2017
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    17 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/tutorial/2017/02/18/how-to-create-user-sign-up-view">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="how-to-create-user-sign-up-view.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2017/02/featured-signup.jpg" alt="How to Create User Sign Up View" class="featured-image">
+    
+      <small>(Picture: <a href="https://www.pexels.com/photo/white-samsung-laptop-computer-showing-smartphones-163141/" target="_blank">https://www.pexels.com/photo/white-samsung-laptop-computer-showing-smartphones-163141/</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>In this tutorial I will cover a few strategies to create Django user sign up/registration. Usually I implement it from
+scratch. You will see it’s very straightforward.</p>
+
+<p>For the examples I will use an empty Django project named <strong>mysite</strong>. Inside the <strong>mysite</strong> folder I created an app
+named <strong>core</strong>. So every time you see <strong>mysite</strong> and/or <strong>core</strong>, change to the suitable project name and app name.</p>
+
+<p>A brief summary of what you are going to find here:</p>
+
+<ul>
+  <li><a href="#basic-sign-up">Basic Sign Up</a></li>
+  <li><a href="#sign-up-with-extra-fields">Sign Up With Extra Fields</a></li>
+  <li><a href="#sign-up-with-profile-model">Sign Up With Profile Model</a></li>
+  <li><a href="#sign-up-with-confirmation-mail">Sign Up With Confirmation Mail</a></li>
+</ul>
+
+<hr />
+
+<h4 id="basic-sign-up">Basic Sign Up</h4>
+
+<p>The most simple way to implement a user sign up is by using the <code class="highlighter-rouge">UserCreationForm</code> as it is. This strategy is suitable
+in case you are using the default Django user, using <strong>username</strong> to authenticate and is interested only in setting the
+<strong>username</strong> and <strong>password</strong> upon sign up.</p>
+
+<p><strong>urls.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">mysite.core</span> <span class="kn">import</span> <span class="n">views</span> <span class="k">as</span> <span class="n">core_views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="o">...</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^signup/$'</span><span class="p">,</span> <span class="n">core_views</span><span class="o">.</span><span class="n">signup</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'signup'</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">login</span><span class="p">,</span> <span class="n">authenticate</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.forms</span> <span class="kn">import</span> <span class="n">UserCreationForm</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
+
+<span class="k">def</span> <span class="nf">signup</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">UserCreationForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">username</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'username'</span><span class="p">)</span>
+            <span class="n">raw_password</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'password1'</span><span class="p">)</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">raw_password</span><span class="p">)</span>
+            <span class="n">login</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'home'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">UserCreationForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'signup.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></code></pre></figure>
+
+<p><strong>signup.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h2&gt;</span>Sign up<span class="nt">&lt;/h2&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nv">form.as_p</span> <span class="cp">}}</span>
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Sign up<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span></code></pre></figure>
+
+<p>Basically what we are doing here is handling the <code class="highlighter-rouge">UserCreationForm</code> processing. Business as usual. After the code reach
+<code class="highlighter-rouge">form.save()</code>, the user is created. But here we need to take a step further: manually authenticate the user. You could
+redirect the user to the login page, but performing the authentication is good for the user experience.</p>
+
+<p>In order to perform the authentication, we need to grab the raw password from the input that came from POST. The
+<code class="highlighter-rouge">user.password</code> stores the hash, and we can’t use it directly to authenticate.</p>
+
+<p>If the <code class="highlighter-rouge">authenticate()</code> function is executed successfully (in this case it will always return a success), it will
+a user instance (meaning the username <em>and</em> password matches), we can now securely log the user in. It’s done by
+calling the <code class="highlighter-rouge">login()</code> function, passing the <strong>request</strong> and the <strong>user</strong> instance as parameter. After that, simply
+redirect the user to wherever you want.</p>
+
+<p>If you want more control over the <strong>signup.html</strong> form, you can extract the fields in a for loop:</p>
+
+<p><strong>signup.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;h2&gt;</span>Sign up<span class="nt">&lt;/h2&gt;</span>
+  <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="cp">{%</span> <span class="k">for</span> <span class="nv">field</span> <span class="ow">in</span> <span class="nv">form</span> <span class="cp">%}</span>
+      <span class="nt">&lt;p&gt;</span>
+        <span class="cp">{{</span> <span class="nv">field.label_tag</span> <span class="cp">}}</span><span class="nt">&lt;br&gt;</span>
+        <span class="cp">{{</span> <span class="nv">field</span> <span class="cp">}}</span>
+        <span class="cp">{%</span> <span class="k">if</span> <span class="nv">field.help_text</span> <span class="cp">%}</span>
+          <span class="nt">&lt;small</span> <span class="na">style=</span><span class="s">"color: grey"</span><span class="nt">&gt;</span><span class="cp">{{</span> <span class="nv">field.help_text</span> <span class="cp">}}</span><span class="nt">&lt;/small&gt;</span>
+        <span class="cp">{%</span> <span class="k">endif</span> <span class="cp">%}</span>
+        <span class="cp">{%</span> <span class="k">for</span> <span class="nv">error</span> <span class="ow">in</span> <span class="nv">field.errors</span> <span class="cp">%}</span>
+          <span class="nt">&lt;p</span> <span class="na">style=</span><span class="s">"color: red"</span><span class="nt">&gt;</span><span class="cp">{{</span> <span class="nv">error</span> <span class="cp">}}</span><span class="nt">&lt;/p&gt;</span>
+        <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+      <span class="nt">&lt;/p&gt;</span>
+    <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Sign up<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span></code></pre></figure>
+
+<p>It will look like this:</p>
+
+<p><img src="../../../../media/2017/02/signup1.png" alt="Sign Up Basic Example" /></p>
+
+<p>The code is available on GitHub: <a href="https://github.com/sibtc/simple-signup/tree/master/basic-example" target="_blank">github.com/sibtc/simple-signup/tree/master/basic-example</a>.</p>
+
+<hr />
+
+<h4 id="sign-up-with-extra-fields">Sign Up With Extra Fields</h4>
+
+<p>So, what if I wanted to also get the user’s email address and full name upon sign up?</p>
+
+<p>This strategy will work if you are using the Django user as it is, or if you have extended it using the <strong>AbstractUser</strong>
+or <strong>AbstractBaseUser</strong>. If you extended the Django user using a Profile model, hold tight, we will get there too.</p>
+
+<p>Now we need a step further, we have to extend the <strong>UserCreationForm</strong>.</p>
+
+<p><strong>forms.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.forms</span> <span class="kn">import</span> <span class="n">UserCreationForm</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+
+<span class="k">class</span> <span class="nc">SignUpForm</span><span class="p">(</span><span class="n">UserCreationForm</span><span class="p">):</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="s">'Optional.'</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="s">'Optional.'</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">254</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="s">'Required. Inform a valid email address.'</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">'username'</span><span class="p">,</span> <span class="s">'first_name'</span><span class="p">,</span> <span class="s">'last_name'</span><span class="p">,</span> <span class="s">'email'</span><span class="p">,</span> <span class="s">'password1'</span><span class="p">,</span> <span class="s">'password2'</span><span class="p">,</span> <span class="p">)</span></code></pre></figure>
+
+<p>Now in the view, just change the form class to use our new <strong>SignUpForm</strong>.</p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">login</span><span class="p">,</span> <span class="n">authenticate</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
+
+<span class="kn">from</span> <span class="nn">mysite.core.forms</span> <span class="kn">import</span> <span class="n">SignUpForm</span>
+
+<span class="k">def</span> <span class="nf">signup</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SignUpForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">username</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'username'</span><span class="p">)</span>
+            <span class="n">raw_password</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'password1'</span><span class="p">)</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">raw_password</span><span class="p">)</span>
+            <span class="n">login</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'home'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SignUpForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'signup.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></code></pre></figure>
+
+<p>It will look like this:</p>
+
+<p><img src="../../../../media/2017/02/signup2.png" alt="Sign Up Basic Example With Extra Fields" /></p>
+
+<p>By the way, if you are wondering about the template, I’m using the same <strong>signup.html</strong> template from the previous
+example.</p>
+
+<p>The code is available on GitHub: <a href="https://github.com/sibtc/simple-signup/tree/master/extra-fields" target="_blank">github.com/sibtc/simple-signup/tree/master/extra-fields</a>.</p>
+
+<hr />
+
+<h4 id="sign-up-with-profile-model">Sign Up With Profile Model</h4>
+
+<p>With some tweaks we can also make it work using a profile model. Consider the model definition:</p>
+
+<p><strong>models.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
+<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+
+<span class="k">class</span> <span class="nc">Profile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">bio</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">TextField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">location</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">birth_date</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">update_user_profile</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+        <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></code></pre></figure>
+
+<p>In this particular case, the profile is created using a Signal. It’s not mandatory, but usually it is a good way to
+implement it. You can learn more about extending the user model in <a href="../../../2016/07/22/how-to-extend-django-user-model.html">this post</a>.</p>
+
+<p>Let’s say we want to also get the <strong>birth_date</strong> of the user upon sign up. First, let’s update the model form:</p>
+
+<p><strong>forms.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.forms</span> <span class="kn">import</span> <span class="n">UserCreationForm</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+<span class="k">class</span> <span class="nc">SignUpForm</span><span class="p">(</span><span class="n">UserCreationForm</span><span class="p">):</span>
+    <span class="n">birth_date</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">DateField</span><span class="p">(</span><span class="n">help_text</span><span class="o">=</span><span class="s">'Required. Format: YYYY-MM-DD'</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">'username'</span><span class="p">,</span> <span class="s">'birth_date'</span><span class="p">,</span> <span class="s">'password1'</span><span class="p">,</span> <span class="s">'password2'</span><span class="p">,</span> <span class="p">)</span></code></pre></figure>
+
+<p>This form won’t save automatically the <strong>birth_date</strong> on <code class="highlighter-rouge">form.save()</code>. Instead, we have to handle it manually:</p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">login</span><span class="p">,</span> <span class="n">authenticate</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">mysite.core.forms</span> <span class="kn">import</span> <span class="n">SignUpForm</span>
+
+<span class="k">def</span> <span class="nf">signup</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SignUpForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">refresh_from_db</span><span class="p">()</span>  <span class="c"># load the profile instance created by the signal</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">birth_date</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'birth_date'</span><span class="p">)</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">raw_password</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'password1'</span><span class="p">)</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">authenticate</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="o">.</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">raw_password</span><span class="p">)</span>
+            <span class="n">login</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'home'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SignUpForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'signup.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></code></pre></figure>
+
+<p>Because of the Signal handling the Profile creation, we have a synchronism issue here. It is easily solved by calling
+the <code class="highlighter-rouge">user.refresh_from_db()</code> method. This will cause a hard refresh from the database, which will retrieve the profile
+instance.</p>
+
+<p>If you don’t call <code class="highlighter-rouge">user.refresh_from_db()</code>, when you try to access the <code class="highlighter-rouge">user.profile</code>, it will return <code class="highlighter-rouge">None</code>.</p>
+
+<p>After refreshing it user model, set the cleaned data to the fields that matter, and save the user model. The user save
+will trigger the profile save as well, that’s why you don’t need to call <code class="highlighter-rouge">user.profile.save()</code>, instead you call just
+<code class="highlighter-rouge">user.save()</code>.</p>
+
+<p>I updated the <strong>birth_date</strong> directly in the view, but in case you are dealing with a bigger amount of fields in the
+profile model, I would suggest creating two forms (say, UserForm and ProfileForm), and process both at once.
+Check <a href="https://gist.github.com/vitorfs/cbe877156ba538a20c53c9a1cea29277" target="_blank">this gist</a> for an example.</p>
+
+<p>The code is available on GitHub: <a href="https://github.com/sibtc/simple-signup/tree/master/profile-model" target="_blank">github.com/sibtc/simple-signup/tree/master/profile-model</a>.</p>
+
+<hr />
+
+<h4 id="sign-up-with-confirmation-mail">Sign Up With Confirmation Mail</h4>
+
+<p>This one requires a more complicated setup. Because you know, you need to configure email, need some extra fields,
+unique links with expiration date, and stuff like that.</p>
+
+<p>I have already published in great detail each one of those parts, so in this post I will just put the pieces together.</p>
+
+<p>For testing purpose, I will be using the console email backend, to debug the code:</p>
+
+<p><strong>settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">EMAIL_BACKEND</span> <span class="o">=</span> <span class="s">'django.core.mail.backends.console.EmailBackend'</span></code></pre></figure>
+
+<p>If you want to configure a production quality email service, read more in this post:
+<a href="../../../2016/06/13/how-to-send-email.html">How to Send Email in a Django App</a>.</p>
+
+<p>Create a field to determine if the email is confirmed or not:</p>
+
+<p><strong>models.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.db.models.signals</span> <span class="kn">import</span> <span class="n">post_save</span>
+<span class="kn">from</span> <span class="nn">django.dispatch</span> <span class="kn">import</span> <span class="n">receiver</span>
+
+<span class="k">class</span> <span class="nc">Profile</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">OneToOneField</span><span class="p">(</span><span class="n">User</span><span class="p">,</span> <span class="n">on_delete</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CASCADE</span><span class="p">)</span>
+    <span class="n">email_confirmed</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="c"># other fields...</span>
+
+<span class="nd">@receiver</span><span class="p">(</span><span class="n">post_save</span><span class="p">,</span> <span class="n">sender</span><span class="o">=</span><span class="n">User</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">update_user_profile</span><span class="p">(</span><span class="n">sender</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">created</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">created</span><span class="p">:</span>
+        <span class="n">Profile</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">instance</span><span class="p">)</span>
+    <span class="n">instance</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">save</span><span class="p">()</span></code></pre></figure>
+
+<p>In an previous article I explained how to make use of some Django internal apis to create one time link. You can read
+more about it here: <a href="../../../2016/08/24/how-to-create-one-time-link.html">How to Create a One Time Link</a> (in case
+you want to learn more how it works).</p>
+
+<p>For our use case, create a new module named <strong>tokens.py</strong>.</p>
+
+<p><strong>tokens.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth.tokens</span> <span class="kn">import</span> <span class="n">PasswordResetTokenGenerator</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">six</span>
+
+<span class="k">class</span> <span class="nc">AccountActivationTokenGenerator</span><span class="p">(</span><span class="n">PasswordResetTokenGenerator</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_make_hash_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">pk</span><span class="p">)</span> <span class="o">+</span> <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">(</span><span class="n">timestamp</span><span class="p">)</span> <span class="o">+</span>
+            <span class="n">six</span><span class="o">.</span><span class="n">text_type</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">email_confirmed</span><span class="p">)</span>
+        <span class="p">)</span>
+
+<span class="n">account_activation_token</span> <span class="o">=</span> <span class="n">AccountActivationTokenGenerator</span><span class="p">()</span></code></pre></figure>
+
+<p>We basically extended the <code class="highlighter-rouge">PasswordResetTokenGenerator</code> to create a unique token generator to confirm email addresses.
+This make use of your project’s <code class="highlighter-rouge">SECRET_KEY</code>, so it is a pretty safe and reliable method.</p>
+
+<p>Now we need to enforce the email registration on sign up.</p>
+
+<p><strong>forms.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.forms</span> <span class="kn">import</span> <span class="n">UserCreationForm</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+
+
+<span class="k">class</span> <span class="nc">SignUpForm</span><span class="p">(</span><span class="n">UserCreationForm</span><span class="p">):</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">254</span><span class="p">,</span> <span class="n">help_text</span><span class="o">=</span><span class="s">'Required. Inform a valid email address.'</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">'username'</span><span class="p">,</span> <span class="s">'email'</span><span class="p">,</span> <span class="s">'password1'</span><span class="p">,</span> <span class="s">'password2'</span><span class="p">,</span> <span class="p">)</span></code></pre></figure>
+
+<p>In the view processing we will no longer authenticate the user, instead we will email him/her the account activation
+email:</p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.sites.shortcuts</span> <span class="kn">import</span> <span class="n">get_current_site</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.utils.encoding</span> <span class="kn">import</span> <span class="n">force_bytes</span>
+<span class="kn">from</span> <span class="nn">django.utils.http</span> <span class="kn">import</span> <span class="n">urlsafe_base64_encode</span>
+<span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">render_to_string</span>
+<span class="kn">from</span> <span class="nn">mysite.core.forms</span> <span class="kn">import</span> <span class="n">SignUpForm</span>
+<span class="kn">from</span> <span class="nn">mysite.core.tokens</span> <span class="kn">import</span> <span class="n">account_activation_token</span>
+
+<span class="k">def</span> <span class="nf">signup</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SignUpForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">commit</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="n">current_site</span> <span class="o">=</span> <span class="n">get_current_site</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+            <span class="n">subject</span> <span class="o">=</span> <span class="s">'Activate Your MySite Account'</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">render_to_string</span><span class="p">(</span><span class="s">'account_activation_email.html'</span><span class="p">,</span> <span class="p">{</span>
+                <span class="s">'user'</span><span class="p">:</span> <span class="n">user</span><span class="p">,</span>
+                <span class="s">'domain'</span><span class="p">:</span> <span class="n">current_site</span><span class="o">.</span><span class="n">domain</span><span class="p">,</span>
+                <span class="s">'uid'</span><span class="p">:</span> <span class="n">urlsafe_base64_encode</span><span class="p">(</span><span class="n">force_bytes</span><span class="p">(</span><span class="n">user</span><span class="o">.</span><span class="n">pk</span><span class="p">)),</span>
+                <span class="s">'token'</span><span class="p">:</span> <span class="n">account_activation_token</span><span class="o">.</span><span class="n">make_token</span><span class="p">(</span><span class="n">user</span><span class="p">),</span>
+            <span class="p">})</span>
+            <span class="n">user</span><span class="o">.</span><span class="n">email_user</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'account_activation_sent'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">SignUpForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'signup.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></code></pre></figure>
+
+<p>Basically this is the same strategy for password reset. Notice that I’m changing the <code class="highlighter-rouge">user.is_active</code> to <code class="highlighter-rouge">False</code>, so
+the user can’t log in before confirming the email address. After that, we send the email for the user. See below
+the contents of the email template.</p>
+
+<p><strong>account_activation_email.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">autoescape</span> <span class="nv">off</span> <span class="cp">%}</span>
+Hi <span class="cp">{{</span> <span class="nv">user.username</span> <span class="cp">}}</span>,
+
+Please click on the link below to confirm your registration:
+
+http://<span class="cp">{{</span> <span class="nv">domain</span> <span class="cp">}}{%</span> <span class="nv">url</span> <span class="s1">'activate'</span> <span class="nv">uidb64</span><span class="err">=</span><span class="nv">uid</span> <span class="nv">token</span><span class="err">=</span><span class="nv">token</span> <span class="cp">%}</span>
+<span class="cp">{%</span> <span class="k">endautoescape</span> <span class="cp">%}</span></code></pre></figure>
+
+<p>And here is the routes you will need:</p>
+
+<p><strong>urls.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">mysite.core</span> <span class="kn">import</span> <span class="n">views</span> <span class="k">as</span> <span class="n">core_views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^account_activation_sent/$'</span><span class="p">,</span> <span class="n">core_views</span><span class="o">.</span><span class="n">account_activation_sent</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'account_activation_sent'</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^activate/(?P&lt;uidb64&gt;[0-9A-Za-z_</span><span class="err">\</span><span class="s">-]+)/(?P&lt;token&gt;[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$'</span><span class="p">,</span>
+        <span class="n">core_views</span><span class="o">.</span><span class="n">activate</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'activate'</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>The <code class="highlighter-rouge">account_activation_sent</code> view is a simple HTML template:</p>
+
+<p><img src="../../../../media/2017/02/signup3.png" alt="Sign Up Confirmation Link" /></p>
+
+<p>This page is showed right after the user submit the sign up form. Then, at the same time, the user will receive an
+email with the link:</p>
+
+<p><img src="../../../../media/2017/02/signup4.png" alt="Sign Up Confirmation Link" /></p>
+
+<p>By clicking in the link, the user is sent to the <code class="highlighter-rouge">activate</code> view:</p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">login</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span><span class="p">,</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">django.utils.encoding</span> <span class="kn">import</span> <span class="n">force_text</span>
+<span class="kn">from</span> <span class="nn">django.utils.http</span> <span class="kn">import</span> <span class="n">urlsafe_base64_decode</span>
+<span class="kn">from</span> <span class="nn">mysite.core.tokens</span> <span class="kn">import</span> <span class="n">account_activation_token</span>
+
+<span class="k">def</span> <span class="nf">activate</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">uidb64</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">uid</span> <span class="o">=</span> <span class="n">force_text</span><span class="p">(</span><span class="n">urlsafe_base64_decode</span><span class="p">(</span><span class="n">uidb64</span><span class="p">))</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">uid</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="nb">TypeError</span><span class="p">,</span> <span class="nb">ValueError</span><span class="p">,</span> <span class="nb">OverflowError</span><span class="p">,</span> <span class="n">User</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">account_activation_token</span><span class="o">.</span><span class="n">check_token</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">is_active</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">profile</span><span class="o">.</span><span class="n">email_confirmed</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">user</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+        <span class="n">login</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'home'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'account_activation_invalid.html'</span><span class="p">)</span></code></pre></figure>
+
+<p>Here we do all the magic, checking if the user exists, if the token is valid. If everything checks, we switch the flags
+<code class="highlighter-rouge">is_active</code> and <code class="highlighter-rouge">email_confirmed</code> to <code class="highlighter-rouge">True</code> and log the user in.</p>
+
+<p>By changing the value of the <code class="highlighter-rouge">email_confirmed</code> field, it will cause the link to be invalidated.</p>
+
+<p>The code is available on GitHub: <a href="https://github.com/sibtc/simple-signup/tree/master/confirmation-email" target="_blank">github.com/sibtc/simple-signup/tree/master/confirmation-email</a>.</p>
+
+<hr />
+
+<p>That’s it! I hope you enjoyed this post. In a future post I can explore the third party libraries that help the
+registration process. But usually I prefer to implement it by myself, and avoid an extra dependency.</p>
+
+<p>All the four examples are available on GitHub in the same repository:</p>
+
+<p><a href="https://github.com/sibtc/simple-signup" target="_blank">github.com/sibtc/simple-signup</a></p>
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../../article/2021/07/08/what-you-should-know-about-the-django-user-model.html">
+<img src="../../../../media/2021/07/featured-user.jpg" alt="What You Should Know About The Django User Model" title="What You Should Know About The Django User Model">
+What You Should Know About The Django User Model
+</a>
+</div>
+<div class="four columns">
+<a href="../../../2018/01/18/how-to-implement-multiple-user-types-with-django.html">
+<img src="../../../../media/2018/01/featured-user-types.jpg" alt="How to Implement Multiple User Types with Django" title="How to Implement Multiple User Types with Django">
+How to Implement Multiple User Types with Django
+</a>
+</div>
+<div class="four columns">
+<a href="../06/how-to-implement-case-insensitive-username.html">
+<img src="../../../../media/2017/02/featured-case.jpg" alt="How to Implement Case-Insensitive Username" title="How to Implement Case-Insensitive Username">
+How to Implement Case-Insensitive Username
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/user/index.html"><span class="tag">user</span></a>
+    
+      <a href="../../../../tag/registration/index.html"><span class="tag">registration</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mMNwhL"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Create%20User%20Sign%20Up%20View&amp;url=http://sibt.co/2mIrn2q&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nmxInI"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2lZkPPR&amp;title=How%20to%20Create%20User%20Sign%20Up%20View&amp;summary=In%20this%20tutorial%20I%20will%20cover%20a%20few%20strategies%20to%20create%20Django%20user%20sign%20up/registration.%20Usually%20I%20implement%20it%20fromscratch.%20You%20will%20see%20it%E2%80%99s%20very%20straightforward.&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'how-to-create-user-sign-up-view.html';
+        this.page.identifier = '/tutorial/2017/02/18/how-to-create-user-sign-up-view';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html",
+  "headline": "How to Create User Sign Up View",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2017/02/featured-signup.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2017-02-18T02:00:00+02:00",
+  "dateModified": "2017-02-18T02:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "In this tutorial I will cover a few strategies to create Django user sign up/registration. Usually I implement it fromscratch. You will see it’s very straightforward."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2017/02/18/how-to-create-user-sign-up-view.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:46:01 GMT -->
+</html>

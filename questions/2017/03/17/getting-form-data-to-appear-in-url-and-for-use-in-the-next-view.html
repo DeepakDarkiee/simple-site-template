@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/questions/2017/03/17/getting-form-data-to-appear-in-url-and-for-use-in-the-next-view.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:40:23 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>Ask Vitor #1: Getting form data to appear in URL and for use in the next view</title>
+<meta name="description" content="  Devon Moore asks: I want to have the user specify a date in a custom form. This date will append the current URL with the date value path/YYYY-MM-DD/ I the...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="getting-form-data-to-appear-in-url-and-for-use-in-the-next-view.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'getting-form-data-to-appear-in-url-and-for-use-in-the-next-view.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="Ask Vitor #1: Getting form data to appear in URL and for use in the next view">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/questions/2017/03/17/getting-form-data-to-appear-in-url-and-for-use-in-the-next-view.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2017/03/thumbnail-ask-vitor-1.jpg">
+<meta property="og:description" content="  Devon Moore asks: I want to have the user specify a date in a custom form. This date will append the current URL with the date value path/YYYY-MM-DD/ I the...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2017-03-17T00:00:00+02:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="Ask Vitor #1: Getting form data to appear in URL and for use in the next view">
+<meta name="twitter:description" content="  Devon Moore asks: I want to have the user specify a date in a custom form. This date will append the current URL with the date value path/YYYY-MM-DD/ I then need to capture the date and use it to...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2017/03/thumbnail-ask-vitor-1.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="forms">
+  
+    <meta property="article:tag" content="urls">
+  
+    <meta property="article:tag" content="cbv">
+  
+    <meta property="article:tag" content="askvitor">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      Q&A
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">Ask Vitor #1: Getting form data to appear in URL and for use in the next view</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Mar 17, 2017
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    5 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/questions/2017/03/17/getting-form-data-to-appear-in-url-and-for-use-in-the-next-view">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="getting-form-data-to-appear-in-url-and-for-use-in-the-next-view.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2017/03/featured-ask-vitor-1.jpg" alt="Ask Vitor #1: Getting form data to appear in URL and for use in the next view" class="featured-image">
+    
+  </div>
+
+
+            <article>
+              <blockquote>
+  <p><em>Devon Moore asks: </em><br /><br />
+I want to have the user specify a date in a custom form. This date will append the current URL with the date value <code>path/YYYY-MM-DD/</code> I then need to capture the date and use it to filter data from the database to display that date’s data.<br />
+I’m using class based views and for the report I’m using generic view since this view is a custom report I’m building using multiple db models.</p>
+</blockquote>
+
+<hr />
+
+<h4 id="answer">Answer</h4>
+
+<p>Here is what Devon wants to achieve:</p>
+
+<p><img src="../../../../media/2017/03/askvitor1.png" alt="Result" /></p>
+
+<p>There are a couple of ways to achieve the desired result. Using class-based views, we could perhaps do something like
+this:</p>
+
+<p><strong>forms.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">ReportForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">date</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">DateField</span><span class="p">()</span></code></pre></figure>
+
+<p><strong>urls.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">core</span> <span class="kn">import</span> <span class="n">views</span>  <span class="c"># import your views using the correct app name</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'report/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">Report</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s">'report'</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'report/(?P&lt;year&gt;[0-9]{4})-(?P&lt;month&gt;[0-9]{2})-(?P&lt;day&gt;[0-9]{2})/$'</span><span class="p">,</span>
+        <span class="n">views</span><span class="o">.</span><span class="n">ReportDetails</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s">'report_details'</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Example of valid URL matching the <code class="highlighter-rouge">report_details</code> pattern: <code class="highlighter-rouge">/report/2017-03-17/</code>. If you want to change the URL to
+use slashes instead of dashes (<code class="highlighter-rouge">/report/2017/03/17/</code>), change the URL pattern to this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python">    <span class="n">url</span><span class="p">(</span><span class="s">r'report/(?P&lt;year&gt;[0-9]{4})/(?P&lt;month&gt;[0-9]{2})/(?P&lt;day&gt;[0-9]{2})/$'</span><span class="p">,</span>
+        <span class="n">views</span><span class="o">.</span><span class="n">ReportDetails</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s">'report_details'</span><span class="p">),</span></code></pre></figure>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.views</span> <span class="kn">import</span> <span class="n">View</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="kn">import</span> <span class="n">FormView</span>
+<span class="kn">from</span> <span class="nn">django.utils.dateformat</span> <span class="kn">import</span> <span class="n">format</span>
+
+<span class="k">class</span> <span class="nc">Report</span><span class="p">(</span><span class="n">FormView</span><span class="p">):</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s">'report.html'</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">ReportForm</span>
+
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'date'</span><span class="p">)</span>
+        <span class="n">year</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">year</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="s">'m'</span><span class="p">)</span>
+        <span class="n">day</span> <span class="o">=</span> <span class="n">format</span><span class="p">(</span><span class="n">date</span><span class="p">,</span> <span class="s">'d'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'report_details'</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">ReportDetails</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">year</span><span class="p">,</span> <span class="n">month</span><span class="p">,</span> <span class="n">day</span><span class="p">):</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">date_joined__year__gte</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">year</span><span class="p">))</span>
+        <span class="c"># do your thing here, filter the data etc</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'report_details.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'users'</span><span class="p">:</span> <span class="n">users</span><span class="p">})</span></code></pre></figure>
+
+<p>The view <code class="highlighter-rouge">Report</code> is responsible just for validating the user input and redirecting the user to the view that will
+actually process the report, which is <code class="highlighter-rouge">ReportDetails</code>.</p>
+
+<p>The form is posted to <code class="highlighter-rouge">Report</code>. <code class="highlighter-rouge">Report</code> validates the input and if it is valid, it fires a redirect towards the
+<code class="highlighter-rouge">ReportDetails</code>. <code class="highlighter-rouge">ReportDetails</code> grab the date information from the URL, process the querysets and finally returns
+to the user, rendering the template.</p>
+
+<p><strong>report.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+    <span class="cp">{%</span> <span class="nv">csrf_token</span> <span class="cp">%}</span>
+    <span class="cp">{{</span> <span class="nv">form.as_p</span> <span class="cp">}}</span>
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Generate report<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span></code></pre></figure>
+
+<p><strong>report_details.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">{%</span> <span class="k">extends</span> <span class="s1">'base.html'</span> <span class="cp">%}</span>
+
+<span class="cp">{%</span> <span class="k">block</span> <span class="nv">content</span> <span class="cp">%}</span>
+  <span class="nt">&lt;ul&gt;</span>
+  <span class="cp">{%</span> <span class="k">for</span> <span class="nv">user</span> <span class="ow">in</span> <span class="nv">users</span> <span class="cp">%}</span>
+    <span class="nt">&lt;li&gt;</span><span class="cp">{{</span> <span class="nv">user.username</span> <span class="cp">}}</span><span class="nt">&lt;/li&gt;</span>
+  <span class="cp">{%</span> <span class="k">endfor</span> <span class="cp">%}</span>
+  <span class="nt">&lt;/ul&gt;</span>
+  <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'report'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>New report<span class="nt">&lt;/a&gt;</span>
+<span class="cp">{%</span> <span class="k">endblock</span> <span class="cp">%}</span></code></pre></figure>
+
+<p>The final result would be something like this:</p>
+
+<p><img src="../../../../media/2017/03/askvitor1-1.png" alt="Report View" /></p>
+
+<p>Filtering with the proper URL:</p>
+
+<p><img src="../../../../media/2017/03/askvitor1-2.png" alt="Report Details View" /></p>
+
+<hr />
+
+<h4 id="caveats">Caveats</h4>
+
+<p>This implementation will only work if you only need the date to filter the report.</p>
+
+<p>If you need to pass extra information to do the filtering of the querysets, I would recommend sending the form data
+directly to the <code class="highlighter-rouge">Report</code> view. And perhaps even using a GET request, because you are not modifying the data.</p>
+
+<p>Something like this:</p>
+
+<p><strong>urls.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'report/$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">Report</span><span class="o">.</span><span class="n">as_view</span><span class="p">(),</span> <span class="n">name</span><span class="o">=</span><span class="s">'report'</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Report</span><span class="p">(</span><span class="n">View</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s">'date'</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">:</span>  <span class="c"># only try to filter if `date` is in the querystring</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">ReportForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+                <span class="c"># process the report</span>
+                <span class="n">date</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'date'</span><span class="p">)</span>
+                <span class="n">invoices</span> <span class="o">=</span> <span class="n">Invoices</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">date__year</span><span class="o">=</span><span class="n">date</span><span class="o">.</span><span class="n">year</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'report_details.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'invoices'</span><span class="p">:</span> <span class="n">invoices</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">form</span> <span class="o">=</span> <span class="n">ReportForm</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'report.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'form'</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span></code></pre></figure>
+
+<p>Then you would end up having a URL like this: <code class="highlighter-rouge">/report/?date=2017-03-17</code>. And if you had more information in the form,
+like the status, it would append in the URL: <code class="highlighter-rouge">/report/?date=2017-03-17&amp;status=pending</code>.</p>
+
+<p>The URL would still be friendly, and the implementation would be simpler.</p>
+
+<hr />
+
+<h4 id="get-the-code">Get the Code</h4>
+
+<p>The code is available on GitHub: <a href="https://github.com/sibtc/askvitor/tree/master/0001" target="_blank">github.com/sibtc/askvitor</a>.</p>
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../../tutorial/2019/01/02/how-to-implement-grouped-model-choice-field.html">
+<img src="../../../../media/2019/01/featured-grouped.jpg" alt="How to Implement Grouped Model Choice Field" title="How to Implement Grouped Model Choice Field">
+How to Implement Grouped Model Choice Field
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../tutorial/2018/11/28/advanced-form-rendering-with-django-crispy-forms.html">
+<img src="../../../../media/2018/11/featured-forms.jpg" alt="Advanced Form Rendering with Django Crispy Forms" title="Advanced Form Rendering with Django Crispy Forms">
+Advanced Form Rendering with Django Crispy Forms
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../tutorial/2018/08/13/how-to-use-bootstrap-4-forms-with-django.html">
+<img src="../../../../media/2018/08/featured-crispy.jpg" alt="How to Use Bootstrap 4 Forms With Django" title="How to Use Bootstrap 4 Forms With Django">
+How to Use Bootstrap 4 Forms With Django
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/forms/index.html"><span class="tag">forms</span></a>
+    
+      <a href="../../../../tag/urls/index.html"><span class="tag">urls</span></a>
+    
+      <a href="../../../../tag/cbv/index.html"><span class="tag">cbv</span></a>
+    
+      <a href="../../../../tag/askvitor/index.html"><span class="tag">askvitor</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mC7cCE"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Ask%20Vitor%20%231:%20Getting%20form%20data%20to%20appear%20in%20URL%20and%20for%20use%20in%20the%20next%20view&amp;url=http://sibt.co/2mCkm2u&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2m9Lp9g"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2m9O6rc&amp;title=Ask%20Vitor%20%231:%20Getting%20form%20data%20to%20appear%20in%20URL%20and%20for%20use%20in%20the%20next%20view&amp;summary=%20%20Devon%20Moore%20asks:%20I%20want%20to%20have%20the%20user%20specify%20a%20date%20in%20a%20custom%20form.%20This%20date%20will%20append%20the%20current%20URL%20with%20the%20date%20value%20path/YYYY-MM-DD/%20I%20then%20need%20to%20capture%20the%20date%20and%20use%20it%20to...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+  <!--hr class="dashed">
+  <div class="row">
+    <div class="twelve columns" style="text-align: center">
+      <h4>Have a question about Django, Web development or anything related to tech? Go ahead and ask it!</h4>
+      <a href="/ask/" class="button button-primary">Ask a Question</a>
+    </div>
+  </div-->
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'getting-form-data-to-appear-in-url-and-for-use-in-the-next-view.html';
+        this.page.identifier = '/questions/2017/03/17/getting-form-data-to-appear-in-url-and-for-use-in-the-next-view';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/questions/2017/03/17/getting-form-data-to-appear-in-url-and-for-use-in-the-next-view.html",
+  "headline": "Ask Vitor #1: Getting form data to appear in URL and for use in the next view",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2017/03/featured-ask-vitor-1.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2017-03-17T00:00:00+02:00",
+  "dateModified": "2017-03-17T00:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "  Devon Moore asks: I want to have the user specify a date in a custom form. This date will append the current URL with the date value path/YYYY-MM-DD/ I then need to capture the date and use it to..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/questions/2017/03/17/getting-form-data-to-appear-in-url-and-for-use-in-the-next-view.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:40:26 GMT -->
+</html>

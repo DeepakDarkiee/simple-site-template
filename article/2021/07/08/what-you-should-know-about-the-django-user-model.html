@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/article/2021/07/08/what-you-should-know-about-the-django-user-model.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:36:28 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>What You Should Know About The Django User Model</title>
+<meta name="description" content="The goal of this article is to discuss the caveats of the default Django user model implementation and also to give you some advice on how to address them. I...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="what-you-should-know-about-the-django-user-model.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'what-you-should-know-about-the-django-user-model.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="What You Should Know About The Django User Model">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/article/2021/07/08/what-you-should-know-about-the-django-user-model.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2021/07/thumbnail-user.jpg">
+<meta property="og:description" content="The goal of this article is to discuss the caveats of the default Django user model implementation and also to give you some advice on how to address them. I...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2021-07-08T17:30:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="What You Should Know About The Django User Model">
+<meta name="twitter:description" content="The goal of this article is to discuss the caveats of the default Django user model implementation and also to give you some advice on how to address them. It is important to know the limitations o...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2021/07/thumbnail-user.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="user">
+  
+    <meta property="article:tag" content="model">
+  
+    <meta property="article:tag" content="contrib">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      article
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">What You Should Know About The Django User Model</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Jul 8, 2021
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    22 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/article/2021/07/08/what-you-should-know-about-the-django-user-model">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="what-you-should-know-about-the-django-user-model.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2021/07/featured-user.jpg" alt="What You Should Know About The Django User Model" class="featured-image">
+    
+      <small>(Picture: <a href="https://www.pexels.com/photo/man-using-smartphone-3584924/" target="_blank">https://www.pexels.com/photo/man-using-smartphone-3584924/</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>The goal of this article is to discuss the caveats of the default Django user model implementation and also to give you 
+some advice on how to address them. It is important to know the limitations of the current implementation so to avoid 
+the most common pitfalls.</p>
+
+<p>Something to keep in mind is that the Django user model is heavily based on its initial implementation that is at least 
+16 years old. Because user and authentication is a core part of the majority of the web applications using Django, most 
+of its quirks persisted on the subsequent releases so to maintain backward compatibility.</p>
+
+<p>The good news is that Django offers many ways to override and customize its default implementation so to fit your 
+application needs. But some of those changes must be done right at the beginning of the project, otherwise it would be
+too much of a hassle to change the database structure after your application is in production.</p>
+
+<p>Below, the topics that we are going to cover in this article:</p>
+
+<ul>
+  <li><a href="#user-model-limitations">User Model Limitations</a>
+    <ul>
+      <li><a href="#the-username-field-is-case-sensitive">The username field is case-sensitive</a></li>
+      <li><a href="#the-username-field-validates-against-unicode-letters">The username field validates against unicode letters</a></li>
+      <li><a href="#the-email-field-is-not-unique">The email field is not unique</a></li>
+      <li><a href="#the-email-field-is-not-mandatory">The email field is not mandatory</a></li>
+      <li><a href="#a-user-without-password-cannot-initiate-a-password-reset">A user without password cannot initiate a password reset</a></li>
+      <li><a href="#swapping-the-default-user-model-is-very-difficult-after-you-created-the-initial-migrations">Swapping the default user model is very difficult after you created the initial migrations</a></li>
+    </ul>
+  </li>
+  <li><a href="#detailed-solutions">Detailed Solutions</a>
+    <ul>
+      <li><a href="#workarounds">Workarounds</a>
+        <ul>
+          <li><a href="#making-username-field-case-insensitive">Making username field case-insensitive</a></li>
+          <li><a href="#fixing-the-username-validation-to-use-accept-ascii-letters-only">Fixing the username validation to use accept ASCII letters only</a></li>
+          <li><a href="#fixing-the-email-uniqueness-and-making-it-mandatory">Fixing the email uniqueness and making it mandatory</a></li>
+        </ul>
+      </li>
+      <li><a href="#replacing-the-default-user-model">Replacing the default User model</a>
+        <ul>
+          <li><a href="#handling-case-insensitive-without-postgresql">Handling case-insensitive without PostgreSQL</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#conclusions">Conclusions</a></li>
+</ul>
+
+<hr />
+
+<h3 id="user-model-limitations">User Model Limitations</h3>
+
+<p>First, let’s explore the caveats and next we discuss the options.</p>
+
+<h4 id="the-username-field-is-case-sensitive">The username field is case-sensitive</h4>
+
+<p>Even though the <code class="highlighter-rouge">username</code> field is marked as unique, by default it is not case-sensitive. That means the username 
+<code class="highlighter-rouge">john.doe</code> and <code class="highlighter-rouge">John.doe</code> identifies two different users in your application.</p>
+
+<p>This can be a security issue if your application has social aspects that builds around the <code class="highlighter-rouge">username</code> providing a
+public URL to a profile like Twitter, Instagram or GitHub for example.</p>
+
+<p>It also delivers a poor user experience because people doesn’t expect that <code class="highlighter-rouge">john.doe</code> is a different username than
+<code class="highlighter-rouge">John.Doe</code>, and if the user does not type the username exactly in the same way when they created their account, they 
+might be unable to log in to your application.</p>
+
+<p><strong>Possible Solutions:</strong></p>
+
+<ul>
+  <li>If you are using PostgreSQL, you can replace the username <code class="highlighter-rouge">CharField</code> with the <code class="highlighter-rouge">CICharField</code> instead (which is case-insensitive)</li>
+  <li>You can override the method <code class="highlighter-rouge">get_by_natural_key</code> from the <code class="highlighter-rouge">UserManager</code> to query the database using <code class="highlighter-rouge">iexact</code></li>
+  <li>Create a custom authentication backend based on the <code class="highlighter-rouge">ModelBackend</code> implementation</li>
+</ul>
+
+<h4 id="the-username-field-validates-against-unicode-letters">The username field validates against unicode letters</h4>
+
+<p>This is not necessarily an issue, but it is important for you to understand what that means and what are the effects.</p>
+
+<p>By default the username field accepts letters, numbers and the characters: <code class="highlighter-rouge">@</code>, <code class="highlighter-rouge">.</code>, <code class="highlighter-rouge">+</code>, <code class="highlighter-rouge">-</code>, and <code class="highlighter-rouge">_</code>.</p>
+
+<p>The catch here is on <em>which</em> letters it accepts.</p>
+
+<p>For example, <code class="highlighter-rouge">joão</code> would be a valid username. Similarly, <code class="highlighter-rouge">Джон</code> or <code class="highlighter-rouge">約翰</code> would also be a valid username.</p>
+
+<p>Django ships with two username validators: <code class="highlighter-rouge">ASCIIUsernameValidator</code> and <code class="highlighter-rouge">UnicodeUsernameValidator</code>. If the intended
+behavior is to only accept letters from A-Z, you may want to switch the username validator to use ASCII letters only
+by using the <code class="highlighter-rouge">ASCIIUsernameValidator</code>.</p>
+
+<p><strong>Possible Solutions:</strong></p>
+
+<ul>
+  <li>Replace the default user model and change the username validator to <code class="highlighter-rouge">ASCIIUsernameValidator</code></li>
+  <li>If you can’t replace the default user model, you can change the validator on the form you use to create/update the user</li>
+</ul>
+
+<h4 id="the-email-field-is-not-unique">The email field is not unique</h4>
+
+<p>Multiple users can have the same email address associated with their account.</p>
+
+<p>By default the email is used to recover a password. If there is more than one user with the same email address, the
+password reset will be initiated for all accounts and the user will receive an email for each active account.</p>
+
+<p>It also may not be an issue but this will certainly make it impossible to offer the option to authenticate the user
+using the email address (like those sites that allow you to login with username or email address).</p>
+
+<p><strong>Possible Solutions:</strong></p>
+
+<ul>
+  <li>Replace the default user model using the <code class="highlighter-rouge">AbstractBaseUser</code> to define the email field from scratch</li>
+  <li>If you can’t replace the user model, enforce the validation on the forms used to create/update</li>
+</ul>
+
+<h4 id="the-email-field-is-not-mandatory">The email field is not mandatory</h4>
+
+<p>By default the email field does not allow <code class="highlighter-rouge">null</code>, however it allow <code class="highlighter-rouge">blank</code> values, so it pretty much allows users to
+not inform a email address.</p>
+
+<p>Also, this may not be an issue for your application. But if you intend to allow users to log in with email it may be a 
+good idea to enforce the registration of this field.</p>
+
+<p>When using the built-in resources like user creation forms or when using model forms you need to pay attention to this
+detail if the desired behavior is to always have the user email.</p>
+
+<p><strong>Possible Solutions:</strong></p>
+
+<ul>
+  <li>Replace the default user model using the <code class="highlighter-rouge">AbstractBaseUser</code> to define the email field from scratch</li>
+  <li>If you can’t replace the user model, enforce the validation on the forms used to create/update</li>
+</ul>
+
+<h4 id="a-user-without-password-cannot-initiate-a-password-reset">A user without password cannot initiate a password reset</h4>
+
+<p>There is a small catch on the user creation process that if the <code class="highlighter-rouge">set_password</code> method is called passing <code class="highlighter-rouge">None</code> as a 
+parameter, it will produce an unusable password. And that also means that the user will be unable to start a password
+reset to set the first password.</p>
+
+<p>You can end up in that situation if you are using social networks like Facebook or Twitter to allow the user to create
+an account on your website.</p>
+
+<p>Another way of ending up in this situation is simply by creating a user using the <code class="highlighter-rouge">User.objects.create_user()</code> or
+<code class="highlighter-rouge">User.objects.create_superuser()</code> without providing an initial password.</p>
+
+<p><strong>Possible Solutions:</strong></p>
+
+<ul>
+  <li>If in you user creation flow you allow users to get started without setting a password, remember to pass a random
+(and lengthy) initial password so the user can later on go through the password reset flow and set an initial password.</li>
+</ul>
+
+<h4 id="swapping-the-default-user-model-is-very-difficult-after-you-created-the-initial-migrations">Swapping the default user model is very difficult after you created the initial migrations</h4>
+
+<p>Changing the user model is something you want to do early on. After your database schema is generated and your 
+database is populated it will be very tricky to swap the user model.</p>
+
+<p>The reason why is that you are likely going to have some foreign key created referencing the user table, also Django 
+internal tables will create hard references to the user table. And if you plan to change that later on you will
+need to change and migrate the database by yourself.</p>
+
+<p><strong>Possible Solutions:</strong></p>
+
+<ul>
+  <li>Whenever you are starting a new Django project, <strong>always swap the default user model</strong>. Even if the default 
+implementation fit all your needs. You can simply extend the <code class="highlighter-rouge">AbstractUser</code> and change a single configuration on the
+settings module. This will give you a tremendous freedom and it will make things way easier in the future should the
+requirements change.</li>
+</ul>
+
+<hr />
+
+<h3 id="detailed-solutions">Detailed Solutions</h3>
+
+<p>To address the limitations we discussed in this article we have two options: (1) implement workarounds to fix the
+behavior of the default user model; (2) replace the default user model altogether and fix the issues for good.</p>
+
+<p>What is going to dictate what approach you need to use is <em>in what stage your project currently is</em>.</p>
+
+<ul>
+  <li>If you have an existing project running in production that is using the default <code class="highlighter-rouge">django.contrib.auth.models.User</code>, go 
+with the first solution implementing the workarounds;</li>
+  <li>If you are just starting your Django, start with the right foot and go with the solution number 2.</li>
+</ul>
+
+<h4 id="workarounds">Workarounds</h4>
+
+<p>First let’s have a look on a few workarounds that you can implement if you project is already in production. Keep in
+mind that those solutions assume that you don’t have direct access to the User model, that is, you are currently using
+the default User model importing it from <code class="highlighter-rouge">django.contrib.auth.models</code>.</p>
+
+<p>If you did replace the User model, then jump to the next section to get better tips on how to fix the issues.</p>
+
+<h5 id="making-username-field-case-insensitive">Making username field case-insensitive</h5>
+
+<p>Before making any changes you need to make sure you don’t have conflicting usernames on your database. For example,
+if you have a User with the username <code class="highlighter-rouge">maria</code> and another with the username <code class="highlighter-rouge">Maria</code> you have to plan a data migration
+first. It is difficult to tell you what to do because it really depends on how you want to handle it. One option is
+to append some digits after the username, but that can disturb the user experience.</p>
+
+<p>Now let’s say you checked your database and there are no conflicting usernames and you are good to go.</p>
+
+<p>First thing you need to do is to protect your sign up forms to not allow conflicting usernames to create accounts.</p>
+
+<p>Then on your user creation form, used to sign up, you could validate the username like this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">clean_username</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"username"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">username__iexact</span><span class="o">=</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_error</span><span class="p">(</span><span class="s">"username"</span><span class="p">,</span> <span class="s">"A user with this username already exists."</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">username</span></code></pre></figure>
+
+<p>If you are handling user creation in a rest API using DRF, you can do something similar in your serializer:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">validate_username</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">username__iexact</span><span class="o">=</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">serializers</span><span class="o">.</span><span class="n">ValidationError</span><span class="p">(</span><span class="s">"A user with this username already exists."</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span></code></pre></figure>
+
+<p>In the previous example the mentioned <code class="highlighter-rouge">ValidationError</code> is the one defined in the DRF.</p>
+
+<p>The <code class="highlighter-rouge">iexact</code> notation on the queryset parameter will query the database ignoring the case.</p>
+
+<p>Now that the user creation is sanitized we can proceed to define a custom authentication backend.</p>
+
+<p>Create a module named <strong>backends.py</strong> anywhere in your project and add the following snippet:</p>
+
+<p><strong>backends.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth</span> <span class="kn">import</span> <span class="n">get_user_model</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.backends</span> <span class="kn">import</span> <span class="n">ModelBackend</span>
+
+
+<span class="k">class</span> <span class="nc">CaseInsensitiveModelBackend</span><span class="p">(</span><span class="n">ModelBackend</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">authenticate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">username</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">UserModel</span> <span class="o">=</span> <span class="n">get_user_model</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">username</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">username</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">USERNAME_FIELD</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">case_insensitive_username_field</span> <span class="o">=</span> <span class="s">'{}__iexact'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">UserModel</span><span class="o">.</span><span class="n">USERNAME_FIELD</span><span class="p">)</span>
+            <span class="n">user</span> <span class="o">=</span> <span class="n">UserModel</span><span class="o">.</span><span class="n">_default_manager</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">case_insensitive_username_field</span><span class="p">:</span> <span class="n">username</span><span class="p">})</span>
+        <span class="k">except</span> <span class="n">UserModel</span><span class="o">.</span><span class="n">DoesNotExist</span><span class="p">:</span>
+            <span class="c"># Run the default password hasher once to reduce the timing</span>
+            <span class="c"># difference between an existing and a non-existing user (#20760).</span>
+            <span class="n">UserModel</span><span class="p">()</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">user</span><span class="o">.</span><span class="n">check_password</span><span class="p">(</span><span class="n">password</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_can_authenticate</span><span class="p">(</span><span class="n">user</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">user</span></code></pre></figure>
+
+<p>Now switch the authentication backend in the <strong>settings.py</strong> module:</p>
+
+<p><strong>settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">AUTHENTICATION_BACKENDS</span> <span class="o">=</span> <span class="p">(</span><span class="s">'mysite.core.backends.CaseInsensitiveModelBackend'</span><span class="p">,</span> <span class="p">)</span></code></pre></figure>
+
+<p>Please note that <code class="highlighter-rouge">'mysite.core.backends.CaseInsensitiveModelBackend'</code> must be changed to the valid path, where you
+created the <strong>backends.py</strong> module.</p>
+
+<p>It is important to have handled all conflicting users before changing the authentication backend because otherwise it
+could raise a 500 exception <code class="highlighter-rouge">MultipleObjectsReturned</code>.</p>
+
+<h5 id="fixing-the-username-validation-to-use-accept-ascii-letters-only">Fixing the username validation to use accept ASCII letters only</h5>
+
+<p>Here we can borrow the built-in <code class="highlighter-rouge">UsernameField</code> and customize it to append the <code class="highlighter-rouge">ASCIIUsernameValidator</code> to the list of
+validators:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth.forms</span> <span class="kn">import</span> <span class="n">UsernameField</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.validators</span> <span class="kn">import</span> <span class="n">ASCIIUsernameValidator</span>
+
+<span class="k">class</span> <span class="nc">ASCIIUsernameField</span><span class="p">(</span><span class="n">UsernameField</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">validators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ASCIIUsernameValidator</span><span class="p">())</span></code></pre></figure>
+
+<p>Then on the <code class="highlighter-rouge">Meta</code> of your User creation form you can replace the form field class:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">UserCreationForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="c"># field definitions...</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">"username"</span><span class="p">,)</span>
+        <span class="n">field_classes</span> <span class="o">=</span> <span class="p">{</span><span class="s">'username'</span><span class="p">:</span> <span class="n">ASCIIUsernameField</span><span class="p">}</span></code></pre></figure>
+
+<h5 id="fixing-the-email-uniqueness-and-making-it-mandatory">Fixing the email uniqueness and making it mandatory</h5>
+
+<p>Here all you can do is to sanitize and handle the user input in all views where you user can modify its email address.</p>
+
+<p>You have to include the email field on your sign up form/serializer as well.</p>
+
+<p>Then just make it mandatory like this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">UserCreationForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">EmailField</span><span class="p">(</span><span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="c"># other field definitions...</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">User</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">"username"</span><span class="p">,)</span>
+        <span class="n">field_classes</span> <span class="o">=</span> <span class="p">{</span><span class="s">'username'</span><span class="p">:</span> <span class="n">ASCIIUsernameField</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">clean_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">"email"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">email__iexact</span><span class="o">=</span><span class="n">email</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_error</span><span class="p">(</span><span class="s">"email"</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s">"A user with this email already exists."</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">email</span></code></pre></figure>
+
+<p>You can also check a complete and detailed example of this form on the project shared together with this post: 
+<a href="https://github.com/sibtc/django-user-caveats/tree/master/userworkarounds">userworkarounds</a></p>
+
+<h4 id="replacing-the-default-user-model">Replacing the default User model</h4>
+
+<p>Now I’m going to show you how I usually like to extend and replace the default User model. It is a little bit verbose
+but that is the strategy that will allow you to access all the inner parts of the User model and make it better.</p>
+
+<p>To replace the User model you have two options: extending the <code class="highlighter-rouge">AbstractBaseUser</code> or extending the <code class="highlighter-rouge">AbstractUser</code>.</p>
+
+<p>To illustrate what that means I draw the following diagram of how the default Django model is implemented:</p>
+
+<p><img src="../../../../media/2021/07/user-diagram.png" alt="User Model Diagram" /></p>
+
+<p>The green circle identified with the label <code class="highlighter-rouge">User</code> is actually the one you import from <code class="highlighter-rouge">django.contrib.auth.models</code> and
+that is the implementation that we discussed in this article.</p>
+
+<p>If you look at the source code, its implementation looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">AbstractUser</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">AbstractUser</span><span class="o">.</span><span class="n">Meta</span><span class="p">):</span>
+        <span class="n">swappable</span> <span class="o">=</span> <span class="s">'AUTH_USER_MODEL'</span></code></pre></figure>
+
+<p>So basically it is just an implementation of the <code class="highlighter-rouge">AbstractUser</code>. Meaning all the fields and logic are implemented in the
+abstract class.</p>
+
+<p>It is done that way so we can easily extend the <code class="highlighter-rouge">User</code> model by creating a sub-class of the <code class="highlighter-rouge">AbstractUser</code> and add other 
+features and fields you like.</p>
+
+<p>But there is a limitation that you can’t override an existing model field. For example, you can re-define the email 
+field to make it mandatory or to change its length.</p>
+
+<p>So extending the <code class="highlighter-rouge">AbstractUser</code> class is only useful when you want to modify its methods, add more fields or swap the
+<code class="highlighter-rouge">objects</code> manager.</p>
+
+<p>If you want to remove a field or change how the field is defined, you have to extend the user model from the
+<code class="highlighter-rouge">AbstractBaseUser</code>.</p>
+
+<p>The best strategy to have full control over the user model is creating a new concrete class from the <code class="highlighter-rouge">PermissionsMixin</code>
+and the <code class="highlighter-rouge">AbstractBaseUser</code>.</p>
+
+<p>Note that the <code class="highlighter-rouge">PermissionsMixin</code> is only necessary if you intend to use the Django admin or the built-in permissions 
+framework. If you are not planning to use it you can leave it out. And in the future if things change you can add
+the mixin and migrate the model and you are ready to go.</p>
+
+<p>So the implementation strategy looks like this:</p>
+
+<p><img src="../../../../media/2021/07/custom-user-diagram.png" alt="Custom User Model Diagram" /></p>
+
+<p>Now I’m going to show you my go-to implementation. I always use PostgreSQL which, in my opinion, is the best database 
+to use with Django. At least it is the one with most support and features anyway. So I’m going to show an approach
+that use the PostgreSQL’s <code class="highlighter-rouge">CITextExtension</code>. Then I will show some options if you are using other database engines.</p>
+
+<p>For this implementation I always create an app named <code class="highlighter-rouge">accounts</code>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">django-admin startapp accounts</code></pre></figure>
+
+<p>Then before adding any code I like to create an empty migration to install the PostgreSQL extensions that we are going
+to use:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py makemigrations accounts --empty --name<span class="o">=</span><span class="s2">"postgres_extensions"</span></code></pre></figure>
+
+<p>Inside the <code class="highlighter-rouge">migrations</code> directory of the <code class="highlighter-rouge">accounts</code> app you will find an empty migration called 
+<code class="highlighter-rouge">0001_postgres_extensions.py</code>.</p>
+
+<p>Modify the file to include the extension installation:</p>
+
+<p><strong>migrations/0001_postgres_extensions.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.postgres.operations</span> <span class="kn">import</span> <span class="n">CITextExtension</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">migrations</span>
+
+<span class="k">class</span> <span class="nc">Migration</span><span class="p">(</span><span class="n">migrations</span><span class="o">.</span><span class="n">Migration</span><span class="p">):</span>
+
+    <span class="n">dependencies</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">]</span>
+
+    <span class="n">operations</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">CITextExtension</span><span class="p">()</span>
+    <span class="p">]</span></code></pre></figure>
+
+<p>Now let’s implement our model. Open the <code class="highlighter-rouge">models.py</code> file inside the <code class="highlighter-rouge">accounts</code> app.</p>
+
+<p>I always grab the initial code directly from Django’s source on GitHub, copying the <code class="highlighter-rouge">AbstractUser</code> implementation, and
+modify it accordingly:</p>
+
+<p><strong>accounts/models.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth.base_user</span> <span class="kn">import</span> <span class="n">AbstractBaseUser</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">PermissionsMixin</span><span class="p">,</span> <span class="n">UserManager</span>
+<span class="kn">from</span> <span class="nn">django.contrib.auth.validators</span> <span class="kn">import</span> <span class="n">ASCIIUsernameValidator</span>
+<span class="kn">from</span> <span class="nn">django.contrib.postgres.fields</span> <span class="kn">import</span> <span class="n">CICharField</span><span class="p">,</span> <span class="n">CIEmailField</span>
+<span class="kn">from</span> <span class="nn">django.core.mail</span> <span class="kn">import</span> <span class="n">send_mail</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">django.utils</span> <span class="kn">import</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="kn">import</span> <span class="n">gettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
+
+
+<span class="k">class</span> <span class="nc">CustomUser</span><span class="p">(</span><span class="n">AbstractBaseUser</span><span class="p">,</span> <span class="n">PermissionsMixin</span><span class="p">):</span>
+    <span class="n">username_validator</span> <span class="o">=</span> <span class="n">ASCIIUsernameValidator</span><span class="p">()</span>
+
+    <span class="n">username</span> <span class="o">=</span> <span class="n">CICharField</span><span class="p">(</span>
+        <span class="n">_</span><span class="p">(</span><span class="s">"username"</span><span class="p">),</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span>
+        <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">"Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."</span><span class="p">),</span>
+        <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">username_validator</span><span class="p">],</span>
+        <span class="n">error_messages</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">"unique"</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">"A user with that username already exists."</span><span class="p">),</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">first_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">"first name"</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">last_name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">"last name"</span><span class="p">),</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">CIEmailField</span><span class="p">(</span>
+        <span class="n">_</span><span class="p">(</span><span class="s">"email address"</span><span class="p">),</span>
+        <span class="n">unique</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">error_messages</span><span class="o">=</span><span class="p">{</span>
+            <span class="s">"unique"</span><span class="p">:</span> <span class="n">_</span><span class="p">(</span><span class="s">"A user with that email address already exists."</span><span class="p">),</span>
+        <span class="p">},</span>
+    <span class="p">)</span>
+    <span class="n">is_staff</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span>
+        <span class="n">_</span><span class="p">(</span><span class="s">"staff status"</span><span class="p">),</span>
+        <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+        <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s">"Designates whether the user can log into this admin site."</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">is_active</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">BooleanField</span><span class="p">(</span>
+        <span class="n">_</span><span class="p">(</span><span class="s">"active"</span><span class="p">),</span>
+        <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
+        <span class="n">help_text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span>
+            <span class="s">"Designates whether this user should be treated as active. Unselect this instead of deleting accounts."</span>
+        <span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">date_joined</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">_</span><span class="p">(</span><span class="s">"date joined"</span><span class="p">),</span> <span class="n">default</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">now</span><span class="p">)</span>
+
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">UserManager</span><span class="p">()</span>
+
+    <span class="n">EMAIL_FIELD</span> <span class="o">=</span> <span class="s">"email"</span>
+    <span class="n">USERNAME_FIELD</span> <span class="o">=</span> <span class="s">"username"</span>
+    <span class="n">REQUIRED_FIELDS</span> <span class="o">=</span> <span class="p">[</span><span class="s">"email"</span><span class="p">]</span>
+
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">"user"</span><span class="p">)</span>
+        <span class="n">verbose_name_plural</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">"users"</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">normalize_email</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_full_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""
+        Return the first_name plus the last_name, with a space in between.
+        """</span>
+        <span class="n">full_name</span> <span class="o">=</span> <span class="s">"</span><span class="si">%</span><span class="s">s </span><span class="si">%</span><span class="s">s"</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">first_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">last_name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">full_name</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">get_short_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="s">"""Return the short name for the user."""</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">first_name</span>
+
+    <span class="k">def</span> <span class="nf">email_user</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">from_email</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="s">"""Send an email to this user."""</span>
+        <span class="n">send_mail</span><span class="p">(</span><span class="n">subject</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">from_email</span><span class="p">,</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">email</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></code></pre></figure>
+
+<p>Let’s review what we changed here:</p>
+
+<ul>
+  <li>We switched the <code class="highlighter-rouge">username_validator</code> to use <code class="highlighter-rouge">ASCIIUsernameValidator</code></li>
+  <li>The <code class="highlighter-rouge">username</code> field now is using <code class="highlighter-rouge">CICharField</code> which is not case-sensitive</li>
+  <li>The <code class="highlighter-rouge">email</code> field is now mandatory, unique and is using <code class="highlighter-rouge">CIEmailField</code> which is not case-sensitive</li>
+</ul>
+
+<p>On the settings module, add the following configuration:</p>
+
+<p><strong>settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">AUTH_USER_MODEL</span> <span class="o">=</span> <span class="s">"accounts.CustomUser"</span></code></pre></figure>
+
+<p>Now we are ready to create our migrations:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py makemigrations </code></pre></figure>
+
+<p>Apply the migrations:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate</code></pre></figure>
+
+<p>And you should get a similar result if you are just creating your project and if there is no other models/apps:</p>
+
+<figure class="highlight"><pre><code class="language-console" data-lang="console">Operations to perform:
+  Apply all migrations: accounts, admin, auth, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0001_initial... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+<span class="err">  Applying auth.0009_alter_user_last_name_max_length... OK</span></code></pre></figure>
+
+<p>If you check your database scheme you will see that there is no <code class="highlighter-rouge">auth_user</code> table (which is the default one), and now
+the user is stored on the table <code class="highlighter-rouge">accounts_customuser</code>:</p>
+
+<p><img src="../../../../media/2021/07/database.png" alt="Database Scheme" /></p>
+
+<p>And all the Foreign Keys to the user model will be created pointing to this table. That’s why it is important to do it
+right in the beginning of your project, before you created the database scheme.</p>
+
+<p>Now you have all the freedom. You can replace the <code class="highlighter-rouge">first_name</code> and <code class="highlighter-rouge">last_name</code> and use just one field called <code class="highlighter-rouge">name</code>.
+You could remove the <code class="highlighter-rouge">username</code> field and identify your User model with the <code class="highlighter-rouge">email</code> (then just make sure you change
+the property <code class="highlighter-rouge">USERNAME_FIELD</code> to <code class="highlighter-rouge">email</code>).</p>
+
+<p>You can grab the source code on GitHub: <a href="https://github.com/sibtc/django-user-caveats/tree/master/customuser">customuser</a></p>
+
+<h5 id="handling-case-insensitive-without-postgresql">Handling case-insensitive without PostgreSQL</h5>
+
+<p>If you are not using PostgreSQL and want to implement case-insensitive authentication and you have direct access to
+the User model, a nice hack is to create a custom manager for the User model, like this:</p>
+
+<p><strong>accounts/models.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">AbstractUser</span><span class="p">,</span> <span class="n">UserManager</span>
+
+<span class="k">class</span> <span class="nc">CustomUserManager</span><span class="p">(</span><span class="n">UserManager</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">get_by_natural_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">):</span>
+        <span class="n">case_insensitive_username_field</span> <span class="o">=</span> <span class="s">'{}__iexact'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">USERNAME_FIELD</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">case_insensitive_username_field</span><span class="p">:</span> <span class="n">username</span><span class="p">})</span>
+
+<span class="k">class</span> <span class="nc">CustomUser</span><span class="p">(</span><span class="n">AbstractBaseUser</span><span class="p">,</span> <span class="n">PermissionsMixin</span><span class="p">):</span>
+    <span class="c"># all the fields, etc...</span>
+
+    <span class="n">objects</span> <span class="o">=</span> <span class="n">CustomUserManager</span><span class="p">()</span>
+
+    <span class="c"># meta, methods, etc...</span></code></pre></figure>
+
+<p>Then you could also sanitize the username field on the <code class="highlighter-rouge">clean()</code> method to always save it as lowercase so you don’t have
+to bother having case variant/conflicting usernames:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">clean</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">clean</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">normalize_email</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">email</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span></code></pre></figure>
+
+<hr />
+
+<h3 id="conclusions">Conclusions</h3>
+
+<p>In this tutorial we discussed a few caveats of the default User model implementation and presented a few options to
+address those issues.</p>
+
+<p>The takeaway message here is: <strong>always replace the default User model</strong>.</p>
+
+<p>If your project is already in production, don’t panic: there are ways to fix those issues following the recommendations
+in this post.</p>
+
+<p>I also have two detailed blog posts on how to make the username field case-insensitive and other about how to extend
+the django user model:</p>
+
+<ul>
+  <li><a href="../../../../tutorial/2017/02/06/how-to-implement-case-insensitive-username.html">How to Implement Case-Insensitive Username</a></li>
+  <li><a href="../../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">How to Extend Django User Model</a></li>
+</ul>
+
+<p>You can also explore the source code presented in this post on GitHub:</p>
+
+<ul>
+  <li><a href="https://github.com/sibtc/django-user-caveats">sibtc/django-user-caveats</a></li>
+</ul>
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../../tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html">
+<img src="../../../../media/2018/01/featured-user-types.jpg" alt="How to Implement Multiple User Types with Django" title="How to Implement Multiple User Types with Django">
+How to Implement Multiple User Types with Django
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../tips/2017/08/11/django-tip-21-redirects-app.html">
+<img src="../../../../media/2017/08/featured-tip21.jpg" alt="Django Tips #21 Using The Redirects App" title="Django Tips #21 Using The Redirects App">
+Django Tips #21 Using The Redirects App
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../tutorial/2017/02/18/how-to-create-user-sign-up-view.html">
+<img src="../../../../media/2017/02/featured-signup.jpg" alt="How to Create User Sign Up View" title="How to Create User Sign Up View">
+How to Create User Sign Up View
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/user/index.html"><span class="tag">user</span></a>
+    
+      <a href="../../../../tag/model/index.html"><span class="tag">model</span></a>
+    
+      <a href="../../../../tag/contrib/index.html"><span class="tag">contrib</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=https://sibt.co/3hTSeWv"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=What%20You%20Should%20Know%20About%20The%20Django%20User%20Model&amp;url=https://sibt.co/2T05xw8&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=https://sibt.co/36l8PND"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=https://sibt.co/3hpOigV&amp;title=What%20You%20Should%20Know%20About%20The%20Django%20User%20Model&amp;summary=The%20goal%20of%20this%20article%20is%20to%20discuss%20the%20caveats%20of%20the%20default%20Django%20user%20model%20implementation%20and%20also%20to%20give%20you%20some%20advice%20on%20how%20to%20address%20them.%20It%20is%20important%20to%20know%20the%20limitations%20o...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'what-you-should-know-about-the-django-user-model.html';
+        this.page.identifier = '/article/2021/07/08/what-you-should-know-about-the-django-user-model';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/article/2021/07/08/what-you-should-know-about-the-django-user-model.html",
+  "headline": "What You Should Know About The Django User Model",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2021/07/featured-user.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2021-07-08T17:30:00+03:00",
+  "dateModified": "2021-07-08T17:30:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "The goal of this article is to discuss the caveats of the default Django user model implementation and also to give you some advice on how to address them. It is important to know the limitations o..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/article/2021/07/08/what-you-should-know-about-the-django-user-model.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:36:34 GMT -->
+</html>

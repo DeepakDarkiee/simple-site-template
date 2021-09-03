@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/article/2017/08/07/a-minimal-django-application.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:38:12 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>A Minimal Django Application</title>
+<meta name="description" content="In this article I want to explore some of the basic concepts of Django, setting up a minimal web application to get adeeper understanding of how Django works...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="a-minimal-django-application.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'a-minimal-django-application.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="A Minimal Django Application">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/article/2017/08/07/a-minimal-django-application.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2017/08/thumbnail-minimal.jpg">
+<meta property="og:description" content="In this article I want to explore some of the basic concepts of Django, setting up a minimal web application to get adeeper understanding of how Django works...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2017-08-07T08:00:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="A Minimal Django Application">
+<meta name="twitter:description" content="In this article I want to explore some of the basic concepts of Django, setting up a minimal web application to get adeeper understanding of how Django works under the hoods.">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2017/08/thumbnail-minimal.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="project">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      article
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">A Minimal Django Application</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Aug 7, 2017
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    17 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/article/2017/08/07/a-minimal-django-application">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="a-minimal-django-application.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2017/08/featured-minimal.jpg" alt="A Minimal Django Application" class="featured-image">
+    
+      <small>(Picture: <a href="https://www.pexels.com/photo/art-botanical-cactus-color-532566/" target="_blank">https://www.pexels.com/photo/art-botanical-cactus-color-532566/</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>In this article I want to explore some of the basic concepts of Django, setting up a minimal web application to get a
+deeper understanding of how Django works under the hoods.</p>
+
+<p>An important disclaimer before we start, that’s not a tutorial about how to start a Django application, it’s more of
+an exploratory experiment for learning purpose.</p>
+
+<hr />
+
+<h4 id="introduction">Introduction</h4>
+
+<p>If you are reading this article, the chances are that you already know that Django is a Web framework written in
+Python. But that’s an abstract definition. In practice, Django is a Python package that lives inside the
+<strong>site-packages</strong> directory of your current Python installation. That means it lives alongside with other Python
+packages, such as <a href="http://www.python-requests.org/en/master/" target="_blank">Requests</a>, <a href="https://python-pillow.org/" target="_blank">Pillow</a> and
+<a href="http://www.numpy.org/" target="_blank">NumPy</a>.</p>
+
+<p>A simple way to verify a Django installation is importing it in a Python shell:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">&gt;&gt;&gt; </span>import django
+<span class="gp">&gt;&gt;&gt; </span>print<span class="o">(</span>django.get_version<span class="o">())</span>
+1.11.4</code></pre></figure>
+
+<p>But the way we interact with Django is a little bit different than the way we interact with other Python packages.
+Usually we don’t import it directly into our Python programs to make use of its resources.</p>
+
+<p>When we first start learning Django, we are taught that we should start a new project using the <code class="highlighter-rouge">django-admin</code>
+command-line utility by executing the <code class="highlighter-rouge">startproject</code> command.</p>
+
+<p>The <code class="highlighter-rouge">startproject</code> command creates a basic Django project directory structure with the following files:</p>
+
+<ul>
+  <li>manage.py</li>
+  <li>settings.py</li>
+  <li>urls.py</li>
+  <li>wsgi.py</li>
+</ul>
+
+<p>The contents of the files above are essentially a boilerplate code that’s generated using the templates inside the
+<a href="https://github.com/django/django/tree/master/django/conf/project_template" target="_blank">django.conf.project_template</a> folder. It’s like a pre-configuration of commonly
+used resources.</p>
+
+<p>For example, if you are going to develop a Web application, the chances are that you will need a database, handle user
+authentication, work with sessions, and so on. The boilerplate code from the <code class="highlighter-rouge">startproject</code> command makes our life
+easier. But that’s not the only way to start a new project. We could start everything from scratch. And that’s sort of
+what we are going to do in this article.</p>
+
+<p>Also, the names are purely convention, which is a good thing because whenever you browse an existing Django project
+it’s easier to know where to find certain things.</p>
+
+<p>In the next sections we are going to explore the role of each of those files in a Django project.</p>
+
+<hr />
+
+<h4 id="running-a-project-locally">Running a Project Locally</h4>
+
+<p>To run the the development server, we usually execute the following command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py runserver</code></pre></figure>
+
+<p>The <code class="highlighter-rouge">manage.py</code> script is automatically generated when we start a new Django project by running the command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">django-admin startproject myproject</code></pre></figure>
+
+<p>Basically the <code class="highlighter-rouge">django-admin</code> and <code class="highlighter-rouge">manage.py</code> does the same things. The main difference is that <code class="highlighter-rouge">manage.py</code> adds your
+project’s package in the <code class="highlighter-rouge">sys.path</code> and sets the environment variable <code class="highlighter-rouge">DJANGO_SETTINGS_MODULE</code> to point to your
+<code class="highlighter-rouge">settings.py</code> file.</p>
+
+<p>That means we could run the development server of my project using the <code class="highlighter-rouge">django-admin</code> command-line utility. The
+difference is that we would need to provide manually the information of the path to my project’s package and the
+<code class="highlighter-rouge">settings.py</code>.</p>
+
+<p>So, considering my project is in the following path: <strong>/home/projects/myproject</strong>, we can start the development server
+like this:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">django-admin runserver --pythonpath<span class="o">=</span><span class="s1">'/home/projects/myproject'</span> --settings<span class="o">=</span>myproject.settings</code></pre></figure>
+
+<p>Or if you are currently in the project root in the file system, you could perhaps do this to save typing:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">django-admin runserver --pythonpath<span class="o">=</span>. --settings<span class="o">=</span>myproject.settings</code></pre></figure>
+
+<p>As you can see, the <code class="highlighter-rouge">settings.py</code> module is the starting point of every Django project. It’s the file responsible
+for putting the pieces together and instructing Django on how to run our project; which apps are installed, what
+database the project uses (if any), the credentials to connect, where to find the project’s templates, the urls,
+the wsgi module and many other important configurations.</p>
+
+<p>The name <code class="highlighter-rouge">settings.py</code> is just a convention. We could use any other name. As far as we tell Django where to find the
+required information.</p>
+
+<hr />
+
+<h4 id="the-settings-module">The Settings Module</h4>
+
+<p>Now that we know the settings module is the central part to run our project, what’s the bare minimum configuration we
+need to feed Django, so to start the development server?</p>
+
+<p>Before we answer that question, know that Django comes pre-configured. Before loading your project’s settings module,
+Django will load the global settings that can be found in the
+<a href="https://github.com/django/django/blob/master/django/conf/global_settings.py" target="_blank"><strong>django.conf.global_settings.py</strong></a> file.</p>
+
+<p>The link above takes you to the file directly in the Django’s GitHub repository. Take a moment and check it out.</p>
+
+<p>What happen when Django finally loads your project’s settings module, is that it will override the default values from
+the <strong>global_settings.py</strong>.</p>
+
+<p>The <strong>global_settings.py</strong> doesn’t have all the necessary information. We will need to provide at least a
+<code class="highlighter-rouge">SECRET_KEY</code>.</p>
+
+<p>If you check the Django’s <strong>global_settings.py</strong> file, you will see right at the top of the file that the <code class="highlighter-rouge">DEBUG</code>
+configuration defaults to <code class="highlighter-rouge">False</code>. If you don’t override it to <code class="highlighter-rouge">True</code>, you will also need to configure the
+<code class="highlighter-rouge">ALLOWED_HOSTS</code> variable.</p>
+
+<p>So, the bare minimum configuration just to successfully start the development server could be either defining the
+<code class="highlighter-rouge">SECRET_KEY</code> and <code class="highlighter-rouge">DEBUG=True</code>, or <code class="highlighter-rouge">SECRET_KEY</code> and <code class="highlighter-rouge">ALLOWED_HOSTS</code>.</p>
+
+<hr />
+
+<h4 id="starting-a-project-from-scratch">Starting a Project From Scratch</h4>
+
+<p>To try things out, I created a file named <strong>tinyapp.py</strong> and added the following parameters to it:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span></code></pre></figure>
+
+<p>Let’s run it:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">django-admin runserver --pythonpath<span class="o">=</span>. --settings<span class="o">=</span>tinyapp</code></pre></figure>
+
+<p><img src="../../../../media/2017/08/minimal-terminal.png" alt="django-admin runserver" /></p>
+
+<p>It’s running. Let’s see what happens when we open it in a web browser:</p>
+
+<p><img src="../../../../media/2017/08/minimal-error.png" alt="A server error occurred. Please contact the administrator." /></p>
+
+<p>At least something showed up. Let’s check the terminal for some further information about the error we got. Checking
+the terminal that I’m using to run the project, it says:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">AttributeError: <span class="s1">'Settings'</span> object has no attribute <span class="s1">'ROOT_URLCONF'</span></code></pre></figure>
+
+<p>At the moment we happen to have no URL or view. Actually right now Django doesn’t even know where to look for URL
+patterns to see if it have something to process or show.</p>
+
+<p>The <code class="highlighter-rouge">ROOT_URLCONF</code> expects the path to a special file that contains a list of URLs so it can match the requested path
+with the views within our project. This file needs to define a list named <code class="highlighter-rouge">urlpatterns</code>. That’s correct! We are talking
+about our well known <code class="highlighter-rouge">urls.py</code> module here.</p>
+
+<p>But, so far we don’t need a <code class="highlighter-rouge">urls.py</code> file. We can tell Django to import the <code class="highlighter-rouge">urlpatterns</code> from our <code class="highlighter-rouge">tinyapp.py</code>
+file, so it can also be our <code class="highlighter-rouge">ROOT_URLCONF</code>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[]</span></code></pre></figure>
+
+<p><img src="../../../../media/2017/08/minimal-success.png" alt="It worked!" /></p>
+
+<p>There we go! Our first Django-powered page!</p>
+
+<hr />
+
+<h4 id="working-with-views">Working With Views</h4>
+
+<p>So far so good. But our tiny Django app isn’t doing much. Let’s add our very first view.</p>
+
+<p>A Django view is just a Python function that receives an <code class="highlighter-rouge">HttpRequest</code> object and returns an <code class="highlighter-rouge">HttpResponse</code>.</p>
+
+<p>Truth is, our view functions can be defined anywhere in our project. Django won’t look for a file named <code class="highlighter-rouge">views.py</code>.
+Again, it’s just a convention. Unless you have a good reason for doing it in a different way, stick with the
+convention.</p>
+
+<p>We will get there later. For now, let’s keep writing code inside the <code class="highlighter-rouge">tinyapp.py</code> file.</p>
+
+<p>Below, our first Django view named <code class="highlighter-rouge">home</code>. It simply returns a text saying <strong>“Welcome to the Tinyapp’s Homepage!”</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">'Welcome to the Tinyapp</span><span class="se">\'</span><span class="s">s Homepage!'</span><span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[]</span></code></pre></figure>
+
+<p>The next step is instructing Django when to return this view to the visitor. We can do that by adding an entry to the
+<code class="highlighter-rouge">urlpatterns</code> list.</p>
+
+<p>The <code class="highlighter-rouge">urlpatterns</code> list expects instances of <code class="highlighter-rouge">url()</code> which can be imported from <code class="highlighter-rouge">django.conf.urls</code>.</p>
+
+<p>To define a <code class="highlighter-rouge">url()</code> you need to at least inform a regex compatible with Python’s <code class="highlighter-rouge">re</code> module and a view function or the
+result of <code class="highlighter-rouge">as_view()</code> for class-based views.</p>
+
+<p>A basic url routing to the homepage looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">'Welcome to the Tinyapp</span><span class="se">\'</span><span class="s">s Homepage!'</span><span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">home</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>The result is:</p>
+
+<p><img src="../../../../media/2017/08/tinyapp-success.png" alt="Welcome to the Tinyapp's Homepage!" /></p>
+
+<hr />
+
+<h4 id="html-templates">HTML Templates</h4>
+
+<p>Even though we are just returning a string in our first view, the browser tries to render it as if it was an HTML page.</p>
+
+<p>If you want to return text only, you can pass this information along in the <code class="highlighter-rouge">HttpResponse</code> so the browser will know it’s
+working with plain text only and won’t try to do anything smart with the response body:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">'Welcome to the Tinyapp</span><span class="se">\'</span><span class="s">s Homepage!'</span><span class="p">,</span> <span class="n">content_type</span><span class="o">=</span><span class="s">'text/plain'</span><span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">home</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>You can see that the browser renders it a little bit different, as it won’t try to parse the content as HTML:</p>
+
+<p><img src="../../../../media/2017/08/tinyapp-plain-text.png" alt="Welcome to the Tinyapp's Homepage!" /></p>
+
+<p>But we know that’s not the case in most of the cases while developing Web applications. Let’s remove the <code class="highlighter-rouge">content_type</code>
+and add some HTML to our pages.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">'&lt;h1 style="color:red"&gt;Welcome to the Tinyapp</span><span class="se">\'</span><span class="s">s Homepage!&lt;/h1&gt;'</span><span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">home</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p><img src="../../../../media/2017/08/tinyapp-html.png" alt="Welcome to the Tinyapp's Homepage!" /></p>
+
+<p>We can keep it on and make it a little bit more dynamic:</p>
+
+<div class="danger">
+  <strong><i class="fa fa-warning"></i> Warning!</strong>
+  Don't use user's input directly like that in real projects! You should always sanitize the user input to avoid
+  security issues like XSS.
+</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'color'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span>
+        <span class="s">'&lt;h1 style="color:'</span> <span class="o">+</span> <span class="n">color</span> <span class="o">+</span> <span class="s">'"&gt;Welcome to the Tinyapp</span><span class="se">\'</span><span class="s">s Homepage!&lt;/h1&gt;'</span>
+    <span class="p">)</span>  <span class="c"># don't use user input like that in real projects!</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">home</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p><img src="../../../../media/2017/08/tinyapp-html-green.png" alt="Welcome to the Tinyapp's Homepage!" /></p>
+
+<p>We could keep playing with strings and generating HTML on-the-fly:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'color'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">'&lt;h1 style="color:'</span> <span class="o">+</span> <span class="n">color</span> <span class="o">+</span> <span class="s">'"&gt;Welcome to the Tinyapp</span><span class="se">\'</span><span class="s">s Homepage!&lt;/h1&gt;'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">'Tinyapp'</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="s">'Vitor Freitas'</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="s">'''&lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+    &lt;head&gt;
+      &lt;title&gt;'''</span> <span class="o">+</span> <span class="n">title</span> <span class="o">+</span> <span class="s">'''&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;h1&gt;About '''</span> <span class="o">+</span> <span class="n">title</span> <span class="o">+</span> <span class="s">'''&lt;/h1&gt;
+        &lt;p&gt;This Website was developed by '''</span> <span class="o">+</span> <span class="n">author</span> <span class="o">+</span> <span class="s">'''.&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;'''</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">home</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^about/$'</span><span class="p">,</span> <span class="n">about</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p><img src="../../../../media/2017/08/tinyapp-about.png" alt="About Tinyapp" /></p>
+
+<p>But hey, there should be a better way to do it. And sure thing there is. That’s what the Django’s Template Engine is
+all about.</p>
+
+<p>Before we can use it, we need to tell Django our project makes use of the template engine:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+<span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[{</span><span class="s">'BACKEND'</span><span class="p">:</span> <span class="s">'django.template.backends.django.DjangoTemplates'</span><span class="p">},]</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="c"># body of the function...</span>
+
+<span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="c"># body of the function...</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">home</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^about/$'</span><span class="p">,</span> <span class="n">about</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>The Django Template Engine have its own syntax rules. Basically it will read a file (a template), usually a <strong>.html</strong>
+file, parse it, process all the special tags like <code class="highlighter-rouge"><span class="p">{</span><span class="err">{</span><span class="w"> </span><span class="err">var</span><span class="w"> </span><span class="p">}</span><span class="err">}</span></code> or <code class="highlighter-rouge"><span class="p">{</span><span class="err">%</span><span class="w"> </span><span class="err">for</span><span class="w"> </span><span class="err">user</span><span class="w"> </span><span class="err">in</span><span class="w"> </span><span class="err">users</span><span class="w"> </span><span class="err">%</span><span class="p">}</span></code> and the final result will
+be an output string, which normally is a valid HTML document which is returned to the user.</p>
+
+<p>See the example below:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+<span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[{</span><span class="s">'BACKEND'</span><span class="p">:</span> <span class="s">'django.template.backends.django.DjangoTemplates'</span><span class="p">},]</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'color'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">'&lt;h1 style="color:'</span> <span class="o">+</span> <span class="n">color</span> <span class="o">+</span> <span class="s">'"&gt;Welcome to the Tinyapp</span><span class="se">\'</span><span class="s">s Homepage!&lt;/h1&gt;'</span><span class="p">)</span>
+
+
+<span class="kn">from</span> <span class="nn">django.template</span> <span class="kn">import</span> <span class="n">engines</span>
+<span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">render_to_string</span>
+
+<span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">'Tinyapp'</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="s">'Vitor Freitas'</span>
+
+    <span class="n">about_template</span> <span class="o">=</span> <span class="s">'''&lt;!DOCTYPE html&gt;
+    &lt;html&gt;
+    &lt;head&gt;
+      &lt;title&gt;{{ title }}&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+      &lt;h1&gt;About {{ title }}&lt;/h1&gt;
+      &lt;p&gt;This Website was developed by {{ author }}.&lt;/p&gt;
+      &lt;p&gt;Now using the Django's Template Engine.&lt;/p&gt;
+      &lt;p&gt;&lt;a href="{</span><span class="si">% </span><span class="s">url 'homepage' </span><span class="si">%</span><span class="s">}"&gt;Return to the homepage&lt;/a&gt;.&lt;/p&gt;
+    &lt;/body&gt;
+    &lt;/html&gt;
+    '''</span>
+
+    <span class="n">django_engine</span> <span class="o">=</span> <span class="n">engines</span><span class="p">[</span><span class="s">'django'</span><span class="p">]</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="n">django_engine</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">about_template</span><span class="p">)</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">render</span><span class="p">({</span><span class="s">'title'</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="s">'author'</span><span class="p">:</span> <span class="n">author</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'homepage'</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^about/$'</span><span class="p">,</span> <span class="n">about</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'aboutpage'</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p><img src="../../../../media/2017/08/template-engine.png" alt="Template Engine" /></p>
+
+<p>Here we are using the Django’s Template Engine programmatically. But what we normally do is storing the HTML templates
+outside the Python code and telling Django where to look for the templates.</p>
+
+<p>Let’s do it step-by-step.</p>
+
+<p>First, create a folder named “templates” alongside our <code class="highlighter-rouge">tinyapp.py</code> file.</p>
+
+<p>Now, save the content of the <code class="highlighter-rouge">about_template</code> variable inside an HTML file named <code class="highlighter-rouge">about.html</code>, inside our recently
+created templates folder.</p>
+
+<p><strong>templates/about.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-django" data-lang="django"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+  <span class="nt">&lt;title&gt;</span><span class="cp">{{</span> <span class="nv">title</span> <span class="cp">}}</span><span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;h1&gt;</span>About <span class="cp">{{</span> <span class="nv">title</span> <span class="cp">}}</span><span class="nt">&lt;/h1&gt;</span>
+  <span class="nt">&lt;p&gt;</span>This Website was developed by <span class="cp">{{</span> <span class="nv">author</span> <span class="cp">}}</span>.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Now using the Django's Template Engine.<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">"</span><span class="cp">{%</span> <span class="nv">url</span> <span class="s1">'homepage'</span> <span class="cp">%}</span><span class="s">"</span><span class="nt">&gt;</span>Return to the homepage<span class="nt">&lt;/a&gt;</span>.<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span></code></pre></figure>
+
+<p>That’s what our project looks like now:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">myproject/
+ |-- templates/
+ |    +-- about.html
+ +-- tinyapp.py</code></pre></figure>
+
+<p>So, now instead of loading the template from a Python string, we can load it from the filesystem.</p>
+
+<p>First and most importantly, we tell Django where to find the templates:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">'BACKEND'</span><span class="p">:</span> <span class="s">'django.template.backends.django.DjangoTemplates'</span><span class="p">,</span>
+        <span class="s">'DIRS'</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s">'/home/projects/myproject/templates/'</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Now we can refactor our <code class="highlighter-rouge">about</code> view:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+<span class="kn">from</span> <span class="nn">django.template.loader</span> <span class="kn">import</span> <span class="n">render_to_string</span>
+
+
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'4l0ngs3cr3tstr1ngw3lln0ts0l0ngw41tn0w1tsl0ng3n0ugh'</span>
+<span class="n">ROOT_URLCONF</span> <span class="o">=</span> <span class="n">__name__</span>
+<span class="n">TEMPLATES</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s">'BACKEND'</span><span class="p">:</span> <span class="s">'django.template.backends.django.DjangoTemplates'</span><span class="p">,</span>
+        <span class="s">'DIRS'</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s">'/home/projects/myproject/templates/'</span>
+        <span class="p">],</span>
+    <span class="p">},</span>
+<span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">color</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">GET</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'color'</span><span class="p">,</span> <span class="s">''</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">'&lt;h1 style="color:'</span> <span class="o">+</span> <span class="n">color</span> <span class="o">+</span> <span class="s">'"&gt;Welcome to the Tinyapp</span><span class="se">\'</span><span class="s">s Homepage!&lt;/h1&gt;'</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">about</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="s">'Tinyapp'</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="s">'Vitor Freitas'</span>
+    <span class="n">html</span> <span class="o">=</span> <span class="n">render_to_string</span><span class="p">(</span><span class="s">'about.html'</span><span class="p">,</span> <span class="p">{</span><span class="s">'title'</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span> <span class="s">'author'</span><span class="p">:</span> <span class="n">author</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'homepage'</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^about/$'</span><span class="p">,</span> <span class="n">about</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'aboutpage'</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>You know the <code class="highlighter-rouge">render</code> function from <code class="highlighter-rouge">django.shortcuts</code>? That’s exactly what it does: use the <code class="highlighter-rouge">render_to_string</code>
+function and returns an <code class="highlighter-rouge">HttpResponse</code> instance.</p>
+
+<hr />
+
+<h4 id="conclusions">Conclusions</h4>
+
+<p>I hope you enjoyed reading this article and that you learned something new today! As I said in the beginning, this was
+just some sort of experiment. I strongly advise you to get your hands dirty and try things out. It makes you feel more
+comfortable with Django development, as you get a deeper understanding of its mechanics.</p>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../../tutorial/2021/06/27/how-to-start-a-production-ready-django-project.html">
+<img src="../../../../media/2021/06/featured-production.jpg" alt="How to Start a Production-Ready Django Project" title="How to Start a Production-Ready Django Project">
+How to Start a Production-Ready Django Project
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../series/2017/09/04/a-complete-beginners-guide-to-django-part-1.html">
+<img src="../../../../media/series/beginners-guide/1.11/part-1/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 1" title="A Complete Beginner's Guide to Django - Part 1">
+A Complete Beginner's Guide to Django - Part 1
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../2015/11/30/starting-a-new-django-18-project.html">
+<img src="../../../../media/2015-11-30-starting-a-new-django-18-project/featured-post-image.jpg" alt="Starting a New Django 1.8 Project" title="Starting a New Django 1.8 Project">
+Starting a New Django 1.8 Project
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/project/index.html"><span class="tag">project</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2xeAVGN"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=A%20Minimal%20Django%20Application&amp;url=http://sibt.co/2xeAUCJ&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2xe6Ary"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2xevlUy&amp;title=A%20Minimal%20Django%20Application&amp;summary=In%20this%20article%20I%20want%20to%20explore%20some%20of%20the%20basic%20concepts%20of%20Django,%20setting%20up%20a%20minimal%20web%20application%20to%20get%20adeeper%20understanding%20of%20how%20Django%20works%20under%20the%20hoods.&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'a-minimal-django-application.html';
+        this.page.identifier = '/article/2017/08/07/a-minimal-django-application';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/article/2017/08/07/a-minimal-django-application.html",
+  "headline": "A Minimal Django Application",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2017/08/featured-minimal.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2017-08-07T08:00:00+03:00",
+  "dateModified": "2017-08-07T08:00:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "In this article I want to explore some of the basic concepts of Django, setting up a minimal web application to get adeeper understanding of how Django works under the hoods."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/article/2017/08/07/a-minimal-django-application.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:38:21 GMT -->
+</html>

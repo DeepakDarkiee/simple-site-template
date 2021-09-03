@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/series/2017/10/16/a-complete-beginners-guide-to-django-part-7.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:40:26 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>A Complete Beginner's Guide to Django - Part 7</title>
+<meta name="description" content="Welcome to the last part of our tutorial series! In this tutorial, we are going to deploy our Django application to a production server. We are also going to...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="a-complete-beginners-guide-to-django-part-7.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'a-complete-beginners-guide-to-django-part-7.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="A Complete Beginner's Guide to Django - Part 7">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/series/2017/10/16/a-complete-beginners-guide-to-django-part-7.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/series/beginners-guide/1.11/part-7/thumbnail.jpg">
+<meta property="og:description" content="Welcome to the last part of our tutorial series! In this tutorial, we are going to deploy our Django application to a production server. We are also going to...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2017-10-16T03:00:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="A Complete Beginner's Guide to Django - Part 7">
+<meta name="twitter:description" content="Welcome to the last part of our tutorial series! In this tutorial, we are going to deploy our Django application to a production server. We are also going to configure an Email service and HTTPS ce...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/series/beginners-guide/1.11/part-7/thumbnail.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="python">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="guide">
+  
+    <meta property="article:tag" content="beginners">
+  
+    <meta property="article:tag" content="deployment">
+  
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns post">
+        <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+</div>
+
+      </div>
+    </div>
+    <div id="main-content" class="row">
+      <div id="seriesSideBar" class="three columns">
+        <div class="card">
+          
+            <div id="ad">
+              <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+            </div>
+          
+          <nav id="platformSideBar" class="platform js-set-platform" style="margin-bottom: 2rem; display: none; font-size: 1.2rem">
+            <a href="javascript:void(0);" data-platform="mac" title="Set platform to Mac"><i class="fa fa-apple"></i> Mac</a>
+            <a href="javascript:void(0);" data-platform="windows" title="Set platform to Windows"><i class="fa fa-windows"></i> Win</a>
+            <a href="javascript:void(0);" data-platform="linux" title="Set platform to Linux"><i class="fa fa-linux"></i> Linux</a>
+          </nav>
+          <h5>Table of Contents</h5>
+          <ul>
+            
+              <li><a href="#introduction">Introduction</a></li>
+              
+            
+              <li><a href="#version-control">Version Control</a></li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#basic-setup">
+                    Basic Setup
+                  </a>
+                </li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#remote-repository">
+                    Remote Repository
+                  </a>
+                </li>
+              
+            
+              <li><a href="#project-settings">Project Settings</a></li>
+              
+            
+              <li><a href="#tracking-requirements">Tracking Requirements</a></li>
+              
+            
+              <li><a href="#domain-name">Domain Name</a></li>
+              
+            
+              <li><a href="#deployment-strategy">Deployment Strategy</a></li>
+              
+            
+              <li><a href="#deploying-to-a-vps-digital-ocean">Deploying to a VPS (Digital Ocean)</a></li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#application-user">
+                    Application User
+                  </a>
+                </li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#postgresql-database-setup">
+                    PostgreSQL Database Setup
+                  </a>
+                </li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#django-project-setup">
+                    Django Project Setup
+                  </a>
+                </li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#configuring-gunicorn">
+                    Configuring Gunicorn
+                  </a>
+                </li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#configuring-supervisor">
+                    Configuring Supervisor
+                  </a>
+                </li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#configuring-nginx">
+                    Configuring NGINX
+                  </a>
+                </li>
+              
+            
+              <li><a href="#configuring-an-email-service">Configuring an Email Service</a></li>
+              
+            
+              <li><a href="#configuring-https-certificate">Configuring HTTPS Certificate</a></li>
+              
+            
+              <li><a href="#conclusions">Conclusions</a></li>
+              
+            
+          </ul>
+          <hr style="margin: 1.5rem 0;">
+          <ul style="font-size: 1.4rem">
+            <li><a href="#top"><i class="fa fa-arrow-up" style="margin-right: .2rem"></i> scroll to top</a></li>
+            <li><a href="#comments"><i class="fa fa-comments" style="margin-right: .2rem"></i> go to comments</a></li>
+            <li><a href="../../../beginners-guide/1.11/index.html"><i class="fa fa-list" style="margin-right: .2rem"></i> go to series index</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="nine columns content post" style="float:right">
+        <div class="card">
+          
+  <h5 class="post-category">
+    
+      series
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">A Complete Beginner's Guide to Django - Part 7</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Oct 16, 2017
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    23 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/series/2017/10/16/a-complete-beginners-guide-to-django-part-7">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="a-complete-beginners-guide-to-django-part-7.html"></span> views
+  </li>
+  
+    <li>
+      <i class="fa fa-book"></i>
+      <a href="../../../beginners-guide/1.11/index.html">Part 7 of 7</a>
+    </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/series/beginners-guide/1.11/part-7/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 7" class="featured-image">
+    
+  </div>
+
+
+          <div class="row" style="margin-bottom: 2rem;">
+            <div class="five columns">
+              <nav id="platformArticle" class="platform js-set-platform">
+                <a href="javascript:void(0);" data-platform="mac" title="Set platform to Mac"><i class="fa fa-apple"></i> Mac</a>
+                <a href="javascript:void(0);" data-platform="windows" title="Set platform to Windows"><i class="fa fa-windows"></i> Windows</a>
+                <a href="javascript:void(0);" data-platform="linux" title="Set platform to Linux"><i class="fa fa-linux"></i> Linux</a>
+
+              </nav>
+            </div>
+            <div class="three columns">
+              <nav class="platform">
+                <a href="../../../beginners-guide/1.11/index.html" class="series-nav">Series 7/7</a>
+              </nav>
+            </div>
+            <div class="four columns versions">
+              
+                <img src="https://img.shields.io/badge/python-3.6.2-brightgreen.svg" alt="Python 3.6.2">
+              
+              
+                <img src="https://img.shields.io/badge/django-1.11.4-brightgreen.svg" alt="Django 1.11.4">
+              
+            </div>
+          </div>
+
+          <article>
+            <h4 id="introduction">Introduction</h4>
+
+<p>Welcome to the last part of our tutorial series! In this tutorial, we are going to deploy our Django application to a
+production server. We are also going to configure an Email service and HTTPS certificates for our servers.</p>
+
+<p>At first, I thought about given an example using a Virtual Private Server (VPS), which is more generic and then using
+one Platform as a Service such as Heroku. But it was too much detail, so I ended up creating this tutorial focused on
+VPSs.</p>
+
+<p>Our project is live! If you want to check online before you go through the text, this is the application we are going
+to deploy: <a href="https://www.djangoboards.com/" target="_blank" rel="noopener">www.djangoboards.com</a>.</p>
+
+<hr />
+
+<h4 id="version-control">Version Control</h4>
+
+<p>Version control is an extremely important topic in software development. Especially when working with teams and
+maintaining production code at the same time, several features are being developed in parallel. No matter if it’s
+a one developer project or a multiple developers project, every project should use version control.</p>
+
+<p>There are several options of version control systems out there. Perhaps because of the popularity of GitHub, <strong>Git</strong>
+become the <em>de facto</em> standard in version control. So if you are not familiar version control, Git is a good place to
+start. There are many tutorials, courses, and resources in general so that it’s easy to find help.</p>
+
+<p>GitHub and Code School have a great <a href="https://try.github.io/" target="_blank" rel="noopener">interactive tutorial about Git</a>,
+which I used years ago when I started moving from SVN to Git. It’s a very good introduction.</p>
+
+<p>This is such an important topic that I probably should have brought it up since the first tutorial. But the truth is I
+wanted the focus of this tutorial series to be on Django. If all this is new for you, don’t worry. It’s important to
+take one step at a time. Your first project won’t be perfect. It’s important to keep learning and evolving your skills
+slowly but with constancy.</p>
+
+<p>A very good thing about Git is that it’s much more than just a version control system. There’s a rich ecosystem of
+tools and services built around it. Some good examples are continuous integration, deployment, code review,
+code quality, and project management.</p>
+
+<p>Using Git to support the deployment process of Django projects works very well. It’s a convenient way to pull the
+latest version from the source code repository or to rollback to a specific version in case of a problem. There are
+many services that integrate with Git so to automate test execution and deployment for example.</p>
+
+<p>If you don’t have Git installed on your local machine, grab the installed from <a href="https://git-scm.com/downloads" target="_blank" rel="noopener">https://git-scm.com/downloads</a>.</p>
+
+<h5 id="basic-setup">Basic Setup</h5>
+
+<p>First thing, set your identity:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git config --global user.name <span class="s2">"Vitor Freitas"</span>
+git config --global user.email vitor@simpleisbetterthancomplex.com</code></pre></figure>
+
+<p>In the project root (the same directory as <strong>manage.py</strong> is), initialize a git repository:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">git init</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">Initialized empty Git repository in /Users/vitorfs/Development/myproject/.git/</code></pre></figure>
+
+<p>Check the status of the repository:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">git status</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add &lt;file&gt;..." to include in what will be committed)
+
+  accounts/
+  boards/
+  manage.py
+  myproject/
+  requirements.txt
+  static/
+  templates/
+
+nothing added to commit but untracked files present (use "git add" to track)</code></pre></figure>
+
+<p>Before we proceed in adding the source files, create a new file named <strong>.gitignore</strong> in the project root. This special
+file will help us keep the repository clean, without unnecessary files like cache files or logs for example.</p>
+
+<p>You can grab a <a href="https://github.com/github/gitignore/blob/master/Python.gitignore" target="_blank" rel="noopener">generic .gitignore file for Python projects</a>
+from GitHub.</p>
+
+<p>Make sure to rename it from <strong>Python.gitignore</strong> to just <strong>.gitignore</strong> (the dot is important!).</p>
+
+<p>You can complement the <strong>.gitignore</strong> file telling it to ignore SQLite database files for example:</p>
+
+<p><strong>.gitignore</strong></p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">__pycache__/
+*.py[cod]
+.env
+venv/
+
+
+# SQLite database files
+
+*.sqlite3</code></pre></figure>
+
+<p>Now add the files to the repository:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">git add .</code></pre></figure>
+
+<p>Notice the dot here. The command above is telling Git to add <em>all</em> untracked files within the current directory.</p>
+
+<p>Now make the first commit:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">git commit -m "Initial commit"</code></pre></figure>
+
+<p>Always write a comment telling what this commit is about, briefly describing what have you changed.</p>
+
+<h5 id="remote-repository">Remote Repository</h5>
+
+<p>Now let’s setup <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a> as a remote repository. First, create
+a free account on GitHub, then confirm your email address. After that, you will be able to create public repositories.</p>
+
+<p>For now, just pick a name for the repository, don’t initialize it with a README, or add a .gitignore or add a license
+so far. Make sure you start the repository empty:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/github1.png" alt="GitHub" /></p>
+
+<p>After you create the repository you should see something like this:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/github2.png" alt="GitHub" /></p>
+
+<p>Now let’s configure it as our remote repository:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">git remote add origin git@github.com:sibtc/django-boards.git</code></pre></figure>
+
+<p>Now push the code to the remote server, that is, to the GitHub repository:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">git push origin master
+
+Counting objects: 84, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (81/81), done.
+Writing objects: 100% (84/84), 319.70 KiB | 0 bytes/s, done.
+Total 84 (delta 10), reused 0 (delta 0)
+remote: Resolving deltas: 100% (10/10), done.
+To git@github.com:sibtc/django-boards.git
+ * [new branch]      master -&gt; master</code></pre></figure>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/github3.png" alt="GitHub" /></p>
+
+<p>I create this repository just to demonstrate the process to create a remote repository with an existing code base. The
+source code of the project is officially hosted in this repository:
+<a href="https://github.com/sibtc/django-beginners-guide" target="_blank" rel="noopener">https://github.com/sibtc/django-beginners-guide</a>.</p>
+
+<hr />
+
+<h4 id="project-settings">Project Settings</h4>
+
+<p>No matter if the code is stored in a public or private remote repository, sensitive information should <strong>never</strong> be
+committed and pushed to the remote repository. That includes secret keys, passwords, API keys, etc.</p>
+
+<p>At this point, we have to deal with two specific types of configuration in our <strong>settings.py</strong> module:</p>
+
+<ul>
+  <li>Sensitive information such as keys and passwords;</li>
+  <li>Configurations that are specific to a given environment.</li>
+</ul>
+
+<p>Passwords and keys can be stored in environment variables or using local files (not committed to the remote
+repository):</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="c"># environment variables</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">'SECRET_KEY'</span><span class="p">]</span>
+
+<span class="c"># or local files</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'/etc/secret_key.txt'</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></code></pre></figure>
+
+<p>For that, there’s a great utility library called <a href="../../../../2015/11/26/package-of-the-week-python-decouple.html">Python Decouple</a>
+that I use in every single Django project I develop. It will search for a local file named <strong>.env</strong> to set the
+configuration variables and will fall back to the environment variables. It also provides an interface to define
+default values, transform the data into <strong>int</strong>, <strong>bool</strong>, and <strong>list</strong> when applicable.</p>
+
+<p>It’s not mandatory, but I really find it a very useful tool. And it works like a charm with services like Heroku.</p>
+
+<p>First, let’s install it:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">pip install python-decouple</code></pre></figure>
+
+<p><strong>myproject/settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">decouple</span> <span class="kn">import</span> <span class="n">config</span>
+
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'SECRET_KEY'</span><span class="p">)</span></code></pre></figure>
+
+<p>Now we can place the sensitive information in a special file named <strong>.env</strong> (notice the dot in front) in the same
+directory where the <strong>manage.py</strong> file is:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">myproject/
+ |-- myproject/
+ |    |-- accounts/
+ |    |-- boards/
+ |    |-- myproject/
+ |    |-- static/
+ |    |-- templates/
+ |    |-- .env        &lt;-- here!
+ |    |-- .gitignore
+ |    |-- db.sqlite3
+ |    +-- manage.py
+ +-- venv/</code></pre></figure>
+
+<p><strong>.env</strong></p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">SECRET_KEY=rqr_cjv4igscyu8&amp;&amp;(0ce(=sy=f2)p=f_wn&amp;@0xsp7m$@!kp=d</code></pre></figure>
+
+<p>The <strong>.env</strong> file is ignored in the <strong>.gitignore</strong> file, so every time we are going to deploy the application or run
+in a different machine, we will have to create a <strong>.env</strong> file and add the necessary configuration.</p>
+
+<p>Now let’s install another library to help us write the database connection in a single line. This way it’s easier to
+write different database connection strings in different environments:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">pip install dj-database-url</code></pre></figure>
+
+<p>For now, all the configurations we will need to decouple:</p>
+
+<p><strong>myproject/settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">decouple</span> <span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">Csv</span>
+<span class="kn">import</span> <span class="nn">dj_database_url</span>
+
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'SECRET_KEY'</span><span class="p">)</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'DEBUG'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'ALLOWED_HOSTS'</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="n">Csv</span><span class="p">())</span>
+<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'default'</span><span class="p">:</span> <span class="n">dj_database_url</span><span class="o">.</span><span class="n">config</span><span class="p">(</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">config</span><span class="p">(</span><span class="s">'DATABASE_URL'</span><span class="p">)</span>
+    <span class="p">)</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Example of a <strong>.env</strong> file for our local machine:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">SECRET_KEY=rqr_cjv4igscyu8&amp;&amp;(0ce(=sy=f2)p=f_wn&amp;@0xsp7m$@!kp=d
+DEBUG=True
+ALLOWED_HOSTS=.localhost,127.0.0.1</code></pre></figure>
+
+<p>Notice that in the <code class="highlighter-rouge">DEBUG</code> configuration we have a default, so in production we can ignore this configuration because
+it will be set to <code class="highlighter-rouge">False</code> automatically, as it is supposed to be.</p>
+
+<p>Now the <code class="highlighter-rouge">ALLOWED_HOSTS</code> will be transformed into a list like <code class="highlighter-rouge">['.localhost', '127.0.0.1'. ]</code>. Now, this is on our
+local machine, for production we will set it to something like <code class="highlighter-rouge">['.djangoboards.com', ]</code> or whatever domain you have.</p>
+
+<p>This particular configuration makes sure your application is only served to this domain.</p>
+
+<hr />
+
+<h4 id="tracking-requirements">Tracking Requirements</h4>
+
+<p>It’s a good practice to keep track of the project’s dependencies, so to be easier to install it on another machine.</p>
+
+<p>We can check the currently installed Python libraries by running the command:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">pip freeze
+
+dj-database-url==0.4.2
+Django==1.11.6
+django-widget-tweaks==1.4.1
+Markdown==2.6.9
+python-decouple==3.1
+pytz==2017.2</code></pre></figure>
+
+<p>Create a file named <strong>requirements.txt</strong> in the project root, and add the dependencies there:</p>
+
+<p><strong>requirements.txt</strong></p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">dj-database-url==0.4.2
+Django==1.11.6
+django-widget-tweaks==1.4.1
+Markdown==2.6.9
+python-decouple==3.1</code></pre></figure>
+
+<p>I kept the <strong>pytz==2017.2</strong> out, because it is automatically installed by Django.</p>
+
+<p>You can update your source code repository:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">git add .
+git commit -m "Add requirements.txt file"
+git push origin master</code></pre></figure>
+
+<hr />
+
+<h4 id="domain-name">Domain Name</h4>
+
+<p>If we are going to deploy a Django application properly, we will need a domain name. It’s important to have a domain
+name to serve the application, configure an email service and configure an https certificate.</p>
+
+<p>Lately, I’ve been using <a href="https://namecheap.pxf.io/c/477033/386170/5618" target="_blank" rel="noopener nofollow">Namecheap</a>
+a lot. You can get a <strong>.com</strong> domain for $8.88/year, or if you are just trying things out, you could register a <strong>.xyz</strong>
+domain for $0.99/year.</p>
+
+<p>Anyway, you are free to use any registrar. To demonstrate the deployment process, I registered the
+<a href="https://www.djangoboards.com/" target="_blank" rel="noopener">www.DjangoBoards.com</a> domain.</p>
+
+<hr />
+
+<h4 id="deployment-strategy">Deployment Strategy</h4>
+
+<p>Here is an overview of the deployment strategy we are going to use in this tutorial:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/deployment.jpg" alt="Deployment" /></p>
+
+<p>The cloud is our Virtual Private Server provided by <a href="https://m.do.co/c/074832454ff1" target="_blank" rel="nofollow noopener">Digital Ocean</a>.
+You can sign up to Digital Ocean using my affiliate link to get a <a href="https://m.do.co/c/074832454ff1" target="_blank" rel="nofollow noopener">free $10 credit</a> (only valid for new accounts).</p>
+
+<p>Upfront we will have NGINX, illustrated by the ogre. NGINX will receive all requests to the server. But it won’t try
+to do anything smart if the request data. All it is going to do is decide if the requested information is a static
+asset that it can serve by itself, or if it’s something more complicated. If so, it will pass the request to Gunicorn.</p>
+
+<p>The NGINX will also be configured with HTTPS certificates. Meaning it will only accept requests via HTTPS. If the client
+tries to request via HTTP, NGINX will first redirect the user to the HTTPS, and only then it will decide what to do
+with the request.</p>
+
+<p>We are also going to install this certbot to automatically renew the Let’s Encrypt certificates.</p>
+
+<p>Gunicorn is an application server. Depending on the number of processors the server has, it can spawn multiple workers
+to process multiple requests in parallel. It manages the workload and executes the Python and Django code.</p>
+
+<p>Django is the one doing the hard work. It may access the database (PostgreSQL) or the file system. But for the
+most part, the work is done inside the views, rendering templates, all those things that we’ve been coding for the
+past weeks. After Django process the request, it returns a response to Gunicorn, who returns the result to NGINX
+that will finally deliver the response to the client.</p>
+
+<p>We are also going to install PostgreSQL, a production quality database system. Because of Django’s ORM system, it’s
+easy to switch databases.</p>
+
+<p>The last step is to install Supervisor. It’s a process control system and it will keep an eye on Gunicorn and
+Django to make sure everything runs smoothly. If the server restarts, or if Gunicorn crashes, it will automatically
+restart it.</p>
+
+<hr />
+
+<h4 id="deploying-to-a-vps-digital-ocean">Deploying to a VPS (Digital Ocean)</h4>
+
+<p>You may use any other VPS (Virtual Private Server) you like. The configuration should be very similar, after all, we
+are going to use Ubuntu 16.04 as our server.</p>
+
+<p>First, let’s create a new server (on Digital Ocean they call it “Droplet”). Select Ubuntu 16.04:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/do1.png" alt="Digital Ocean" /></p>
+
+<p>Pick the size. The smallest droplet is enough:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/do2.png" alt="Digital Ocean" /></p>
+
+<p>Then choose a hostname for your droplet (in my case “django-boards”):</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/do3.png" alt="Digital Ocean" /></p>
+
+<p>If you have an SSH key, you can add it to your account. Then you will be able to log in the server using it. Otherwise,
+they will email you the root password.</p>
+
+<p>Now pick the server’s IP address:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/do4.png" alt="Digital Ocean" /></p>
+
+<p>Before we log in to the server, let’s point our domain name to this IP address. This will save some time because
+DNS settings usually take a few minutes to propagate.</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/namecheap.png" alt="Namecheap" /></p>
+
+<p>So here we added two A records, one pointing to the naked domain “djangoboards.com” and the other one for
+“www.djangoboards.com”. We will use NGINX to configure a canonical URL.</p>
+
+<p>Now let’s log in to the server using your terminal:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">ssh root@45.55.144.54
+root@45.55.144.54's password:</code></pre></figure>
+
+<p>Then you should see the following message:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">You are required to change your password immediately (root enforced)
+Welcome to Ubuntu 16.04.3 LTS (GNU/Linux 4.4.0-93-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  Get cloud support with Ubuntu Advantage Cloud Guest:
+    http://www.ubuntu.com/business/services/cloud
+
+0 packages can be updated.
+0 updates are security updates.
+
+
+Last login: Sun Oct 15 18:39:21 2017 from 82.128.188.51
+Changing password for root.
+(current) UNIX password:</code></pre></figure>
+
+<p>Set the new password, and let’s start to configure the server.</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get update
+sudo apt-get -y upgrade</code></pre></figure>
+
+<p>If you get any prompt during the upgrade, select the option “keep the local version currently installed”.</p>
+
+<p><strong>Python 3.6</strong></p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo add-apt-repository ppa:deadsnakes/ppa
+sudo apt-get update
+sudo apt-get install python3.6</code></pre></figure>
+
+<p><strong>PostgreSQL</strong></p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get -y install postgresql postgresql-contrib</code></pre></figure>
+
+<p><strong>NGINX</strong></p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get -y install nginx</code></pre></figure>
+
+<p><strong>Supervisor</strong></p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get -y install supervisor
+
+sudo systemctl enable supervisor
+sudo systemctl start supervisor</code></pre></figure>
+
+<p><strong>Virtualenv</strong></p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">wget https://bootstrap.pypa.io/get-pip.py
+sudo python3.6 get-pip.py
+sudo pip3.6 install virtualenv</code></pre></figure>
+
+<h5 id="application-user">Application User</h5>
+
+<p>Create a new user with the command below:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">adduser boards</code></pre></figure>
+
+<p>Usually, I just pick the name of the application. Enter a password and optionally add some extra info to the prompt.</p>
+
+<p>Now add the user to the sudoers list:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">gpasswd -a boards sudo</code></pre></figure>
+
+<h5 id="postgresql-database-setup">PostgreSQL Database Setup</h5>
+
+<p>First switch to the postgres user:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo su - postgres</code></pre></figure>
+
+<p>Create a database user:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">createuser u_boards</code></pre></figure>
+
+<p>Create a new database and set the user as the owner:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">createdb django_boards --owner u_boards</code></pre></figure>
+
+<p>Define a strong password for the user:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">psql -c "ALTER USER u_boards WITH PASSWORD 'BcAZoYWsJbvE7RMgBPzxOCexPRVAq'"</code></pre></figure>
+
+<p>We can now exit the postgres user:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">exit</code></pre></figure>
+
+<h5 id="django-project-setup">Django Project Setup</h5>
+
+<p>Switch to the application user:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo su - boards</code></pre></figure>
+
+<p>First, we can check where we are:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">pwd
+/home/boards</code></pre></figure>
+
+<p>First, let’s clone the repository with our code:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">git clone https://github.com/sibtc/django-beginners-guide.git</code></pre></figure>
+
+<p>Start a virtual environment:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">virtualenv venv -p python3.6</code></pre></figure>
+
+<p>Initialize the virtualenv:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">source venv/bin/activate</code></pre></figure>
+
+<p>Install the requirements:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">pip install -r django-beginners-guide/requirements.txt</code></pre></figure>
+
+<p>We will have to add two extra libraries here, the Gunicorn and the PostgreSQL driver:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">pip install gunicorn
+pip install psycopg2</code></pre></figure>
+
+<p>Now inside the <strong>/home/boards/django-beginners-guide</strong> folder, let’s create a <strong>.env</strong> file to store the database
+credentials, the secret key and everything else:</p>
+
+<p><strong>/home/boards/django-beginners-guide/.env</strong></p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">SECRET_KEY=rqr_cjv4igscyu8&amp;&amp;(0ce(=sy=f2)p=f_wn&amp;@0xsp7m$@!kp=d
+ALLOWED_HOSTS=.djangoboards.com
+DATABASE_URL=postgres://u_boards:BcAZoYWsJbvE7RMgBPzxOCexPRVAq@localhost:5432/django_boards</code></pre></figure>
+
+<p>Here is the syntax of the database URL: postgres://<code class="highlighter-rouge">db_user</code>:<code class="highlighter-rouge">db_password</code>@<code class="highlighter-rouge">db_host</code>:<code class="highlighter-rouge">db_port</code>/<code class="highlighter-rouge">db_name</code>.</p>
+
+<p>Now let’s migrate the database, collect the static files and create a super user:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">cd django-beginners-guide</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">python manage.py migrate
+
+Operations to perform:
+  Apply all migrations: admin, auth, boards, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying boards.0001_initial... OK
+  Applying boards.0002_auto_20170917_1618... OK
+  Applying boards.0003_topic_views... OK
+  Applying sessions.0001_initial... OK</code></pre></figure>
+
+<p>Now the static files:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">python manage.py collectstatic
+
+Copying '/home/boards/django-beginners-guide/static/js/jquery-3.2.1.min.js'
+Copying '/home/boards/django-beginners-guide/static/js/popper.min.js'
+Copying '/home/boards/django-beginners-guide/static/js/bootstrap.min.js'
+Copying '/home/boards/django-beginners-guide/static/js/simplemde.min.js'
+Copying '/home/boards/django-beginners-guide/static/css/app.css'
+Copying '/home/boards/django-beginners-guide/static/css/bootstrap.min.css'
+Copying '/home/boards/django-beginners-guide/static/css/accounts.css'
+Copying '/home/boards/django-beginners-guide/static/css/simplemde.min.css'
+Copying '/home/boards/django-beginners-guide/static/img/avatar.svg'
+Copying '/home/boards/django-beginners-guide/static/img/shattered.png'
+...</code></pre></figure>
+
+<p>This command copy all the static assets to an external directory where NGINX can serve the files for us. More on that
+later.</p>
+
+<p>Now create a super user for the application:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">python manage.py createsuperuser</code></pre></figure>
+
+<h5 id="configuring-gunicorn">Configuring Gunicorn</h5>
+
+<p>So, Gunicorn is the one responsible for executing the Django code behind a proxy server.</p>
+
+<p>Create a new file named <strong>gunicorn_start</strong> inside <strong>/home/boards</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">#!/bin/bash
+
+NAME="django_boards"
+DIR=/home/boards/django-beginners-guide
+USER=boards
+GROUP=boards
+WORKERS=3
+BIND=unix:/home/boards/run/gunicorn.sock
+DJANGO_SETTINGS_MODULE=myproject.settings
+DJANGO_WSGI_MODULE=myproject.wsgi
+LOG_LEVEL=error
+
+cd $DIR
+source ../venv/bin/activate
+
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DIR:$PYTHONPATH
+
+exec ../venv/bin/gunicorn ${DJANGO_WSGI_MODULE}:application \
+  --name $NAME \
+  --workers $WORKERS \
+  --user=$USER \
+  --group=$GROUP \
+  --bind=$BIND \
+  --log-level=$LOG_LEVEL \
+  --log-file=-</code></pre></figure>
+
+<p>This script will start the application server. We are providing some information such as where the Django project is,
+which application user to be used to run the server, and so on.</p>
+
+<p>Now make this file executable:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">chmod u+x gunicorn_start</code></pre></figure>
+
+<p>Create two empty folders, one for the socket file and one to store the logs:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">mkdir run logs</code></pre></figure>
+
+<p>Right now the directory structure inside <strong>/home/boards</strong> should look like this:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">django-beginners-guide/
+gunicorn_start
+logs/
+run/
+staticfiles/
+venv/</code></pre></figure>
+
+<p>The <strong>staticfiles</strong> folder was created by the <strong>collectstatic</strong> command.</p>
+
+<h5 id="configuring-supervisor">Configuring Supervisor</h5>
+
+<p>First, create an empty log file inside the <strong>/home/boards/logs/</strong> folder:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">touch logs/gunicorn.log</code></pre></figure>
+
+<p>Now create a new supervisor file:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo vim /etc/supervisor/conf.d/boards.conf</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">[program:boards]
+command=/home/boards/gunicorn_start
+user=boards
+autostart=true
+autorestart=true
+redirect_stderr=true
+stdout_logfile=/home/boards/logs/gunicorn.log</code></pre></figure>
+
+<p>Save the file and run the commands below:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo supervisorctl reread
+sudo supervisorctl update</code></pre></figure>
+
+<p>Now check the status:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo supervisorctl status boards</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">boards                           RUNNING   pid 308, uptime 0:00:07</code></pre></figure>
+
+<h5 id="configuring-nginx">Configuring NGINX</h5>
+
+<p>Next step is to set up the NGINX server to serve the static files and to pass the requests to Gunicorn:</p>
+
+<p>Add a new configuration file named <strong>boards</strong> inside <strong>/etc/nginx/sites-available/</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">upstream app_server {
+    server unix:/home/boards/run/gunicorn.sock fail_timeout=0;
+}
+
+server {
+    listen 80;
+    server_name www.djangoboards.com;  # here can also be the IP address of the server
+
+    keepalive_timeout 5;
+    client_max_body_size 4G;
+
+    access_log /home/boards/logs/nginx-access.log;
+    error_log /home/boards/logs/nginx-error.log;
+
+    location /static/ {
+        alias /home/boards/staticfiles/;
+    }
+
+    # checks for static file, if not found proxy to app
+    location / {
+        try_files $uri @proxy_to_app;
+    }
+
+    location @proxy_to_app {
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header Host $http_host;
+      proxy_redirect off;
+      proxy_pass http://app_server;
+    }
+}</code></pre></figure>
+
+<p>Create a symbolic link to the <strong>sites-enabled</strong> folder:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo ln -s /etc/nginx/sites-available/boards /etc/nginx/sites-enabled/boards</code></pre></figure>
+
+<p>Remove the default NGINX website:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo rm /etc/nginx/sites-enabled/default</code></pre></figure>
+
+<p>Restart the NGINX service:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo service nginx restart</code></pre></figure>
+
+<p>At this point, if the DNS have already propagated, the website should be available on the URL www.djangoboards.com.</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/django-boards.png" alt="Django Boards" /></p>
+
+<hr />
+
+<h4 id="configuring-an-email-service">Configuring an Email Service</h4>
+
+<p>One of the best options to get started is <a href="https://www.mailgun.com/" target="_blank" rel="noopener">Mailgun</a>. It
+offers a very reliable free plan covering 12,000 emails per month.</p>
+
+<p>Sign up for a free account. Then just follow the steps, it’s very straightforward. You will have to work
+together with the service you registered your domain. In my case, it was <a href="https://namecheap.pxf.io/c/477033/386170/5618" target="_blank" rel="noopener nofollow">Namecheap</a>.</p>
+
+<p>Click on add domain to add a new domain to your account. Follow the instructions and make sure you use “mg.”
+subdomain:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/mg1.png" alt="Mailgun" /></p>
+
+<p>Now grab the first set of DNS records, it’s two TXT records:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/mg2.png" alt="Mailgun" /></p>
+
+<p>Add it to your domain, using the web interface offered by your registrar:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/namecheap1.png" alt="Namecheap" /></p>
+
+<p>Do the same thing with the MX records:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/mg3.png" alt="Mailgun" /></p>
+
+<p>Add them to the domain:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/namecheap2.png" alt="Namecheap" /></p>
+
+<p>Now this step is not mandatory, but since we are already here, confirm it as well:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/mg4.png" alt="Mailgun" /></p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/namecheap3.png" alt="Namecheap" /></p>
+
+<p>After adding all the DNS records, click in the <strong>Check DNS Records Now</strong> button:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/mg5.png" alt="Mailgun" /></p>
+
+<p>Now we need to have some patience. Sometimes it takes a while to validate the DNS.</p>
+
+<p>Meanwhile, we can configure the application to receive the connection parameters.</p>
+
+<p><strong>myproject/settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">EMAIL_BACKEND</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'EMAIL_BACKEND'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">'django.core.mail.backends.smtp.EmailBackend'</span><span class="p">)</span>
+<span class="n">EMAIL_HOST</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'EMAIL_HOST'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+<span class="n">EMAIL_PORT</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'EMAIL_PORT'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">587</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">EMAIL_HOST_USER</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'EMAIL_HOST_USER'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+<span class="n">EMAIL_HOST_PASSWORD</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'EMAIL_HOST_PASSWORD'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">''</span><span class="p">)</span>
+<span class="n">EMAIL_USE_TLS</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'EMAIL_USE_TLS'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
+<span class="n">DEFAULT_FROM_EMAIL</span> <span class="o">=</span> <span class="s">'Django Boards &lt;noreply@djangoboards.com&gt;'</span>
+<span class="n">EMAIL_SUBJECT_PREFIX</span> <span class="o">=</span> <span class="s">'[Django Boards] '</span></code></pre></figure>
+
+<p>Then, my local machine <strong>.env</strong> file would look like this:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">SECRET_KEY=rqr_cjv4igscyu8&amp;&amp;(0ce(=sy=f2)p=f_wn&amp;@0xsp7m$@!kp=d
+DEBUG=True
+ALLOWED_HOSTS=.localhost,127.0.0.1
+DATABASE_URL=sqlite:///db.sqlite3
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend</code></pre></figure>
+
+<p>And my production <strong>.env</strong> file would look like this:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">SECRET_KEY=rqr_cjv4igscyu8&amp;&amp;(0ce(=sy=f2)p=f_wn&amp;@0xsp7m$@!kp=d
+ALLOWED_HOSTS=.djangoboards.com
+DATABASE_URL=postgres://u_boards:BcAZoYWsJbvE7RMgBPzxOCexPRVAq@localhost:5432/django_boards
+EMAIL_HOST=smtp.mailgun.org
+EMAIL_HOST_USER=postmaster@mg.djangoboards.com
+EMAIL_HOST_PASSWORD=ED2vmrnGTM1Rdwlhazyhxxcd0F</code></pre></figure>
+
+<p>You can find your credentials in the <strong>Domain Information</strong> section on Mailgun.</p>
+
+<ul>
+  <li>EMAIL_HOST: SMTP Hostname</li>
+  <li>EMAIL_HOST_USER: Default SMTP Login</li>
+  <li>EMAIL_HOST_PASSWORD: Default Password</li>
+</ul>
+
+<p>We can test the new settings in the production server. Make the changes in the <strong>settings.py</strong> file on your local
+machine, commit the changes to the remote repository. Then, in the server pull the new code and restart the Gunicorn
+process:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">git pull</code></pre></figure>
+
+<p>Edit the <strong>.env</strong> file with the email credentials.</p>
+
+<p>Then restart the Gunicorn process:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo supervisorctl restart boards</code></pre></figure>
+
+<p>Now we can try to start the password reset process:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/pwd.png" alt="Password Reset Email" /></p>
+
+<p>On the Mailgun dashboard you can have some statistics about the email delivery:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/mg6.png" alt="Mailgun" /></p>
+
+<hr />
+
+<h4 id="configuring-https-certificate">Configuring HTTPS Certificate</h4>
+
+<p>Now let’s protect our application with a nice HTTPS certificate provided by <a href="https://letsencrypt.org/" target="_blank" rel="noopener">Let’s Encrypt</a>.</p>
+
+<p>Setting up HTTPS has never been this easy. And better, we can get it for free nowadays. They provide a solution called
+<strong>certbot</strong> which takes care of installing and renewing the certificates for us. It’s very straightforward:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo apt-get update
+sudo apt-get install software-properties-common
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+sudo apt-get install python-certbot-nginx</code></pre></figure>
+
+<p>Now install the certs:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo certbot --nginx</code></pre></figure>
+
+<p>Just follow the prompts. When asked about:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">Please choose whether or not to redirect HTTP traffic to HTTPS, removing HTTP access.</code></pre></figure>
+
+<p>Choose <code class="highlighter-rouge">2</code> to redirect all HTTP traffic to HTTPS.</p>
+
+<p>With that the site is already being served over HTTPS:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-7/https.png" alt="HTTPS" /></p>
+
+<p>Setup the auto renew of the certs. Run the command below to edit the crontab file:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">sudo crontab -e</code></pre></figure>
+
+<p>Add the following line to the end of the file:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">0 4 * * * /usr/bin/certbot renew --quiet</code></pre></figure>
+
+<p>This command will run every day at 4 am. All certificates expiring within 30 days will automatically be renewed.</p>
+
+<hr />
+
+<h4 id="conclusions">Conclusions</h4>
+
+<p>Thanks a lot for all those who followed this tutorial series, giving comments and feedback! I really appreciate!
+This was the last tutorial of the series. I hope you enjoyed it!</p>
+
+<p>Even though this was the last part of the tutorial series, I plan to write a few follow-up tutorials exploring other
+interesting topics as well, such as database optimization and adding more features on top of what we have at the
+moment.</p>
+
+<p>By the way, if you are interested in contributing to the project, few free to submit pull requests!
+The source code of the project is available on GitHub: <a href="https://github.com/sibtc/django-beginners-guide/" target="_blank">https://github.com/sibtc/django-beginners-guide/</a></p>
+
+<p>And please let me know what else you would like to see next! :-)</p>
+
+<hr />
+
+<div class="popular-posts">
+  <div class="row">
+    <div class="six columns">
+      <a href="../09/a-complete-beginners-guide-to-django-part-6.html" style="text-decoration: none">
+        <img src="../../../../media/series/beginners-guide/1.11/part-6/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 6" title="A Complete Beginner's Guide to Django - Part 6" />
+        <h5 style="margin-top: 1rem;">← Part 6 - Class-Based Views</h5>
+      </a>
+    </div>
+    <div class="six columns">
+      <a href="../../../beginners-guide/1.11/index.html" style="text-decoration: none">
+        <img src="../../../../media/series/beginners-guide/1.11/featured.jpg" alt="A Complete Beginner's Guide to Django - Index" title="A Complete Beginner's Guide to Django - Index" />
+        <h5 style="margin-top: 1rem; text-align: right;">Tutorial Series Index →</h5>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+          </article>
+
+          <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/python/index.html"><span class="tag">python</span></a>
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/guide/index.html"><span class="tag">guide</span></a>
+    
+      <a href="../../../../tag/beginners/index.html"><span class="tag">beginners</span></a>
+    
+      <a href="../../../../tag/deployment/index.html"><span class="tag">deployment</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2kRhv9p"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=A%20Complete%20Beginner's%20Guide%20to%20Django%20-%20Part%207&amp;url=http://sibt.co/2xIn6EZ&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2kTa1Tu"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2xHTZSq&amp;title=A%20Complete%20Beginner's%20Guide%20to%20Django%20-%20Part%207&amp;summary=Welcome%20to%20the%20last%20part%20of%20our%20tutorial%20series!%20In%20this%20tutorial,%20we%20are%20going%20to%20deploy%20our%20Django%20application%20to%20a%20production%20server.%20We%20are%20also%20going%20to%20configure%20an%20Email%20service%20and%20HTTPS%20ce...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+        </div>
+
+        <div class="card">
+          
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'a-complete-beginners-guide-to-django-part-7.html';
+        this.page.identifier = '/series/2017/10/16/a-complete-beginners-guide-to-django-part-7';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container post post-footer">
+    <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+    <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+  </div>
+
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/series/2017/10/16/a-complete-beginners-guide-to-django-part-7.html",
+  "headline": "A Complete Beginner's Guide to Django - Part 7",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/series/beginners-guide/1.11/part-7/featured.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2017-10-16T03:00:00+03:00",
+  "dateModified": "2017-10-16T03:00:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "Welcome to the last part of our tutorial series! In this tutorial, we are going to deploy our Django application to a production server. We are also going to configure an Email service and HTTPS ce..."
+}
+</script>
+
+  <script src="../../../../js/affix.js"></script>
+  <script src="../../../../js/jquery.waypoints.min.js"></script>
+  <script src="../../../../js/inview.min.js"></script>
+  <script>
+    $(function () {
+      var sidebarMaxHeight = $(window).height() - 90;
+      if (sidebarMaxHeight > 600) {
+        $('head').append('<style type="text/css">@media (min-width: 1200px) {#seriesSideBar.affix div.card { max-height: '+sidebarMaxHeight+'px!important; }}</style>');
+      }
+
+      /* sidebar affix */
+      $("#seriesSideBar").affix({
+        offset: {
+          top: $("#seriesSideBar").offset().top - 50,
+          bottom: function () {
+            return ($("footer").outerHeight(true) + $(".post-footer").outerHeight(true));
+          }
+        }
+      });
+
+      /* sidebar scrollspy */
+      var headers = Array();
+      var trackContents = function (el) {
+        var inview = new Waypoint.Inview({
+          element: el,
+          enter: function(direction) {
+            $("#seriesSideBar ul li a").removeClass("active");
+            $("#seriesSideBar ul li a[href='#" + this.element.id + "']").addClass("active");
+          },
+          exit: function(direction) {
+            if (direction == "up") {
+              var index = headers.indexOf(this.element.id);
+              $("#seriesSideBar ul li a").removeClass("active");
+              if (index > 0) {
+                $("#seriesSideBar ul li a[href='#" + headers[index - 1] + "']").addClass("active");
+              }
+            }
+          }
+        });
+      };
+      $("article h4, article h5").each(function () {
+        trackContents(this);
+        headers.push(this.id);
+      });
+
+      /* article default os */
+      var os = getOS();
+      $("nav.platform a[data-platform='" + os + "']").addClass("active");
+      $("body").addClass("platform-" + os);
+
+      $(".js-set-platform a").click(function () {
+        var $btn = $(this);
+        var $body = $("body");
+        var platform = $btn.attr("data-platform");
+        var platformClass = "platform-" + platform;
+        $body.removeClass("platform-mac platform-windows platform-linux");
+        $body.addClass(platformClass);
+        $("nav.platform a").removeClass("active");
+        $("nav.platform a[data-platform='" + platform + "']").addClass("active");
+      });
+
+      var platformInview = new Waypoint.Inview({
+        element: $("#platformArticle")[0],
+        enter: function(direction) {
+          $("#platformSideBar").hide();
+        },
+        exit: function(direction) {
+          if (direction == "up") {
+            $("#platformSideBar").hide();
+          }
+          else {
+            $("#platformSideBar").show();
+          }
+        }
+      });
+
+    });
+  </script>
+  <noscript><style type="text/css">body article div.platform-windows { display: block!important; }</style></noscript>
+  
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/series/2017/10/16/a-complete-beginners-guide-to-django-part-7.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:40:50 GMT -->
+</html>

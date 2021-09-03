@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2017/05/23/how-to-deploy-a-django-application-on-rhel.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:45:47 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Deploy a Django Application on RHEL 7</title>
+<meta name="description" content="In this tutorial, you will learn how to deploy a Django application with PostgreSQL, Nginx, Gunicorn on a Red HatEnterprise Linux (RHEL) version 7.3. For tes...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="how-to-deploy-a-django-application-on-rhel.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'how-to-deploy-a-django-application-on-rhel.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="How to Deploy a Django Application on RHEL 7">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tutorial/2017/05/23/how-to-deploy-a-django-application-on-rhel.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2017/05/thumbnail-rhel.jpg">
+<meta property="og:description" content="In this tutorial, you will learn how to deploy a Django application with PostgreSQL, Nginx, Gunicorn on a Red HatEnterprise Linux (RHEL) version 7.3. For tes...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2017-05-23T12:02:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Deploy a Django Application on RHEL 7">
+<meta name="twitter:description" content="In this tutorial, you will learn how to deploy a Django application with PostgreSQL, Nginx, Gunicorn on a Red HatEnterprise Linux (RHEL) version 7.3. For testing purpose I’m using an Amazon EC2 ins...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2017/05/thumbnail-rhel.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="deployment">
+  
+    <meta property="article:tag" content="rhel">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tutorial
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Deploy a Django Application on RHEL 7</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> May 23, 2017
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    7 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/tutorial/2017/05/23/how-to-deploy-a-django-application-on-rhel">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="how-to-deploy-a-django-application-on-rhel.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2017/05/featured-rhel.jpg" alt="How to Deploy a Django Application on RHEL 7" class="featured-image">
+    
+  </div>
+
+
+            <article>
+              <p>In this tutorial, you will learn how to deploy a Django application with PostgreSQL, Nginx, Gunicorn on a Red Hat
+Enterprise Linux (RHEL) version 7.3. For testing purpose I’m using an Amazon EC2 instance running RHEL 7.3.</p>
+
+<p>Recently I had to deploy an existing Django project running on Ubuntu 16.04 to a new environment, RHEL 7.3. It gave me
+some headache because I don’t have much server administration skills and I wasn’t familiar with Security Enhanced Linux
+(SELinux) distributions, so I thought about sharing the details of the deployment so it could help someone in the same
+position I was.</p>
+
+<p>If you are just getting started with Django deployment, and doesn’t have a good reason to be using RHEL, I suggest
+you use Ubuntu instead. It requires less configuration, and the process is fairly easier than using RHEL. Perhaps you
+could check this past tutorial:
+<a href="../../../2016/10/14/how-to-deploy-to-digital-ocean.html">How to Deploy a Django Application to Digital Ocean</a>.</p>
+
+<p>Anyway, for this tutorial I will deploy the following Django application:
+<a href="https://github.com/sibtc/urban-train">github.com/sibtc/urban-train</a>. It is just an empty Django project to demonstrate
+the deployment process. So, every time you see <code class="highlighter-rouge">urban-train</code>, change it for your project name.</p>
+
+<hr />
+
+<h4 id="initial-setup">Initial Setup</h4>
+
+<p>First, let’s install all the needed resources and applications. Get started by installing <code class="highlighter-rouge">git</code>, <code class="highlighter-rouge">gcc</code> and
+<code class="highlighter-rouge">python-virtualenv</code>. Everything should be available in the yum repository.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo yum -y install git gcc python-virtualenv</code></pre></figure>
+
+<p>Create a system user for the application:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo groupadd --system urbantrain
+sudo useradd --system --gid urbantrain --shell /bin/bash --home /opt/urban-train urbantrain</code></pre></figure>
+
+<p>Create the Django project home inside <code class="highlighter-rouge">/opt</code>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo mkdir /opt/urban-train</code></pre></figure>
+
+<p>Give the permissions to the <code class="highlighter-rouge">urbantrain</code> user:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo chown urbantrain:urbantrain /opt/urban-train</code></pre></figure>
+
+<hr />
+
+<h4 id="postgresql-server">PostgreSQL Server</h4>
+
+<p>Now install <code class="highlighter-rouge">PostgreSQL 9.6</code> server and development tools:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo yum -y install https://yum.postgresql.org/9.6/redhat/rhel-7-x86_64/pgdg-redhat96-9.6-3.noarch.rpm
+sudo yum -y install postgresql96-server postgresql96-contrib postgresql96-devel</code></pre></figure>
+
+<p>Initialize the database:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo /usr/pgsql-9.6/bin/postgresql96-setup initdb</code></pre></figure>
+
+<p>Start and enable the <code class="highlighter-rouge">PostgreSQL 9.6</code> service:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo systemctl start postgresql-9.6
+sudo systemctl <span class="nb">enable </span>postgresql-9.6</code></pre></figure>
+
+<p>Log in with the <code class="highlighter-rouge">postgres</code> user:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo su - postgres</code></pre></figure>
+
+<p>Create a database user, set a password (save it for later) and create a database for the Bootcamp application:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">createuser u_urban
+psql -c <span class="s2">"ALTER USER u_urban WITH PASSWORD '123';"</span>
+createdb --owner u_urban urban_prod</code></pre></figure>
+
+<p>Now we have to update the authentication method of the database user in the file <code class="highlighter-rouge">pg_hba.conf</code>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">vi /var/lib/pgsql/9.6/data/pg_hba.conf</code></pre></figure>
+
+<p>Go to the bottom of the file, find this snippet:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># TYPE  DATABASE        USER            ADDRESS                 METHOD</span>
+
+<span class="c"># "local" is for Unix domain socket connections only</span>
+<span class="nb">local   </span>all             all                                     peer
+<span class="c"># IPv4 local connections:</span>
+host    all             all             127.0.0.1/32            ident
+<span class="c"># IPv6 local connections:</span>
+host    all             all             ::1/128                 ident
+<span class="c"># Allow replication connections from localhost, by a user with the</span>
+<span class="c"># replication privilege.</span>
+<span class="c">#local   replication     postgres                                peer</span>
+<span class="c">#host    replication     postgres        127.0.0.1/32            ident</span>
+<span class="c">#host    replication     postgres        ::1/128                 ident</span></code></pre></figure>
+
+<p>Change the method from <code class="highlighter-rouge">ident</code> to <code class="highlighter-rouge">md5</code> on the <code class="highlighter-rouge">IPv4</code> and <code class="highlighter-rouge">IPv6</code> rows:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c"># TYPE  DATABASE        USER            ADDRESS                 METHOD</span>
+
+<span class="c"># "local" is for Unix domain socket connections only</span>
+<span class="nb">local   </span>all             all                                     peer
+<span class="c"># IPv4 local connections:</span>
+host    all             all             127.0.0.1/32            md5  <span class="c"># &lt;- here</span>
+<span class="c"># IPv6 local connections:</span>
+host    all             all             ::1/128                 md5  <span class="c"># &lt;- and here</span>
+<span class="c"># Allow replication connections from localhost, by a user with the</span>
+<span class="c"># replication privilege.</span>
+<span class="c">#local   replication     postgres                                peer</span>
+<span class="c">#host    replication     postgres        127.0.0.1/32            ident</span>
+<span class="c">#host    replication     postgres        ::1/128                 ident</span></code></pre></figure>
+
+<p>Save the file and exit.</p>
+
+<p>Now, log out from the postgres session:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">exit</span></code></pre></figure>
+
+<p>Restart the <code class="highlighter-rouge">PostgreSQL 9.6</code> server:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo systemctl restart postgresql-9.6</code></pre></figure>
+
+<hr />
+
+<h4 id="python-virtual-environment">Python Virtual Environment</h4>
+
+<p>First, log in with the <code class="highlighter-rouge">urbantrain</code> system user:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo su - urbantrain</code></pre></figure>
+
+<p>Start a new <code class="highlighter-rouge">python-virtualenv</code> inside the <code class="highlighter-rouge">/opt/urban-train</code> directory:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">virtualenv venv</code></pre></figure>
+
+<p>Activate the <code class="highlighter-rouge">python-virtualenv</code>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">source </span>venv/bin/activate</code></pre></figure>
+
+<p>Create a directory named <code class="highlighter-rouge">logs</code> that will be used by <code class="highlighter-rouge">Gunicorn</code> and <code class="highlighter-rouge">Nginx</code> to write the logs:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">mkdir logs</code></pre></figure>
+
+<p>Clone your project’s repository inside the <code class="highlighter-rouge">/opt/urban-train</code> directory:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git clone git@github.com:sibtc/urban-train.git</code></pre></figure>
+
+<p>Now we have to install the Python dependencies. But first, add the <code class="highlighter-rouge">PostgreSQL</code> to the path. The <code class="highlighter-rouge">psycopg2</code> will need
+it to install:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/pgsql-9.6/bin/</code></pre></figure>
+
+<p>Upgrade the Python package manager:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install pip --upgrade</code></pre></figure>
+
+<p>Install the dependencies (<code class="highlighter-rouge">/opt/urban-train/urban-train/requirements.txt</code> inside the repository):</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install -r requirements.txt</code></pre></figure>
+
+<p>Migrate the database:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate</code></pre></figure>
+
+<p>Collect the static assets (css, javascripts, images, etc.):</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py collectstatic --noinput</code></pre></figure>
+
+<hr />
+
+<h4 id="gunicorn">Gunicorn</h4>
+
+<p>Still logged in with the <code class="highlighter-rouge">urbantrain</code> user, let’s create a <code class="highlighter-rouge">gunicorn_start</code> file to startup the application server.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">vi /opt/urban-train/gunicorn_start</code></pre></figure>
+
+<p>Use the structure below, change the paths, user/groups etc accordingly to your environment/project:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+
+<span class="nv">NAME</span><span class="o">=</span><span class="s2">"urban_train"</span>
+<span class="nv">DJANGODIR</span><span class="o">=</span>/opt/urban-train/urban-train
+<span class="nv">USER</span><span class="o">=</span>urban
+<span class="nv">GROUP</span><span class="o">=</span>urban
+<span class="nv">WORKERS</span><span class="o">=</span>3
+<span class="nv">BIND</span><span class="o">=</span>unix:/opt/urban-train/run/gunicorn.sock
+<span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span>urban_train.settings
+<span class="nv">DJANGO_WSGI_MODULE</span><span class="o">=</span>urban_train.wsgi
+<span class="nv">LOGLEVEL</span><span class="o">=</span>error
+
+<span class="nb">cd</span> <span class="nv">$DJANGODIR</span>
+<span class="nb">source </span>venv/bin/activate
+
+<span class="nb">export </span><span class="nv">DJANGO_SETTINGS_MODULE</span><span class="o">=</span><span class="nv">$DJANGO_SETTINGS_MODULE</span>
+<span class="nb">export </span><span class="nv">PYTHONPATH</span><span class="o">=</span><span class="nv">$DJANGODIR</span>:<span class="nv">$PYTHONPATH</span>
+
+<span class="nb">exec </span>venv/bin/gunicorn <span class="k">${</span><span class="nv">DJANGO_WSGI_MODULE</span><span class="k">}</span>:application <span class="se">\</span>
+  --name <span class="nv">$NAME</span> <span class="se">\</span>
+  --workers <span class="nv">$WORKERS</span> <span class="se">\</span>
+  --user<span class="o">=</span><span class="nv">$USER</span> <span class="se">\</span>
+  --group<span class="o">=</span><span class="nv">$GROUP</span> <span class="se">\</span>
+  --bind<span class="o">=</span><span class="nv">$BIND</span> <span class="se">\</span>
+  --log-level<span class="o">=</span><span class="nv">$LOGLEVEL</span> <span class="se">\</span>
+  --log-file<span class="o">=</span>-</code></pre></figure>
+
+<p>Make the <code class="highlighter-rouge">gunicorn_start</code> file executable:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">chmod u+x gunicorn_start</code></pre></figure>
+
+<p>Create a directory named run, for the unix socket file:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">mkdir run</code></pre></figure>
+
+<hr />
+
+<h4 id="gunicorn-systemd-service">Gunicorn Systemd Service</h4>
+
+<p>Now let’s create a systemd service file for <code class="highlighter-rouge">gunicorn</code> server to manage</p>
+
+<p>First, exit the <code class="highlighter-rouge">urbantrain</code> user. Create the following systemd service file:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo vi /etc/systemd/system/gunicorn.service</code></pre></figure>
+
+<p>Insert the following in the file:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>Unit]
+<span class="nv">Description</span><span class="o">=</span>gunicorn daemon
+<span class="nv">After</span><span class="o">=</span>network.target
+
+<span class="o">[</span>Service]
+<span class="nv">User</span><span class="o">=</span>urbantrain
+<span class="nv">Group</span><span class="o">=</span>urbantrain
+<span class="nv">WorkingDirectory</span><span class="o">=</span>/opt/urban-train
+<span class="nv">ExecStart</span><span class="o">=</span>/opt/urban-train/gunicorn_start
+
+<span class="o">[</span>Install]
+<span class="nv">WantedBy</span><span class="o">=</span>multi-user.target</code></pre></figure>
+
+<p>Start the <code class="highlighter-rouge">gunicorn</code> systemd service we created and enable it so that it starts at boot:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo systemctl start gunicorn
+sudo systemctl <span class="nb">enable </span>gunicorn</code></pre></figure>
+
+<hr />
+
+<h4 id="nginx">Nginx</h4>
+
+<p>The application must be served behind a proxy server. First, create a yum repo file:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo vi /etc/yum.repos.d/nginx.repo</code></pre></figure>
+
+<p>Add repository information:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>nginx]
+<span class="nv">name</span><span class="o">=</span>nginx repo
+<span class="nv">baseurl</span><span class="o">=</span>http://nginx.org/packages/rhel/7/<span class="nv">$basearch</span>/
+<span class="nv">gpgcheck</span><span class="o">=</span>0
+<span class="nv">enabled</span><span class="o">=</span>1</code></pre></figure>
+
+<p>Save and exit.</p>
+
+<p>Now install <code class="highlighter-rouge">nginx</code>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo yum -y install nginx</code></pre></figure>
+
+<p>Because of the security policies of the SELinux, we need to manually add the <code class="highlighter-rouge">httpd_t</code> to the list of permissive
+domains, run this command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo semanage permissive -a httpd_t</code></pre></figure>
+
+<p>Now let’s create a <code class="highlighter-rouge">.conf</code> file for the project. Go to the <code class="highlighter-rouge">conf.d</code> directory:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /etc/nginx/conf.d/</code></pre></figure>
+
+<p>Remove the <code class="highlighter-rouge">default.conf</code> file, and create a new one for our project:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo rm default.conf
+sudo vi urban-train.conf</code></pre></figure>
+
+<p>Inside of the <code class="highlighter-rouge">urban-train.conf</code> file, insert the new server block:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">upstream app_server <span class="o">{</span>
+    server unix:/opt/urban-train/run/gunicorn.sock <span class="nv">fail_timeout</span><span class="o">=</span>0;
+<span class="o">}</span>
+
+server <span class="o">{</span>
+    listen 80;
+    server_name IP_ADDRESS_OR_DOMAIN_NAME;  <span class="c"># &lt;- insert here the ip address/domain name</span>
+
+    keepalive_timeout 5;
+    client_max_body_size 4G;
+
+    access_log /opt/urban-train/logs/nginx-access.log;
+    error_log /opt/urban-train/logs/nginx-error.log;
+
+    location /static/ <span class="o">{</span>
+        <span class="nb">alias</span> /opt/urban-train/static/;
+    <span class="o">}</span>
+
+    location /media/ <span class="o">{</span>
+        <span class="nb">alias</span> /opt/urban-train/media/;
+    <span class="o">}</span>
+
+    location / <span class="o">{</span>
+        try_files <span class="nv">$uri</span> @proxy_to_app;
+    <span class="o">}</span>
+
+    location @proxy_to_app <span class="o">{</span>
+      proxy_set_header X-Forwarded-For <span class="nv">$proxy_add_x_forwarded_for</span>;
+      proxy_set_header Host <span class="nv">$http_host</span>;
+      proxy_redirect off;
+      proxy_pass http://app_server;
+    <span class="o">}</span>
+<span class="o">}</span></code></pre></figure>
+
+<p>Test the <code class="highlighter-rouge">nginx.conf</code>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo nginx -t</code></pre></figure>
+
+<p>Start the <code class="highlighter-rouge">nginx</code> service and enable it so that it starts at boot:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo systemctl start nginx
+sudo systemctl <span class="nb">enable </span>nginx</code></pre></figure>
+
+<hr />
+
+<h4 id="final-remarks">Final Remarks</h4>
+
+<p>Everything should be working now. Do a final test, reboot the server and check if everything starts up normally:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo reboot</code></pre></figure>
+
+<p>Some things that may cause trouble:</p>
+<ul>
+  <li>SELinux permission issues, read more here: <a href="https://www.nginx.com/blog/nginx-se-linux-changes-upgrading-rhel-6-6/" target="_blank">SELinux Changes when Upgrading to RHEL 6.6 / CentOS 6.6</a></li>
+  <li>The nginx user does not have permission to project folders</li>
+  <li>PostgreSQL authentication method</li>
+</ul>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../../series/2017/10/16/a-complete-beginners-guide-to-django-part-7.html">
+<img src="../../../../media/series/beginners-guide/1.11/part-7/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 7" title="A Complete Beginner's Guide to Django - Part 7">
+A Complete Beginner's Guide to Django - Part 7
+</a>
+</div>
+<div class="four columns">
+<a href="../../../2016/10/14/how-to-deploy-to-digital-ocean.html">
+<img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+How to Deploy a Django Application to Digital Ocean
+</a>
+</div>
+<div class="four columns">
+<a href="../../../2016/08/09/how-to-deploy-django-applications-on-heroku.html">
+<img src="../../../../media/2016-08-09-how-to-deploy-django-applications-on-heroku/featured.jpg" alt="How to Deploy Django Applications on Heroku" title="How to Deploy Django Applications on Heroku">
+How to Deploy Django Applications on Heroku
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/deployment/index.html"><span class="tag">deployment</span></a>
+    
+      <a href="../../../../tag/rhel/index.html"><span class="tag">rhel</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2s23pkX"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Deploy%20a%20Django%20Application%20on%20RHEL%207&amp;url=http://sibt.co/2rK1hBr&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2qqgXFW"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2qql2tM&amp;title=How%20to%20Deploy%20a%20Django%20Application%20on%20RHEL%207&amp;summary=In%20this%20tutorial,%20you%20will%20learn%20how%20to%20deploy%20a%20Django%20application%20with%20PostgreSQL,%20Nginx,%20Gunicorn%20on%20a%20Red%20HatEnterprise%20Linux%20(RHEL)%20version%207.3.%20For%20testing%20purpose%20I%E2%80%99m%20using%20an%20Amazon%20EC2%20ins...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'how-to-deploy-a-django-application-on-rhel.html';
+        this.page.identifier = '/tutorial/2017/05/23/how-to-deploy-a-django-application-on-rhel';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tutorial/2017/05/23/how-to-deploy-a-django-application-on-rhel.html",
+  "headline": "How to Deploy a Django Application on RHEL 7",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2017/05/featured-rhel.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2017-05-23T12:02:00+03:00",
+  "dateModified": "2017-05-23T12:02:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "In this tutorial, you will learn how to deploy a Django application with PostgreSQL, Nginx, Gunicorn on a Red HatEnterprise Linux (RHEL) version 7.3. For testing purpose I’m using an Amazon EC2 ins..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2017/05/23/how-to-deploy-a-django-application-on-rhel.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:45:47 GMT -->
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/2015/11/23/small-open-source-django-projects-to-get-started.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:39:24 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>Small Open-Source Django Projects to Get Started</title>
+<meta name="description" content="Learning Django and Python can be very fun. I personally love programming with Python and for the most part, work with the Django framework. But in the begin...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="small-open-source-django-projects-to-get-started.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../favicon.png">
+<link rel="mask-icon" href="../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'small-open-source-django-projects-to-get-started.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="Small Open-Source Django Projects to Get Started">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/2015/11/23/small-open-source-django-projects-to-get-started.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2015-11-23-small-open-source-django-projects-to-get-started/featured-post-image.jpg">
+<meta property="og:description" content="Learning Django and Python can be very fun. I personally love programming with Python and for the most part, work with the Django framework. But in the begin...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2015-11-23T14:00:00+02:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="Small Open-Source Django Projects to Get Started">
+<meta name="twitter:description" content="Learning Django and Python can be very fun. I personally love programming with Python and for the most part, work with the Django framework. But in the beginning some stuff can be confusing, especi...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2015-11-23-small-open-source-django-projects-to-get-started/featured-post-image.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="python">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      article
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">Small Open-Source Django Projects to Get Started</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Nov 23, 2015
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    6 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/2015/11/23/small-open-source-django-projects-to-get-started">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="small-open-source-django-projects-to-get-started.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../media/2015-11-23-small-open-source-django-projects-to-get-started/featured-post-image.jpg" alt="Small Open-Source Django Projects to Get Started" class="featured-image">
+    
+      <small>(Picture: <a href="https://unsplash.com/photos/gcsNOsPEXfs" target="_blank">https://unsplash.com/photos/gcsNOsPEXfs</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>Learning Django and Python can be very fun. I personally love programming with Python and for the most part, work with the Django framework. But in the beginning some stuff can be confusing, especially if you are coming from a Java or C♯ background, like me.</p>
+
+<p>The biggest challenges for me was to get familiar with the initial Django setup, understand the URL routing, and get to know how to organize the project files and apps. I’ve not being around for that long, it’s been only three years now since I started to mess around with Django.</p>
+
+<p>Regarding those challenges, now I can say I’m really comfortable with the Django setup (you will eventually get there after creating a few projects), I fully understand how Django routes URLs but I’m always googling around to find a suitable regex for my needs, and finally, I’m always trying new ways to organize my Django projects.</p>
+
+<p>In this post I will present you some of my open-source Django projects, which can help you to get started and learn more about how to get things done with Django. Of course they are not perfect, using the best practices nor anything. Some of them I developed while I was still learning the basics, but as they are quite small projects, they can be very useful in a sense that you can dive into the source code, without drown in a ocean of complexity.</p>
+
+<hr />
+
+<h4 id="bootcamp">Bootcamp</h4>
+
+<p><img src="../../../media/2015-11-23-small-open-source-django-projects-to-get-started/bootcamp.png" alt="Bootcamp" title="Bootcamp: An enterprise social network" /></p>
+
+<p>Bootcamp is a simple concept of a enterprise social network. I’ve developed it to encourage the developers of a company I worked in the past to collaborate and share experiences. It’s meant to be closed and to run inside a company.</p>
+
+<p>The whole idea was to have a simple feed app in the front page, like Twitter so we could share links and post some of our thoughts and keep track of what everyone was doing. Also we wanted a space that all developers could share some more elaborate content, hence the Articles app. And finally, we wanted a Q&amp;A app, like StackOverflow, for questions related to our business and the softwares and projects we developed for our customers — which couldn’t be shared openly.</p>
+
+<p>A few things you can find within the Bootcamp project:</p>
+
+<ul>
+  <li><a href="https://github.com/vitorfs/bootcamp/tree/master/bootcamp/feeds" target="_blank">Feed app (A Twitter-like microblog)</a>
+    <ul>
+      <li>Live feed updates</li>
+      <li>Comments and likes</li>
+      <li>Track comments and likes changes/updates</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/vitorfs/bootcamp/tree/master/bootcamp/articles" target="_blank">Articles app (A collaborative blog)</a></li>
+  <li><a href="https://github.com/vitorfs/bootcamp/tree/master/bootcamp/questions" target="_blank">Question &amp; Answers (A Stack Overflow-like platform)</a></li>
+  <li><a href="https://github.com/vitorfs/bootcamp/tree/master/bootcamp/activities" target="_blank">Notification center</a>
+    <ul>
+      <li>When someone likes and comments a feed post</li>
+      <li>When someone comments on a article you wrote</li>
+      <li>When someone answers your question, star or up-vote</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/vitorfs/bootcamp/tree/master/bootcamp/messenger" target="_blank">Messages</a>
+    <ul>
+      <li>Simple async messages</li>
+      <li>Read/unread track</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/vitorfs/bootcamp/tree/master/bootcamp/search" target="_blank">Search app</a>
+    <ul>
+      <li>Quick and dirty search solution</li>
+    </ul>
+  </li>
+</ul>
+
+<p>You can grab the source code on GitHub and try the live demo on:</p>
+
+<p><strong>Source Code</strong>: <a href="https://github.com/vitorfs/bootcamp/" target="_blank">github.com/vitorfs/bootcamp</a>
+<strong>Live Demo</strong>: <a href="http://trybootcamp.vitorfs.com/" target="_blank">trybootcamp.vitorfs.com</a></p>
+
+<hr />
+
+<h4 id="woid">Woid</h4>
+
+<p><img src="../../../media/2015-11-23-small-open-source-django-projects-to-get-started/woid.png" alt="Woid" title="Woid" /></p>
+
+<p>Woid is a web crawler that collects top stories on some web sites I usually read. I developed it be my home page so I can keep track of what people are talking about at the moment, so I never miss a good story. I also archive them, so I can look back and see what was the most discussed topic on a specific date.</p>
+
+<p>It’s a fairly simple Django project, but if you are curious about how to do some simple crawling, it might be useful.</p>
+
+<ul>
+  <li><a href="https://github.com/vitorfs/woid/blob/master/woid/apps/services/wrappers.py" target="_blank">Clients</a>
+    <ul>
+      <li>Basic clients using the <a href="http://docs.python-requests.org/en/latest/" target="_blank">requests</a> library and <a href="http://www.crummy.com/software/BeautifulSoup/bs4/doc/" target="_blank">Beautiful Soup</a> to parse the data</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/vitorfs/woid/blob/master/woid/apps/services/crawlers.py" target="_blank">Crawlers</a>
+    <ul>
+      <li>Getting the parsed data, calculating story score and saving the updates to the database</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/vitorfs/woid/blob/master/scripts/top.py" target="_blank">Server script</a>
+    <ul>
+      <li>The script I run on the server to update the stories every 5 minutes (30 minutes for some of them)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>You can grab the source code on GitHub and see the actual site on:</p>
+
+<p><strong>Source Code:</strong> <a href="https://github.com/vitorfs/woid/" target="_blank">github.com/vitorfs/woid</a>
+<strong>Website:</strong> <a href="http://woid.io/" target="_blank">woid.io</a></p>
+
+<hr />
+
+<h4 id="bloodhound">Bloodhound</h4>
+
+<p><img src="../../../media/2015-11-23-small-open-source-django-projects-to-get-started/bloodhound.png" alt="Bloodhound" title="Bloodhound" /></p>
+
+<p>Bloodhound is also a simple web crawler that runs the whole day indexing and tracking price changes on a Finnish retail store named <strong>Verkkokauppa</strong>. The idea was to store all the price changes for every product in their website, so before I buy something, I could check if I’m paying the best price.</p>
+
+<p>There isn’t much to see regarding to the Django part, it’s more about an interface to display the collected data.</p>
+
+<ul>
+  <li><a href="https://github.com/vitorfs/bloodhound/tree/master/bloodhound/core" target="_blank">Core app</a>
+    <ul>
+      <li>Simple views and template to display the collected data</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/vitorfs/bloodhound/tree/master/bloodhound/sniffer" target="_blank">Sniffer app</a>
+    <ul>
+      <li>Crawling frontier model and the crawler source code</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/vitorfs/bloodhound/tree/master/scripts" target="_blank">Server script</a>
+    <ul>
+      <li>Index product script</li>
+      <li>Update prices script</li>
+    </ul>
+  </li>
+</ul>
+
+<p>You can grab the source code on GitHub:</p>
+
+<p><strong>Source Code:</strong> <a href="https://github.com/vitorfs/bloodhound/" target="_blank">github.com/vitorfs/bloodhound</a></p>
+
+<hr />
+
+<h4 id="parsifal">Parsifal</h4>
+
+<p><img src="../../../media/2015-11-23-small-open-source-django-projects-to-get-started/parsifal.png" alt="Parsifal" title="Parsifal" /></p>
+
+<p>Parsifal is a tool I developed a couple of years ago, while doing my Masters Degree. If you are not familiar with some research practices, this app might not be really meaningful for you and what it does can be confusing. Anyway, it’s meant to help researchers do literature reviews.</p>
+
+<p>There is still some old code there, but the app is pretty stable. It was one of my first Django projects and I still maintain actively, as I personally use on my daily activities and there is a good amount of users that also uses it. Even if the core of this app doesn’t make sense for you, there is still some simple apps you can use to learn more about Django.</p>
+
+<ul>
+  <li><a href="https://github.com/vitorfs/parsifal/tree/master/parsifal/authentication" target="_blank">Auth</a>
+    <ul>
+      <li>Authentication</li>
+      <li>Password reset</li>
+      <li>Registration</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/vitorfs/parsifal/tree/master/parsifal/blog" target="_blank">Blog</a></li>
+  <li><a href="https://github.com/vitorfs/parsifal/tree/master/parsifal/help" target="_blank">Help articles</a></li>
+  <li><a href="https://github.com/vitorfs/parsifal/blob/master/parsifal/authentication/models.py" target="_blank">User profile</a>
+    <ul>
+      <li>Extended user profile</li>
+      <li>Uploading and croping profile pictures</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/vitorfs/parsifal/tree/master/parsifal/activities" target="_blank">Follow users</a></li>
+</ul>
+
+<p>You can grab the source code on GitHub and see the actual site on:</p>
+
+<p><strong>Source Code:</strong> <a href="https://github.com/vitorfs/parsifal" target="_blank">github.com/vitorfs/parsifal</a>
+<strong>Website:</strong> <a href="https://parsif.al/" target="_blank">parsif.al</a></p>
+
+<hr />
+
+<p>That’s it for now. I hope those projects can help you learning a little bit more about the Django framework. There’s a lot more to explore and to learn. If you are just starting, keep things simple. Do always the obvious solution first, even if it’s not the best solution. Get comfortable with the framework first. Get your hands dirty! That’s the only way to truly learn something.</p>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../series/2017/10/16/a-complete-beginners-guide-to-django-part-7.html">
+<img src="../../../media/series/beginners-guide/1.11/part-7/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 7" title="A Complete Beginner's Guide to Django - Part 7">
+A Complete Beginner's Guide to Django - Part 7
+</a>
+</div>
+<div class="four columns">
+<a href="../../../series/2017/10/09/a-complete-beginners-guide-to-django-part-6.html">
+<img src="../../../media/series/beginners-guide/1.11/part-6/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 6" title="A Complete Beginner's Guide to Django - Part 6">
+A Complete Beginner's Guide to Django - Part 6
+</a>
+</div>
+<div class="four columns">
+<a href="../../../series/2017/10/02/a-complete-beginners-guide-to-django-part-5.html">
+<img src="../../../media/series/beginners-guide/1.11/part-5/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 5" title="A Complete Beginner's Guide to Django - Part 5">
+A Complete Beginner's Guide to Django - Part 5
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../tag/python/index.html"><span class="tag">python</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2nmDHFM"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Small%20Open-Source%20Django%20Projects%20to%20Get%20Started&amp;url=http://sibt.co/2mkg0gr&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2mCT1hw"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2mjX1Sh&amp;title=Small%20Open-Source%20Django%20Projects%20to%20Get%20Started&amp;summary=Learning%20Django%20and%20Python%20can%20be%20very%20fun.%20I%20personally%20love%20programming%20with%20Python%20and%20for%20the%20most%20part,%20work%20with%20the%20Django%20framework.%20But%20in%20the%20beginning%20some%20stuff%20can%20be%20confusing,%20especi...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'small-open-source-django-projects-to-get-started.html';
+        this.page.identifier = '/2015/11/23/small-open-source-django-projects-to-get-started';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../contact/index.html">contact</a></li>
+      <li><a href="../../../faq/index.html">faq</a></li>
+      <li><a href="../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/2015/11/23/small-open-source-django-projects-to-get-started.html",
+  "headline": "Small Open-Source Django Projects to Get Started",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2015-11-23-small-open-source-django-projects-to-get-started/featured-post-image.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2015-11-23T14:00:00+02:00",
+  "dateModified": "2015-11-23T14:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "Learning Django and Python can be very fun. I personally love programming with Python and for the most part, work with the Django framework. But in the beginning some stuff can be confusing, especi..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/2015/11/23/small-open-source-django-projects-to-get-started.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:39:28 GMT -->
+</html>

@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/series/2017/09/04/a-complete-beginners-guide-to-django-part-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:43:05 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>A Complete Beginner's Guide to Django - Part 1</title>
+<meta name="description" content="I'm starting today a new tutorial series about the Django fundamentals. It's a complete beginner's guide to start learning Django. The material is divided in...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="a-complete-beginners-guide-to-django-part-1.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'a-complete-beginners-guide-to-django-part-1.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="A Complete Beginner's Guide to Django - Part 1">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/series/2017/09/04/a-complete-beginners-guide-to-django-part-1.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/series/beginners-guide/1.11/part-1/thumbnail.jpg">
+<meta property="og:description" content="I'm starting today a new tutorial series about the Django fundamentals. It's a complete beginner's guide to start learning Django. The material is divided in...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2017-09-04T00:00:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="A Complete Beginner's Guide to Django - Part 1">
+<meta name="twitter:description" content="I'm starting today a new tutorial series about the Django fundamentals. It's a complete beginner's guide to start learning Django. The material is divided in 7 parts. We're going to explore all the...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/series/beginners-guide/1.11/part-1/thumbnail.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="python">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="guide">
+  
+    <meta property="article:tag" content="beginners">
+  
+    <meta property="article:tag" content="app">
+  
+    <meta property="article:tag" content="project">
+  
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <div class="container">
+    <div class="row">
+      <div class="twelve columns post">
+        <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+</div>
+
+      </div>
+    </div>
+    <div id="main-content" class="row">
+      <div id="seriesSideBar" class="three columns">
+        <div class="card">
+          
+            <div id="ad">
+              <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+            </div>
+          
+          <nav id="platformSideBar" class="platform js-set-platform" style="margin-bottom: 2rem; display: none; font-size: 1.2rem">
+            <a href="javascript:void(0);" data-platform="mac" title="Set platform to Mac"><i class="fa fa-apple"></i> Mac</a>
+            <a href="javascript:void(0);" data-platform="windows" title="Set platform to Windows"><i class="fa fa-windows"></i> Win</a>
+            <a href="javascript:void(0);" data-platform="linux" title="Set platform to Linux"><i class="fa fa-linux"></i> Linux</a>
+          </nav>
+          <h5>Table of Contents</h5>
+          <ul>
+            
+              <li><a href="#introduction">Introduction</a></li>
+              
+            
+              <li><a href="#why-django">Why Django?</a></li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#whos-using-django">
+                    Who's Using Django?
+                  </a>
+                </li>
+              
+            
+              <li><a href="#installation">Installation</a></li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#installing-python-362">
+                    Installing Python 3.6.2
+                  </a>
+                </li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#installing-virtualenv">
+                    Installing Virtualenv
+                  </a>
+                </li>
+              
+                <li style="padding-left: 1.5rem; font-size: 1.4rem; margin-bottom: 0.25rem">
+                  <a href="#installing-django-1114">
+                    Installing Django 1.11.4
+                  </a>
+                </li>
+              
+            
+              <li><a href="#starting-a-new-project">Starting a New Project</a></li>
+              
+            
+              <li><a href="#django-apps">Django Apps</a></li>
+              
+            
+              <li><a href="#hello-world">Hello, World!</a></li>
+              
+            
+              <li><a href="#conclusions">Conclusions</a></li>
+              
+            
+          </ul>
+          <hr style="margin: 1.5rem 0;">
+          <ul style="font-size: 1.4rem">
+            <li><a href="#top"><i class="fa fa-arrow-up" style="margin-right: .2rem"></i> scroll to top</a></li>
+            <li><a href="#comments"><i class="fa fa-comments" style="margin-right: .2rem"></i> go to comments</a></li>
+            <li><a href="../../../beginners-guide/1.11/index.html"><i class="fa fa-list" style="margin-right: .2rem"></i> go to series index</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="nine columns content post" style="float:right">
+        <div class="card">
+          
+  <h5 class="post-category">
+    
+      series
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">A Complete Beginner's Guide to Django - Part 1</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Sep 4, 2017
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    20 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/series/2017/09/04/a-complete-beginners-guide-to-django-part-1">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="a-complete-beginners-guide-to-django-part-1.html"></span> views
+  </li>
+  
+    <li>
+      <i class="fa fa-book"></i>
+      <a href="../../../beginners-guide/1.11/index.html">Part 1 of 7</a>
+    </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/series/beginners-guide/1.11/part-1/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 1" class="featured-image">
+    
+  </div>
+
+
+          <div class="row" style="margin-bottom: 2rem;">
+            <div class="five columns">
+              <nav id="platformArticle" class="platform js-set-platform">
+                <a href="javascript:void(0);" data-platform="mac" title="Set platform to Mac"><i class="fa fa-apple"></i> Mac</a>
+                <a href="javascript:void(0);" data-platform="windows" title="Set platform to Windows"><i class="fa fa-windows"></i> Windows</a>
+                <a href="javascript:void(0);" data-platform="linux" title="Set platform to Linux"><i class="fa fa-linux"></i> Linux</a>
+
+              </nav>
+            </div>
+            <div class="three columns">
+              <nav class="platform">
+                <a href="../../../beginners-guide/1.11/index.html" class="series-nav">Series 1/7</a>
+              </nav>
+            </div>
+            <div class="four columns versions">
+              
+                <img src="https://img.shields.io/badge/python-3.6.2-brightgreen.svg" alt="Python 3.6.2">
+              
+              
+                <img src="https://img.shields.io/badge/django-1.11.4-brightgreen.svg" alt="Django 1.11.4">
+              
+            </div>
+          </div>
+
+          <article>
+            <h4 id="introduction">Introduction</h4>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-1/Pixton_Comic_Welcome_Class.png" alt="Welcome Class" /></p>
+
+<p>Today I’m starting a new tutorial series about Django fundamentals. It’s a complete beginner’s guide to start
+learning Django. The material is divided into seven parts. We’re going to explore all the basic concepts in great detail,
+from installation, preparation of the development environment, models, views, templates, URLs to more advanced topics
+such as migrations, testing, and deployment.</p>
+
+<p>I wanted to do something different. A tutorial that would be easy to follow, informative and fun to read. That was when
+I came up with the idea to create some comics along the text to illustrate some concepts and scenarios. I hope you
+enjoy the reading!</p>
+
+<p>But before we start…</p>
+
+<p>Back when I worked as a substitute professor in a university, I used to teach an introduction to web development
+discipline for the newcomer students in the Computer Science course. And I would always start new classes with this
+Confucius quote:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-1/Pixton_Comic_Confucius_Quote.png" alt="Confucius Quote" /></p>
+
+<p>So, hands on! Don’t just read the tutorials. Let’s do it together! You will learn much more by doing and practicing.</p>
+
+<hr />
+
+<h4 id="why-django">Why Django?</h4>
+
+<p>Django is a Web framework written in Python. A Web framework is a software that supports the development of dynamic Web
+sites, applications, and services. It provides a set of tools and functionalities that solves many common problems
+associated with Web development, such as security features, database access, sessions, template processing, URL
+routing, internationalization, localization, and much more.</p>
+
+<p>Using a Web framework, such as Django, enables us to develop secure and reliable Web applications very quickly in a
+standardized way, without having to reinvent the wheel.</p>
+
+<p>So, what’s so special about Django? For starters, it’s a Python Web framework, which means you can benefit from wide
+a range of open source libraries out there. The <a href="https://pypi.python.org/pypi" target="_blank">Python Package Index</a>
+repository hosts over <strong>116K</strong> packages (as per 6 of Sep. 2017). If you need to solve a specific problem, the chances
+are someone has already implemented a library for it.</p>
+
+<p>Django is one of the most popular Web frameworks written in Python. It’s definitely the most complete, offering a wide
+range of features out-of-the-box, such as a standalone Web server for development and testing, caching,
+middleware system, ORM, template engine, form processing, interface with Python’s unit testing tools. Django also comes
+with <em>battery included</em>, offering built-in applications such as an authentication system, an administrative interface
+with automatically generated pages for CRUD operations, generation of syndication feeds (RSS/Atom), sitemaps. There’s
+even a Geographic Information System (GIS) framework built within Django.</p>
+
+<p>The development of Django is supported by the <a href="https://www.djangoproject.com/foundation/">Django Software Foundation</a>,
+and it’s sponsored by companies like JetBrains and Instagram. Django has also been around for quite some time now.
+It’s under active development for more than 12 years now, proving to be a mature, reliable and secure Web framework.</p>
+
+<h5 id="whos-using-django">Who’s Using Django?</h5>
+
+<p>It’s good to know who is using Django out there, so to have an idea what you can do with it. Among the biggest Web
+sites using Django we have: <a href="https://instagram.com/" target="_blank">Instagram</a>,
+<a href="https://disqus.com/" target="_blank">Disqus</a>, <a href="https://www.mozilla.org/" target="_blank">Mozilla</a>,
+<a href="https://bitbucket.org/" target="_blank">Bitbucket</a>, <a href="https://www.last.fm/" target="_blank">Last.fm</a>,
+<a href="http://www.nationalgeographic.com/" target="_blank">National Geographic</a>.</p>
+
+<p>For more examples you can see the <a href="https://www.djangosites.org/" target="_blank">Django Sites</a> database, they offer
+a list of over <strong>5K</strong> Django-powered Web sites.</p>
+
+<p>By the way, last year, in the Django Under The Hood 2016 conference, Carl Meyer, a Django core developer, and Instagram
+employee, gave a talk on <a href="https://www.youtube.com/watch?v=lx5WQjXLlq8" target="_blank">how Instagram use Django at scale</a>
+and how it supported their growth. It’s a one hour talk, but if you are interested in learning more, it was an
+entertaining talk.</p>
+
+<hr />
+
+<h4 id="installation">Installation</h4>
+
+<p>The first thing we need to do is install some programs on our machine so to be able to start playing with Django. The
+basic setup consists of installing <strong>Python</strong>, <strong>Virtualenv</strong>, and <strong>Django</strong>.</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-1/Pixton_Comic_Basic_Setup.png" alt="Basic Setup" /></p>
+
+<p>Using virtual environments is not mandatory, but it’s highly recommended. If you are just getting started, it’s better
+to start with the right foot.</p>
+
+<p>When developing Web sites or Web projects with Django, it’s very common to have to install external libraries to
+support the development. Using virtual environments, each project you develop will have its isolated environment.
+So the dependencies won’t clash. It also allows you to maintain in your local machine projects that run on different
+Django versions.</p>
+
+<p>It’s very straightforward to use it, you will see!</p>
+
+<h5 id="installing-python-362">Installing Python 3.6.2</h5>
+
+<p>The first thing we want to do is install the latest Python distribution, which is <strong>Python 3.6.2</strong>. At least it was, by
+the time I was writing this tutorial. If there’s a newer version out there, go with it. The next steps should remain
+more or less the same.</p>
+
+<p>We are going to use Python 3 because the most important Python libraries have already been ported to Python 3 and also
+the next major Django version (2.x) won’t support Python 2 anymore. So Python 3 is the way to go.</p>
+
+<div class="platform-mac">
+
+  <p>The best way to go is with <a href="https://brew.sh/" target="_blank">Homebrew</a>. If you don’t have it installed on your Mac
+yet, run the following command in the <strong>Terminal</strong>:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">/usr/bin/ruby -e <span class="s2">"</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">"</span></code></pre></figure>
+
+  <p>If you don’t have the <strong>Command Line Tools</strong> installed, the Homebrew installation might take a little bit longer. But
+it will take care of everything for you, so no worries. Just sit back and wait until the installation completes.</p>
+
+  <p>You will know when the installation completes when you see the following message:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">==&gt; </span>Installation successful!
+
+<span class="gp">==&gt; </span>Homebrew has enabled anonymous aggregate user behaviour analytics.
+Read the analytics documentation <span class="o">(</span>and how to opt-out<span class="o">)</span> here:
+  https://docs.brew.sh/Analytics.html
+
+<span class="gp">==&gt; </span>Next steps:
+- Run <span class="sb">`</span>brew <span class="nb">help</span><span class="sb">`</span> to get started
+- Further documentation:
+    https://docs.brew.sh</code></pre></figure>
+
+  <p>To install Python 3, run the command below:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">brew install python3</code></pre></figure>
+
+  <p>Since macOS already ships with Python 2 installed, after you install Python 3, you will have both versions available.</p>
+
+  <p>To run Python 2, use the <code class="highlighter-rouge">python</code> command in the Terminal. For Python 3, use <code class="highlighter-rouge">python3</code> instead.</p>
+
+  <p>We can test the installation by typing in the Terminal:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">python3 --version
+Python 3.6.2</code></pre></figure>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/mac/test-python.png" alt="macOS Test Python 3" /></p>
+
+</div>
+
+<div class="platform-windows">
+
+  <p>Go to <a href="https://python.org/" target="_blank">www.python.org</a> click on the Python 3.6.2 download page, scroll down until
+you see the download files listed below:</p>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/download.png" alt="Python 3.6.2 Windows Installer Download" /></p>
+
+  <p>Pick the right version accordingly to your Windows distribution. If you are not sure which one is the right for you,
+the chances are you want to download the <strong>Windows x86-64 executable installer</strong> version.</p>
+
+  <p>Go to your Downloads directory, right click on the installer and click on <strong>Run as administrator</strong>.</p>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/run-as-admin.png" alt="Run as administrator" /></p>
+
+  <p>Make sure you check the option <strong>Add Python 3.6 to PATH</strong> and click on the <strong>Install Now</strong> option.</p>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/install-python.png" alt="Install Now" /></p>
+
+  <p>After the installation completes, you should see the following screen:</p>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/successful-installation.png" alt="Installation Successful" /></p>
+
+  <p>Now search for the <strong>Command Prompt</strong> program and open it:</p>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/search-cmd.png" alt="Command Prompt" /></p>
+
+  <p>To test if everything is working fine so far, type following command:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">python --version</code></pre></figure>
+
+  <p>As an output you should see:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">Python 3.6.2</code></pre></figure>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/test-installation.png" alt="python --version" /></p>
+
+</div>
+
+<div class="platform-linux">
+
+  <p>For this tutorial, I will be using Ubuntu 16.04 as an example. Ubuntu 16.04 already comes with both Python 2 (available
+as <code class="highlighter-rouge">python</code>), and Python 3 (available as <code class="highlighter-rouge">python3</code>) installed. We can test the installation by opening the <strong>Terminal</strong>
+and checking the versions:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">python --version
+Python 2.7.12
+
+python3 --version
+Python 3.5.2</code></pre></figure>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/linux/test-python.png" alt="Test Python Version" /></p>
+
+  <p>So all we have to do is install a newer Python 3 version. But we don’t want to mess with the current Python 3.5.2, as
+the OS makes use of it. We’re simply going to install Python 3.6.2 under the name <code class="highlighter-rouge">python3.6</code> and let the older version
+be.</p>
+
+  <p>If you are using Ubuntu 16.04 or an older version, first add the following repository:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo add-apt-repository ppa:deadsnakes/ppa</code></pre></figure>
+
+  <p>If you are using Ubuntu 16.10, 17.04 or 17.10 you don’t need to perform the step above.</p>
+
+  <p>Now everyone executes the following commands to install the latest Python 3 distribution:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo apt-get update
+sudo apt-get install python3.6</code></pre></figure>
+
+  <p>The new installation will be available under <code class="highlighter-rouge">python3.6</code>, which is fine:</p>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/linux/test-python36.png" alt="Test Python Version 3.6" /></p>
+
+</div>
+
+<p>Great, Python is up and running. Next step: Virtual Environments!</p>
+
+<h5 id="installing-virtualenv">Installing Virtualenv</h5>
+
+<p>For the next step, we are going to use <strong>pip</strong>, a tool to manage and install Python packages, to install <strong>virtualenv</strong>.</p>
+
+<div class="platform-mac">
+
+  <p>Note that Homebrew already installed <strong>pip</strong> for you under the name <code class="highlighter-rouge">pip3</code> for your Python 3.6.2 installation.</p>
+
+  <p>In the Terminal, execute the command below:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo pip3 install virtualenv</code></pre></figure>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/mac/pip-virtualenv.png" alt="pip3 install virtualenv" /></p>
+
+</div>
+
+<div class="platform-windows">
+
+  <p>In the Command Prompt, execute the command below:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install virtualenv</code></pre></figure>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/pip-virtualenv.png" alt="pip install virtualenv" /></p>
+
+</div>
+
+<div class="platform-linux">
+
+  <p>First let’s install <strong>pip</strong> for our Python 3.6.2 version:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">wget https://bootstrap.pypa.io/get-pip.py
+sudo python3.6 get-pip.py</code></pre></figure>
+
+  <p>Now we can install <strong>virtualenv</strong>:</p>
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo pip3.6 install virtualenv</code></pre></figure>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/linux/pip-virtualenv.png" alt="pip3.6 install virtualenv" /></p>
+
+</div>
+
+<p>So far the installations that we performed was system-wide. From now on, everything we install, including Django
+itself, will be installed inside a Virtual Environment.</p>
+
+<p>Think of it like this: for each Django project you start, you will first create a Virtual Environment for it. It’s like
+having a sandbox for each Django project. So you can play around, install packages, uninstall packages without breaking
+anything.</p>
+
+<p>I like to create a folder named <strong>Development</strong> on my personal computer. Then, I use it to organize all my projects and
+websites. But you can follow the next steps creating the directories wherever it feels right for you.</p>
+
+<p>Usually, I start by creating a new folder with the project name inside my <strong>Development</strong> folder. Since this is going
+to be our very first project, we don’t need to pick a fancy name or anything. For now, we can call it <strong>myproject</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">mkdir myproject
+<span class="nb">cd </span>myproject</code></pre></figure>
+
+<div class="platform-mac">
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/mac/myproject.png" alt="Create myproject folder" /></p>
+
+</div>
+
+<div class="platform-windows">
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/myproject.png" alt="Create myproject folder" /></p>
+
+</div>
+
+<div class="platform-linux">
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/linux/myproject.png" alt="Create myproject folder" /></p>
+
+</div>
+
+<p>This folder is the higher level directory that will store all the files and things related to our Django project,
+including its virtual environment.</p>
+
+<p>So let’s start by creating our very first virtual environment and installing Django.</p>
+
+<p>Inside the <strong>myproject</strong> folder:</p>
+
+<div class="platform-mac">
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">virtualenv venv -p python3</code></pre></figure>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/mac/venv.png" alt="Virtualenv" /></p>
+
+</div>
+
+<div class="platform-windows">
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">virtualenv venv</code></pre></figure>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/venv.png" alt="Virtualenv" /></p>
+
+</div>
+
+<div class="platform-linux">
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">virtualenv venv -p python3.6</code></pre></figure>
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/linux/venv.png" alt="Virtualenv" /></p>
+
+</div>
+
+<p>Our virtual environment is created. Now before we start using it, we need to activate:</p>
+
+<div class="platform-mac">
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">source </span>venv/bin/activate</code></pre></figure>
+
+</div>
+
+<div class="platform-windows">
+
+  <figure class="highlight"><pre><code class="language-text" data-lang="text">venv\Scripts\activate</code></pre></figure>
+
+</div>
+
+<div class="platform-linux">
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">source </span>venv/bin/activate</code></pre></figure>
+
+</div>
+
+<p>You will know it worked if you see <strong>(venv)</strong> in front of the command line, like this:</p>
+
+<div class="platform-mac">
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/mac/activate.png" alt="Virtualenv activate" /></p>
+
+</div>
+
+<div class="platform-windows">
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/activate.png" alt="Virtualenv activate" /></p>
+
+</div>
+
+<div class="platform-linux">
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/linux/activate.png" alt="Virtualenv activate" /></p>
+
+</div>
+
+<p>Let’s try to understand what happened here. We created a special folder named <strong>venv</strong>. It contains a copy
+of Python inside this folder. After we activated the <strong>venv</strong> environment, when we run the <code class="highlighter-rouge">python</code> command, it will
+use our local copy, stored inside <strong>venv</strong>, instead of the other one we installed earlier.</p>
+
+<p>Another important thing is that the <strong>pip</strong> program is already installed as well, and when we use it to install a
+Python package, like Django, it will be installed <em>inside</em> the <strong>venv</strong> environment.</p>
+
+<div class="platform-mac">
+
+  <p>Note that when we have the <strong>venv</strong> activated, we will use the command <code class="highlighter-rouge">python</code> (instead of <code class="highlighter-rouge">python3</code>) to refer to
+Python 3.6.2, and just <code class="highlighter-rouge">pip</code> (instead of <code class="highlighter-rouge">pip3</code>) to install packages.</p>
+
+</div>
+
+<div class="platform-linux">
+
+  <p>Note that when we have the <strong>venv</strong> activated, we will use the command <code class="highlighter-rouge">python</code> (instead of <code class="highlighter-rouge">python3.6</code>) to refer to
+Python 3.6.2, and just <code class="highlighter-rouge">pip</code> (instead of <code class="highlighter-rouge">pip3.6</code>) to install packages.</p>
+
+</div>
+
+<p>By the way, to deactivate the <strong>venv</strong> run the command below:</p>
+
+<div class="platform-mac">
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">deactivate</code></pre></figure>
+
+</div>
+
+<div class="platform-windows">
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">venv<span class="se">\S</span>cripts<span class="se">\d</span>eactivate.bat</code></pre></figure>
+
+</div>
+
+<div class="platform-linux">
+
+  <figure class="highlight"><pre><code class="language-bash" data-lang="bash">deactivate</code></pre></figure>
+
+</div>
+
+<p>But let’s keep it activated for the next steps.</p>
+
+<h5 id="installing-django-1114">Installing Django 1.11.4</h5>
+
+<p>It’s very straightforward. Now that we have the <strong>venv</strong> activated, run the following command to install Django:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install django</code></pre></figure>
+
+<div class="platform-mac">
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/mac/pip-django.png" alt="pip install django" /></p>
+
+</div>
+
+<div class="platform-windows">
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/windows/pip-django.png" alt="pip install django" /></p>
+
+</div>
+
+<div class="platform-linux">
+
+  <p><img src="../../../../media/series/beginners-guide/1.11/part-1/linux/pip-django.png" alt="pip install django" /></p>
+
+</div>
+
+<p>We are all set up now!</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-1/Pixton_Comic_End_Installation.png" alt="End Installation" /></p>
+
+<hr />
+
+<h4 id="starting-a-new-project">Starting a New Project</h4>
+
+<p>To start a new Django project, run the command below:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">django-admin startproject myproject</code></pre></figure>
+
+<p>The command-line utility <strong>django-admin</strong> is automatically installed with Django.</p>
+
+<p>After we run the command above, it will generate the base folder structure for a Django project.</p>
+
+<p>Right now, our <strong>myproject</strong> directory looks like this:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">myproject/                  &lt;-- higher level folder
+ |-- myproject/             &lt;-- django project folder
+ |    |-- myproject/
+ |    |    |-- __init__.py
+ |    |    |-- settings.py
+ |    |    |-- urls.py
+ |    |    |-- wsgi.py
+ |    +-- manage.py
+ +-- venv/                  &lt;-- virtual environment folder</code></pre></figure>
+
+<p>Our initial project structure is composed of five files:</p>
+
+<ul>
+  <li><strong>manage.py</strong>: a shortcut to use the <strong>django-admin</strong> command-line utility. It’s used to run management commands
+related to our project. We will use it to run the development server, run tests, create migrations and much more.</li>
+  <li><strong>__init__.py</strong>: this empty file tells Python that this folder is a Python package.</li>
+  <li><strong>settings.py</strong>: this file contains all the project’s configuration. We will refer to this file all the time!</li>
+  <li><strong>urls.py</strong>: this file is responsible for mapping the routes and paths in our project. For example, if you want to
+show something in the URL <code class="highlighter-rouge">/about/</code>, you have to map it here first.</li>
+  <li><strong>wsgi.py</strong>: this file is a simple gateway interface used for deployment. You don’t have to bother about it. Just let
+it be for now.</li>
+</ul>
+
+<p>Django comes with a simple web server installed. It’s very convenient during the development, so we don’t have to
+install anything else to run the project locally. We can test it by executing the command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py runserver</code></pre></figure>
+
+<p>For now, you can ignore the migration errors; we will get to that later.</p>
+
+<p>Now open the following URL in a Web browser: <strong>http://127.0.0.1:8000</strong> and you should see the following page:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-1/it-worked.png" alt="It worked!" /></p>
+
+<div class="platform-mac">
+
+  <p>Hit Control + C to stop the development server.</p>
+
+</div>
+
+<div class="platform-windows">
+
+  <p>Hit CTRL + BREAK to stop the development server.</p>
+
+</div>
+
+<div class="platform-linux">
+
+  <p>Hit Control + C to stop the development server.</p>
+
+</div>
+
+<hr />
+
+<h4 id="django-apps">Django Apps</h4>
+
+<p>In the Django philosophy we have two important concepts:</p>
+
+<ul>
+  <li><strong>app</strong>: is a Web application that does something. An app usually is composed of a set of models (database tables),
+views, templates, tests.</li>
+  <li><strong>project</strong>: is a collection of configurations and apps. One project can be composed of multiple apps, or a single
+app.</li>
+</ul>
+
+<p>It’s important to note that you can’t run a Django <strong>app</strong> without a <strong>project</strong>. Simple websites like a blog can be
+written entirely inside a single app, which could be named <strong>blog</strong> or <strong>weblog</strong> for example.</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-1/Pixton_Comic_Django_Apps.png" alt="Django Apps" /></p>
+
+<p>It’s a way to organize the source code. In the beginning, it’s not very trivial to determine what is an app or what is
+not. How to organize the code and so on. But don’t worry much about that right now! Let’s first get comfortable with
+Django’s API and the fundamentals.</p>
+
+<p>Alright! So, to illustrate let’s create a simple Web Forum or Discussion Board. To create our first app, go to the
+directory where the <strong>manage.py</strong> file is and executes the following command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">django-admin startapp boards</code></pre></figure>
+
+<p>Notice that we used the command <strong>startapp</strong> this time.</p>
+
+<p>This will give us the following directory structure:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">myproject/
+ |-- myproject/
+ |    |-- boards/                &lt;-- our new django app!
+ |    |    |-- migrations/
+ |    |    |    +-- __init__.py
+ |    |    |-- __init__.py
+ |    |    |-- admin.py
+ |    |    |-- apps.py
+ |    |    |-- models.py
+ |    |    |-- tests.py
+ |    |    +-- views.py
+ |    |-- myproject/
+ |    |    |-- __init__.py
+ |    |    |-- settings.py
+ |    |    |-- urls.py
+ |    |    |-- wsgi.py
+ |    +-- manage.py
+ +-- venv/</code></pre></figure>
+
+<p>So, let’s first explore what each file does:</p>
+
+<ul>
+  <li><strong>migrations/</strong>: here Django store some files to keep track of the changes you create in the <strong>models.py</strong> file, so
+to keep the database and the <strong>models.py</strong> synchronized.</li>
+  <li><strong>admin.py</strong>: this is a configuration file for a built-in Django app called <strong>Django Admin</strong>.</li>
+  <li><strong>apps.py</strong>: this is a configuration file of the app itself.</li>
+  <li><strong>models.py</strong>: here is where we define the entities of our Web application. The models are translated automatically
+by Django into database tables.</li>
+  <li><strong>tests.py</strong>: this file is used to write unit tests for the app.</li>
+  <li><strong>views.py</strong>: this is the file where we handle the request/response cycle of our Web application.</li>
+</ul>
+
+<p>Now that we created our first app, let’s configure our project to <em>use</em> it.</p>
+
+<p>To do that, open the <strong>settings.py</strong> and try to find the <code class="highlighter-rouge">INSTALLED_APPS</code> variable:</p>
+
+<p><strong>settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'django.contrib.admin'</span><span class="p">,</span>
+    <span class="s">'django.contrib.auth'</span><span class="p">,</span>
+    <span class="s">'django.contrib.contenttypes'</span><span class="p">,</span>
+    <span class="s">'django.contrib.sessions'</span><span class="p">,</span>
+    <span class="s">'django.contrib.messages'</span><span class="p">,</span>
+    <span class="s">'django.contrib.staticfiles'</span><span class="p">,</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>As you can see, Django already come with 6 built-in apps installed. They offer common functionalities that most Web
+applications need, like authentication, sessions, static files management (images, javascripts, css, etc.) and so on.</p>
+
+<p>We will explore those apps as we progress in this tutorial series. But for now, let them be and just add our <strong>boards</strong>
+app to the list of <code class="highlighter-rouge">INSTALLED_APPS</code>:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'django.contrib.admin'</span><span class="p">,</span>
+    <span class="s">'django.contrib.auth'</span><span class="p">,</span>
+    <span class="s">'django.contrib.contenttypes'</span><span class="p">,</span>
+    <span class="s">'django.contrib.sessions'</span><span class="p">,</span>
+    <span class="s">'django.contrib.messages'</span><span class="p">,</span>
+    <span class="s">'django.contrib.staticfiles'</span><span class="p">,</span>
+
+    <span class="s">'boards'</span><span class="p">,</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Using the analogy of the square and circles from the previous comic, the yellow circle would be our <strong>boards</strong> app, and
+the <strong>django.contrib.admin</strong>, <strong>django.contrib.auth</strong>, etc, would be the red circles.</p>
+
+<hr />
+
+<h4 id="hello-world">Hello, World!</h4>
+
+<p>Let’s write our first <strong>view</strong>. We will explore it in great detail in the next tutorial. But for now, let’s just
+experiment how it looks like to create a new page with Django.</p>
+
+<p>Open the <strong>views.py</strong> file inside the <strong>boards</strong> app, and add the following code:</p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.http</span> <span class="kn">import</span> <span class="n">HttpResponse</span>
+
+<span class="k">def</span> <span class="nf">home</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">HttpResponse</span><span class="p">(</span><span class="s">'Hello, World!'</span><span class="p">)</span></code></pre></figure>
+
+<p>Views are Python functions that receive an <code class="highlighter-rouge">HttpRequest</code> object and returns an <code class="highlighter-rouge">HttpResponse</code> object.
+Receive a <em>request</em> as a parameter and returns a <em>response</em> as a result. That’s the flow you have to keep in mind!</p>
+
+<p>So, here we defined a simple view called <strong>home</strong> which simply returns a message saying <strong>Hello, World!</strong>.</p>
+
+<p>Now we have to tell Django <em>when</em> to serve this view. It’s done inside the <strong>urls.py</strong> file:</p>
+
+<p><strong>urls.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf.urls</span> <span class="kn">import</span> <span class="n">url</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+
+<span class="kn">from</span> <span class="nn">boards</span> <span class="kn">import</span> <span class="n">views</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^$'</span><span class="p">,</span> <span class="n">views</span><span class="o">.</span><span class="n">home</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s">'home'</span><span class="p">),</span>
+    <span class="n">url</span><span class="p">(</span><span class="s">r'^admin/'</span><span class="p">,</span> <span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">urls</span><span class="p">),</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>If you compare the snippet above with your <strong>urls.py</strong> file, you will notice I added the following new line:
+<code class="highlighter-rouge">url(r'^$', views.home, name='home')</code> and imported the <strong>views</strong> module from our app <strong>boards</strong> using <code class="highlighter-rouge">from boards import views</code>.</p>
+
+<p>As I mentioned before, we will explore those concepts in great detail later on.</p>
+
+<p>But for now, Django works with <strong>regex</strong> to match the requested URL. For our <strong>home</strong> view, I’m using the <code class="highlighter-rouge">^$</code> regex,
+which will match an empty path, which is the homepage (this url: <strong>http://127.0.0.1:8000</strong>). If I wanted to match the URL
+<strong>http://127.0.0.1:8000/homepage/</strong>, my url would be: <code class="highlighter-rouge">url(r'^homepage/$', views.home, name='home')</code>.</p>
+
+<p>Let’s see what happen:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py runserver</code></pre></figure>
+
+<p>In a Web browser, open the http://127.0.0.1:8000 URL:</p>
+
+<p><img src="../../../../media/series/beginners-guide/1.11/part-1/hello-world.png" alt="Hello, World!" /></p>
+
+<p>That’s it! You just created your very first view.</p>
+
+<hr />
+
+<h4 id="conclusions">Conclusions</h4>
+
+<p>That was the first part of this tutorial series. In this tutorial, we learned how to install the latest Python version
+and how to setup the development environment. We also had an introduction to virtual environments and started our
+very first Django project and already created our initial app.</p>
+
+<p>I hope you enjoyed the first part! The second part is coming out next week, on Sep 11, 2017. It’s going to be about
+models, views, templates, and URLs. We will explore together all the Django fundamentals! If you would like to get
+notified when the second part is out, you can
+<a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" target="_blank">subscribe to our mailing list</a>.</p>
+
+<p>Just so we can stay on the same page, I made the source code available on GitHub. The current state of the project can
+be found under the release tag <strong>v0.1-lw</strong>. The link below will take you to the right place:</p>
+
+<p><a href="https://github.com/sibtc/django-beginners-guide/tree/v0.1-lw" target="_blank">https://github.com/sibtc/django-beginners-guide/tree/v0.1-lw</a></p>
+
+<hr />
+
+<div class="popular-posts">
+  <div class="row">
+    <div class="six columns">
+      <a href="../../../beginners-guide/1.11/index.html" style="text-decoration: none">
+        <img src="../../../../media/series/beginners-guide/1.11/featured.jpg" alt="A Complete Beginner's Guide to Django - Index" title="A Complete Beginner's Guide to Django - Index" />
+        <h5 style="margin-top: 1rem;">← Tutorial Series Index</h5>
+      </a>
+    </div>
+    <div class="six columns">
+      <a href="../11/a-complete-beginners-guide-to-django-part-2.html" style="text-decoration: none">
+        <img src="../../../../media/series/beginners-guide/1.11/part-2/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 2" title="A Complete Beginner's Guide to Django - Part 2" />
+        <h5 style="text-align: right; margin-top: 1rem;">Part 2 - Fundamentals →</h5>
+      </a>
+    </div>
+  </div>
+</div>
+
+          </article>
+
+          <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/python/index.html"><span class="tag">python</span></a>
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/guide/index.html"><span class="tag">guide</span></a>
+    
+      <a href="../../../../tag/beginners/index.html"><span class="tag">beginners</span></a>
+    
+      <a href="../../../../tag/app/index.html"><span class="tag">app</span></a>
+    
+      <a href="../../../../tag/project/index.html"><span class="tag">project</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2iUviuP"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=A%20Complete%20Beginner's%20Guide%20to%20Django%20-%20Part%201&amp;url=http://sibt.co/2iUhsbT&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2iTfwR1"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2iTq1Uy&amp;title=A%20Complete%20Beginner's%20Guide%20to%20Django%20-%20Part%201&amp;summary=I'm%20starting%20today%20a%20new%20tutorial%20series%20about%20the%20Django%20fundamentals.%20It's%20a%20complete%20beginner's%20guide%20to%20start%20learning%20Django.%20The%20material%20is%20divided%20in%207%20parts.%20We're%20going%20to%20explore%20all%20the...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+        </div>
+
+        <div class="card">
+          
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'a-complete-beginners-guide-to-django-part-1.html';
+        this.page.identifier = '/series/2017/09/04/a-complete-beginners-guide-to-django-part-1';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container post post-footer">
+    <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+    <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+  </div>
+
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/series/2017/09/04/a-complete-beginners-guide-to-django-part-1.html",
+  "headline": "A Complete Beginner's Guide to Django - Part 1",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/series/beginners-guide/1.11/part-1/featured.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2017-09-04T00:00:00+03:00",
+  "dateModified": "2017-09-06T18:35:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "I'm starting today a new tutorial series about the Django fundamentals. It's a complete beginner's guide to start learning Django. The material is divided in 7 parts. We're going to explore all the..."
+}
+</script>
+
+  <script src="../../../../js/affix.js"></script>
+  <script src="../../../../js/jquery.waypoints.min.js"></script>
+  <script src="../../../../js/inview.min.js"></script>
+  <script>
+    $(function () {
+      var sidebarMaxHeight = $(window).height() - 90;
+      if (sidebarMaxHeight > 600) {
+        $('head').append('<style type="text/css">@media (min-width: 1200px) {#seriesSideBar.affix div.card { max-height: '+sidebarMaxHeight+'px!important; }}</style>');
+      }
+
+      /* sidebar affix */
+      $("#seriesSideBar").affix({
+        offset: {
+          top: $("#seriesSideBar").offset().top - 50,
+          bottom: function () {
+            return ($("footer").outerHeight(true) + $(".post-footer").outerHeight(true));
+          }
+        }
+      });
+
+      /* sidebar scrollspy */
+      var headers = Array();
+      var trackContents = function (el) {
+        var inview = new Waypoint.Inview({
+          element: el,
+          enter: function(direction) {
+            $("#seriesSideBar ul li a").removeClass("active");
+            $("#seriesSideBar ul li a[href='#" + this.element.id + "']").addClass("active");
+          },
+          exit: function(direction) {
+            if (direction == "up") {
+              var index = headers.indexOf(this.element.id);
+              $("#seriesSideBar ul li a").removeClass("active");
+              if (index > 0) {
+                $("#seriesSideBar ul li a[href='#" + headers[index - 1] + "']").addClass("active");
+              }
+            }
+          }
+        });
+      };
+      $("article h4, article h5").each(function () {
+        trackContents(this);
+        headers.push(this.id);
+      });
+
+      /* article default os */
+      var os = getOS();
+      $("nav.platform a[data-platform='" + os + "']").addClass("active");
+      $("body").addClass("platform-" + os);
+
+      $(".js-set-platform a").click(function () {
+        var $btn = $(this);
+        var $body = $("body");
+        var platform = $btn.attr("data-platform");
+        var platformClass = "platform-" + platform;
+        $body.removeClass("platform-mac platform-windows platform-linux");
+        $body.addClass(platformClass);
+        $("nav.platform a").removeClass("active");
+        $("nav.platform a[data-platform='" + platform + "']").addClass("active");
+      });
+
+      var platformInview = new Waypoint.Inview({
+        element: $("#platformArticle")[0],
+        enter: function(direction) {
+          $("#platformSideBar").hide();
+        },
+        exit: function(direction) {
+          if (direction == "up") {
+            $("#platformSideBar").hide();
+          }
+          else {
+            $("#platformSideBar").show();
+          }
+        }
+      });
+
+    });
+  </script>
+  <noscript><style type="text/css">body article div.platform-windows { display: block!important; }</style></noscript>
+  
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/series/2017/09/04/a-complete-beginners-guide-to-django-part-1.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:43:36 GMT -->
+</html>

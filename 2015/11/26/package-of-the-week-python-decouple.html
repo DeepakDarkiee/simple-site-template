@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/2015/11/26/package-of-the-week-python-decouple.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:39:42 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Use Python Decouple</title>
+<meta name="description" content="Web applications relies on several number of parameters to run properly on different environments. To name a few from a Django app settings: database url, pa...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="package-of-the-week-python-decouple.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../favicon.png">
+<link rel="mask-icon" href="../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'package-of-the-week-python-decouple.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="How to Use Python Decouple">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/2015/11/26/package-of-the-week-python-decouple.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2015-11-26-package-of-the-week-python-decouple/featured-post-image.jpg">
+<meta property="og:description" content="Web applications relies on several number of parameters to run properly on different environments. To name a few from a Django app settings: database url, pa...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2015-11-26T14:00:00+02:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Use Python Decouple">
+<meta name="twitter:description" content="Web applications relies on several number of parameters to run properly on different environments. To name a few from a Django app settings: database url, password, secret key, debug status, email ...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2015-11-26-package-of-the-week-python-decouple/featured-post-image.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="python">
+  
+    <meta property="article:tag" content="python-decouple">
+  
+    <meta property="article:tag" content="config">
+  
+    <meta property="article:tag" content="settings">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      packages
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Use Python Decouple</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Nov 26, 2015
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    7 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/2015/11/26/package-of-the-week-python-decouple">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="package-of-the-week-python-decouple.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../media/2015-11-26-package-of-the-week-python-decouple/featured-post-image.jpg" alt="How to Use Python Decouple" class="featured-image">
+    
+      <small>(Picture: <a href="https://www.pexels.com/photo/lego-walpaper-computer-59628/" target="_blank">https://www.pexels.com/photo/lego-walpaper-computer-59628/</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>Web applications relies on several number of parameters to run properly on different environments. To name a few from a Django app settings: database url, password, secret key, debug status, email host, allowed hosts. Most of these parameters are environment-specific. On a development environment you might want to run your application with debug mode on. Also, it’s a clever idea to keep your secret key in a safe place (not in your git repository).</p>
+
+<p>Python Decouple is a great library that helps you strictly separate the settings parameters from your source code. The idea is simple: Parameters related to the project, goes straight to the source code. Parameters related to an <em>instance of the project</em>, goes to an environment file.</p>
+
+<p>The following is a quick start of how to use the Python Decouple library.</p>
+
+<hr />
+
+<h4 id="installation">Installation</h4>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="gp">$ </span>pip install python-decouple</code></pre></figure>
+
+<p>Or download it from <a href="https://pypi.python.org/pypi/python-decouple" target="_blank">PyPI</a> if you prefer.</p>
+
+<hr />
+
+<h4 id="usage">Usage</h4>
+
+<p>Let’s consider the following <code class="highlighter-rouge">settings.py</code> file, to explain how to use the library.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">)))</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="s">'3izb^ryglj(bvrjb2_y1fZvcnbky#358_l6-nn#i8fkug4mmz!'</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'default'</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">'ENGINE'</span><span class="p">:</span> <span class="s">'django.db.backends.postgresql_psycopg2'</span><span class="p">,</span>
+        <span class="s">'NAME'</span><span class="p">:</span> <span class="s">'HELLO_DJANGO'</span><span class="p">,</span>
+        <span class="s">'USER'</span><span class="p">:</span> <span class="s">'U_HELLO'</span><span class="p">,</span>
+        <span class="s">'PASSWORD'</span><span class="p">:</span> <span class="s">'hA8(scA@!fg3*sc&amp;xaGh&amp;6</span><span class="si">%-</span><span class="s">l&lt;._&amp;xCf'</span><span class="p">,</span>
+        <span class="s">'HOST'</span><span class="p">:</span> <span class="s">'127.0.0.1'</span><span class="p">,</span>
+        <span class="s">'PORT'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>First create a file named <code class="highlighter-rouge">.env</code> in the root of your project. You can also use a <code class="highlighter-rouge">.ini</code> file, in case the <code class="highlighter-rouge">.env</code> isn’t suitable for your use case. See the <a href="https://pypi.python.org/pypi/python-decouple" target="_blank">documentation</a> for further instructions.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">SECRET_KEY</span><span class="o">=</span>3izb^ryglj<span class="o">(</span>bvrjb2_y1fZvcnbky#358_l6-nn#i8fkug4mmz!
+<span class="nv">DEBUG</span><span class="o">=</span>True
+<span class="nv">DB_NAME</span><span class="o">=</span>HELLO_DJANGO
+<span class="nv">DB_USER</span><span class="o">=</span>U_HELLO
+<span class="nv">DB_PASSWORD</span><span class="o">=</span>hA8<span class="o">(</span>scA@!fg3<span class="k">*</span>sc&amp;xaGh&amp;6%-l&lt;._&amp;xCf
+<span class="nv">DB_HOST</span><span class="o">=</span>127.0.0.1</code></pre></figure>
+
+<p>If you are working with Git, update your <code class="highlighter-rouge">.gitignore</code> adding the <code class="highlighter-rouge">.env</code> file so you don’t commit any sensitive data to your remote repository.</p>
+
+<p>Now import the library:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">decouple</span> <span class="kn">import</span> <span class="n">config</span></code></pre></figure>
+
+<p>Retrieve the settings parameters:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">decouple</span> <span class="kn">import</span> <span class="n">config</span>
+
+<span class="n">BASE_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">__file__</span><span class="p">)))</span>
+<span class="n">SECRET_KEY</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'SECRET_KEY'</span><span class="p">)</span>
+<span class="n">DEBUG</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'DEBUG'</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<span class="n">DATABASES</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'default'</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">'ENGINE'</span><span class="p">:</span> <span class="s">'django.db.backends.postgresql_psycopg2'</span><span class="p">,</span>
+        <span class="s">'NAME'</span><span class="p">:</span> <span class="n">config</span><span class="p">(</span><span class="s">'DB_NAME'</span><span class="p">),</span>
+        <span class="s">'USER'</span><span class="p">:</span> <span class="n">config</span><span class="p">(</span><span class="s">'DB_USER'</span><span class="p">),</span>
+        <span class="s">'PASSWORD'</span><span class="p">:</span> <span class="n">config</span><span class="p">(</span><span class="s">'DB_PASSWORD'</span><span class="p">),</span>
+        <span class="s">'HOST'</span><span class="p">:</span> <span class="n">config</span><span class="p">(</span><span class="s">'DB_HOST'</span><span class="p">),</span>
+        <span class="s">'PORT'</span><span class="p">:</span> <span class="s">''</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h5 id="casting-the-data">Casting the data</h5>
+
+<p>Attention to the <strong>cast</strong> argument. Django expects <code class="highlighter-rouge">DEBUG</code> to be a <strong>boolean</strong>. In a similar way it expects <code class="highlighter-rouge">EMAIL_PORT</code> to be an <strong>integer</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">DEBUG</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'DEBUG'</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+<span class="n">EMAIL_PORT</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'EMAIL_PORT'</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span></code></pre></figure>
+
+<p>Actually, the <strong>cast</strong> argument can receive any <strong>callable</strong>, that will transform the string value into something else. In the case of the <code class="highlighter-rouge">ALLOWED_HOSTS</code>, Django expects a list of hostname.</p>
+
+<p>In your <code class="highlighter-rouge">.env</code> file you can put it like this:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">ALLOWED_HOSTS</span><span class="o">=</span>.localhost, .herokuapp.com</code></pre></figure>
+
+<p>And then in your <code class="highlighter-rouge">settings.py</code> you can retrieve it this way:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'ALLOWED_HOSTS'</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="k">lambda</span> <span class="n">v</span><span class="p">:</span> <span class="p">[</span><span class="n">s</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">v</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">','</span><span class="p">)])</span></code></pre></figure>
+
+<p>Looks complicated, right? Actually the library comes with a Csv Helper, so you don’t need to write all this code. The better way to do it would be:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">decouple</span> <span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">Csv</span>
+
+<span class="n">ALLOWED_HOSTS</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'ALLOWED_HOSTS'</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="n">Csv</span><span class="p">())</span></code></pre></figure>
+
+<h5 id="default-values">Default values</h5>
+
+<p>You can add an extra argument to the <code class="highlighter-rouge">config</code> function, to define a default value, in case there is an undefined value in the <code class="highlighter-rouge">.env</code> file.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">DEBUG</span> <span class="o">=</span> <span class="n">config</span><span class="p">(</span><span class="s">'DEBUG'</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span></code></pre></figure>
+
+<p>Meaning you won’t need to define the <code class="highlighter-rouge">DEBUG</code> parameter in the <code class="highlighter-rouge">.env</code> file in the development environment for example.</p>
+
+<h5 id="overriding-config-files">Overriding config files</h5>
+
+<p>In case you want to temporarily change some of the settings parameter, you can override it with environment variables:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">DEBUG</span><span class="o">=</span>False python manage.py</code></pre></figure>
+
+<hr />
+
+<h4 id="deploying-to-heroku">Deploying to Heroku</h4>
+
+<p>If you are deploying your application to <a href="https://heroku.com/" target="_blank">Heroku</a> using Git, you can’t have an <code class="highlighter-rouge">.env</code> file in your project root. That’s not a problem, because Python Decouple will retreive the environment variables, and Heroku let you define those variables on it’s dashboard.</p>
+
+<p>Inside Heroku’s dashboard, first select your app and click on the <strong>Settings</strong> tab.</p>
+
+<p><img src="../../../media/2015-11-26-package-of-the-week-python-decouple/heroku-settings.png" alt="Heroku Settings" title="Heroku" /></p>
+
+<p>Inside the <strong>Settings</strong> tab click on the <strong>Reveal Config Vars</strong> button and add your variables as you would do in the <code class="highlighter-rouge">.env</code> file.</p>
+
+<p><img src="../../../media/2015-11-26-package-of-the-week-python-decouple/heroku-config.png" alt="Heroku Config Vars" title="Heroku" /></p>
+
+<p>That’s it! You are all set up.</p>
+
+<hr />
+
+<h4 id="tip-for-a-easier-setup">Tip for a easier setup</h4>
+
+<p>Since we don’t commit our <code class="highlighter-rouge">.env</code> file to the remote repository, and it’s required for the project to run properly, it can be confusing for newcomers who aren’t familiar with Python Decouple to setup and run your project.</p>
+
+<p>One thing I like to do in my open source projects is to commit a sample file, usually I name it <code class="highlighter-rouge">.env.example</code>, in the project root, with some sample data. So the one who is trying to run the project must just rename the file to <code class="highlighter-rouge">.env</code> and put the proper values.</p>
+
+<p><img src="../../../media/2015-11-26-package-of-the-week-python-decouple/env-sample.png" alt=".env.example" title=".env.example" /></p>
+
+<p>You can see a real use case checking the <a href="https://github.com/vitorfs/parsifal/blob/master/.env.example" target="_blank">Parsifal repository</a>.</p>
+
+<hr />
+
+<h4 id="integrating-with-travis-ci">Integrating with Travis CI</h4>
+
+<p>The previous tip can be useful if you are integrating with <a href="https://travis-ci.org/" target="_blank">Travis CI</a>. Actually I fill my project’s <code class="highlighter-rouge">.env.example</code> file with the required parameters to run on the Travis CI environment. Then all you have to do, is to run a <code class="highlighter-rouge">before_script</code> renaming the <code class="highlighter-rouge">.env.example</code> file to <code class="highlighter-rouge">.env</code>.</p>
+
+<h5 id="travisyml-sample-file">.travis.yml sample file</h5>
+
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="s">language</span><span class="pi">:</span> <span class="s">python</span>
+<span class="s">python</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s2">"</span><span class="s">2.7"</span>
+<span class="s">install</span><span class="pi">:</span> <span class="s2">"</span><span class="s">pip</span><span class="nv"> </span><span class="s">install</span><span class="nv"> </span><span class="s">-r</span><span class="nv"> </span><span class="s">requirements.txt"</span>
+<span class="s">before_script</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">cp .env.example .env</span>
+  <span class="pi">-</span> <span class="s">python manage.py migrate</span>
+<span class="s">script</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">python manage.py test --settings=parsifal.test_settings</span>
+<span class="s">sudo</span><span class="pi">:</span> <span class="s">false</span></code></pre></figure>
+
+<hr />
+
+<h4 id="see-in-practice">See in practice</h4>
+
+<p>As I stated before in this article, I use Python Decouple in all my Django projects. So if you want to see some examples, visit the links below:</p>
+
+<ul>
+  <li>Parsifal
+    <ul>
+      <li><a href="https://github.com/vitorfs/parsifal/blob/master/parsifal/settings.py" target="_blank">settings.py</a></li>
+      <li><a href="https://github.com/vitorfs/parsifal/blob/master/.env.example" target="_blank">.env</a></li>
+      <li><a href="https://github.com/vitorfs/parsifal/blob/master/.travis.yml" target="_blank">.travis.yml</a></li>
+    </ul>
+  </li>
+  <li>Bootcamp
+    <ul>
+      <li><a href="https://github.com/vitorfs/bootcamp/blob/master/bootcamp/settings.py" target="_blank">settings.py</a></li>
+      <li><a href="https://github.com/vitorfs/bootcamp/blob/master/.env.example" target="_blank">.env</a></li>
+      <li><a href="https://github.com/vitorfs/bootcamp/blob/master/.travis.yml" target="_blank">.travis.yml</a></li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<p>Python Decouple is a must have app if you are developing with Django. Personally I use it in all my Django projects. It’s important to keep your application credentials like API Keys, Amazon S3, email parameters, database parameters safe, specially if it’s an open source repository. Also no more <code class="highlighter-rouge">development_settings.py</code> and <code class="highlighter-rouge">production_settings.py</code>, use just one <code class="highlighter-rouge">settings.py</code> for your whole project.</p>
+
+<p>Python Decouple was developed by <a href="http://henriquebastos.net/" target="_blank">Henrique Bastos</a> and it is distributed under the MIT license. You can learn more about it reading it’s <a href="https://pypi.python.org/pypi/python-decouple" target="_blank">documentation</a>. The source code is available on <a href="https://github.com/henriquebastos/python-decouple" target="_blank">GitHub</a>.</p>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../tips/2017/07/03/django-tip-20-working-with-multiple-settings-modules.html">
+<img src="../../../media/2017/07/featured-tip20.jpg" alt="Django Tips #20 Working With Multiple Settings Modules" title="Django Tips #20 Working With Multiple Settings Modules">
+Django Tips #20 Working With Multiple Settings Modules
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../tag/python/index.html"><span class="tag">python</span></a>
+    
+      <a href="../../../tag/python-decouple/index.html"><span class="tag">python-decouple</span></a>
+    
+      <a href="../../../tag/config/index.html"><span class="tag">config</span></a>
+    
+      <a href="../../../tag/settings/index.html"><span class="tag">settings</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2nGupHB"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Use%20Python%20Decouple&amp;url=http://sibt.co/2naMWZS&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nVb3vI"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nMtZji&amp;title=How%20to%20Use%20Python%20Decouple&amp;summary=Web%20applications%20relies%20on%20several%20number%20of%20parameters%20to%20run%20properly%20on%20different%20environments.%20To%20name%20a%20few%20from%20a%20Django%20app%20settings:%20database%20url,%20password,%20secret%20key,%20debug%20status,%20email%20...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'package-of-the-week-python-decouple.html';
+        this.page.identifier = '/2015/11/26/package-of-the-week-python-decouple';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../contact/index.html">contact</a></li>
+      <li><a href="../../../faq/index.html">faq</a></li>
+      <li><a href="../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/2015/11/26/package-of-the-week-python-decouple.html",
+  "headline": "How to Use Python Decouple",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2015-11-26-package-of-the-week-python-decouple/featured-post-image.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2015-11-26T14:00:00+02:00",
+  "dateModified": "2015-11-26T14:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "Web applications relies on several number of parameters to run properly on different environments. To name a few from a Django app settings: database url, password, secret key, debug status, email ..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/2015/11/26/package-of-the-week-python-decouple.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:39:46 GMT -->
+</html>

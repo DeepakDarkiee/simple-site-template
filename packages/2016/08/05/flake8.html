@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/packages/2016/08/05/flake8.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:39:38 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Use Flake8</title>
+<meta name="description" content="Flake8 is a Python library that wraps PyFlakes, pycodestyle and Ned Batchelder’s McCabe script. It is agreat toolkit for checking your code base against codi...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="flake8.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'flake8.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="How to Use Flake8">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/packages/2016/08/05/flake8.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2016-08-05-flake8/featured.jpg">
+<meta property="og:description" content="Flake8 is a Python library that wraps PyFlakes, pycodestyle and Ned Batchelder’s McCabe script. It is agreat toolkit for checking your code base against codi...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2016-08-05T12:09:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Use Flake8">
+<meta name="twitter:description" content="Flake8 is a Python library that wraps PyFlakes, pycodestyle and Ned Batchelder’s McCabe script. It is agreat toolkit for checking your code base against coding style (PEP8), programming errors (lik...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2016-08-05-flake8/featured.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="python">
+  
+    <meta property="article:tag" content="flake8">
+  
+    <meta property="article:tag" content="pep8">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      packages
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Use Flake8</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Aug 5, 2016
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    4 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/packages/2016/08/05/flake8">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="flake8.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2016-08-05-flake8/featured.jpg" alt="How to Use Flake8" class="featured-image">
+    
+  </div>
+
+
+            <article>
+              <p>Flake8 is a Python library that wraps <strong>PyFlakes</strong>, <strong>pycodestyle</strong> and <strong>Ned Batchelder’s McCabe script</strong>. It is a
+great toolkit for checking your code base against coding style (PEP8), programming errors (like “library imported but
+unused” and “Undefined name”) and to check cyclomatic complexity.</p>
+
+<p>If you are not familiar with the term <strong>cyclomatic complexity</strong>, it is a software metric created by Thomas J. McCabe
+to measure the number of independent paths through the source code. Generally speaking, the higher number of <strong>ifs</strong>
+inside a function, the higher number of paths it will have, thus a higher <strong>cyclomatic complexity</strong>. Of course there
+are other control flow operations that impact the calculus of the cyclomatic complexity. It is also referred as McCabe
+complexity.</p>
+
+<p>Speaking about coding style, I also like to follow the <a href="https://docs.djangoproject.com/en/dev/internals/contributing/writing-code/coding-style/">Django Coding Style</a> on the Django
+projects I develop. This style standard is only enforced when writing code for inclusion in Django.</p>
+
+<hr />
+
+<h4 id="installation">Installation</h4>
+
+<p>Easiest way to get started is installing it using pip:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install flake8</code></pre></figure>
+
+<hr />
+
+<h4 id="usage">Usage</h4>
+
+<p>Inside the Django project dir, run the command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">flake8</code></pre></figure>
+
+<p>Or you can pass the path to a file/dir:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">flake8 bootcamp/feeds/</code></pre></figure>
+
+<p>The output will be something like that:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">./bootcamp/settings.py:96:80: E501 line too long <span class="o">(</span>91 &gt; 79 characters<span class="o">)</span>
+./bootcamp/settings.py:99:80: E501 line too long <span class="o">(</span>81 &gt; 79 characters<span class="o">)</span>
+./bootcamp/settings.py:102:80: E501 line too long <span class="o">(</span>82 &gt; 79 characters<span class="o">)</span>
+./bootcamp/settings.py:105:80: E501 line too long <span class="o">(</span>83 &gt; 79 characters<span class="o">)</span>
+./bootcamp/settings.py:156:80: E501 line too long <span class="o">(</span>94 &gt; 79 characters<span class="o">)</span>
+./bootcamp/settings.py:165:5: F403 <span class="s1">'from local_settings import *'</span> used; unable to detect undefined names
+./bootcamp/urls.py:5:1: F401 <span class="s1">'django.contrib.auth.views as auth_views'</span> imported but unused
+./bootcamp/urls.py:6:1: F401 <span class="s1">'django.core.urlresolvers.reverse'</span> imported but unused
+./bootcamp/urls.py:16:80: E501 line too long <span class="o">(</span>88 &gt; 79 characters<span class="o">)</span>
+./bootcamp/urls.py:17:80: E501 line too long <span class="o">(</span>84 &gt; 79 characters<span class="o">)</span>
+./bootcamp/urls.py:18:80: E501 line too long <span class="o">(</span>87 &gt; 79 characters<span class="o">)</span>
+./bootcamp/urls.py:22:80: E501 line too long <span class="o">(</span>80 &gt; 79 characters<span class="o">)</span>
+./bootcamp/members/forms.py:5:1: F401 <span class="s1">'django.forms.extras.SelectDateWidget'</span> imported but unused
+...</code></pre></figure>
+
+<p>The output is formatted as:</p>
+
+<p><code class="highlighter-rouge">file path</code> : <code class="highlighter-rouge">line number</code> : <code class="highlighter-rouge">column number</code> : <code class="highlighter-rouge">error code</code> : <code class="highlighter-rouge">short description</code></p>
+
+<p>Error code prefix:</p>
+
+<ul>
+  <li><strong>E***/W***:</strong> pep8 errors and warnings</li>
+  <li><strong>F***:</strong> PyFlakes codes (see below)</li>
+  <li><strong>C9**:</strong> McCabe complexity plugin mccabe</li>
+  <li><strong>N8**:</strong> Naming Conventions plugin pep8-naming</li>
+</ul>
+
+<p>You can see the full list of error codes in the links below:</p>
+
+<ul>
+  <li><a href="http://pep8.readthedocs.io/en/latest/intro.html#error-codes" target="_blank">PEP8 error codes</a>.</li>
+  <li><a href="https://flake8.readthedocs.io/en/2.0/warnings.html" target="_blank">PyFlakes error codes</a>.</li>
+  <li><a href="https://github.com/PyCQA/pep8-naming" target="_blank">PEP8 Naming error codes</a>.</li>
+</ul>
+
+<hr />
+
+<h4 id="configuring">Configuring</h4>
+
+<p>You can pass some project-based configuration parameters using a <code class="highlighter-rouge">setup.cfg</code> file. If you already have one, just edit
+it. If that is not the case, create a file named <code class="highlighter-rouge">setup.cfg</code> in the project root.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>flake8]
+exclude <span class="o">=</span> .git,<span class="k">*</span>migrations<span class="k">*</span>
+max-line-length <span class="o">=</span> 119</code></pre></figure>
+
+<p>Those are the basic configurations I use in every project. The <strong>exclude</strong> parameter is used to ignore file/dirs.
+The default line-length is 79. I find it too small and sometimes makes the code look worse. So, following the
+Django code style guidelines, I stick with 119.</p>
+
+<p>See the <a href="http://flake8.pycqa.org/en/latest/user/options.html" target="_blank">full list of options</a>.</p>
+
+<hr />
+
+<h4 id="in-line-ignoring-errors">In-Line Ignoring Errors</h4>
+
+<p>Just add <code class="highlighter-rouge"># noqa</code> in the end of the line.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">ProfilesConfig</span><span class="p">(</span><span class="n">AppConfig</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s">'cmdbox.profiles'</span>
+    <span class="n">verbose_name</span> <span class="o">=</span> <span class="n">_</span><span class="p">(</span><span class="s">'profiles'</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">ready</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="kn">import</span> <span class="nn">cmdbox.profiles.signals.handlers</span>  <span class="c"># noqa</span></code></pre></figure>
+
+<p>Or you can pass the specific error code you want to ignore:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">cmdbox.profiles.signals.handlers</span>  <span class="c"># noqa: F401</span></code></pre></figure>
+
+<hr />
+
+<h4 id="running-flake8-on-travis-ci">Running flake8 on Travis CI</h4>
+
+<p>The example below is a <strong>.travis.yml</strong> file from a project of mine. You can run <strong>flake8</strong> checks very easily just by
+adding the commands inside the <strong>script</strong> list.</p>
+
+<p><strong>.travis.yml</strong></p>
+
+<figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="s">language</span><span class="pi">:</span> <span class="s">python</span>
+<span class="s">python</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s2">"</span><span class="s">2.7"</span>
+<span class="s">install</span><span class="pi">:</span> <span class="s2">"</span><span class="s">pip</span><span class="nv"> </span><span class="s">install</span><span class="nv"> </span><span class="s">-r</span><span class="nv"> </span><span class="s">requirements.txt"</span>
+<span class="s">before_script</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">cp .env.example .env</span>
+  <span class="pi">-</span> <span class="s">python manage.py migrate</span>
+<span class="s">script</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">flake8 cmdbox</span>
+  <span class="pi">-</span> <span class="s">coverage run manage.py test --settings=cmdbox.tests_settings</span>
+<span class="s">after_success</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="s">coveralls</span></code></pre></figure>
+
+<hr />
+
+<p>That’s it! As you can see, it is really easy to start making your Django project PEP8 complaint with flake8.</p>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/python/index.html"><span class="tag">python</span></a>
+    
+      <a href="../../../../tag/flake8/index.html"><span class="tag">flake8</span></a>
+    
+      <a href="../../../../tag/pep8/index.html"><span class="tag">pep8</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mp2WKP"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Use%20Flake8&amp;url=http://sibt.co/2n3OkNX&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nGnejc"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2n9G0hl&amp;title=How%20to%20Use%20Flake8&amp;summary=Flake8%20is%20a%20Python%20library%20that%20wraps%20PyFlakes,%20pycodestyle%20and%20Ned%20Batchelder%E2%80%99s%20McCabe%20script.%20It%20is%20agreat%20toolkit%20for%20checking%20your%20code%20base%20against%20coding%20style%20(PEP8),%20programming%20errors%20(lik...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'flake8.html';
+        this.page.identifier = '/packages/2016/08/05/flake8';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/packages/2016/08/05/flake8.html",
+  "headline": "How to Use Flake8",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2016-08-05-flake8/featured.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2016-08-05T12:09:00+03:00",
+  "dateModified": "2016-08-05T12:09:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "Flake8 is a Python library that wraps PyFlakes, pycodestyle and Ned Batchelder’s McCabe script. It is agreat toolkit for checking your code base against coding style (PEP8), programming errors (lik..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/packages/2016/08/05/flake8.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:39:39 GMT -->
+</html>

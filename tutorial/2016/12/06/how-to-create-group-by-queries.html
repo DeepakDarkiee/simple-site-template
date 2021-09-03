@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2016/12/06/how-to-create-group-by-queries.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:46:01 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Create Group By Queries With Django ORM</title>
+<meta name="description" content="This tutorial is about how to implement SQL-like group by queries using the Django ORM. It’s a fairly common operation,specially for those who are familiar w...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="how-to-create-group-by-queries.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'how-to-create-group-by-queries.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="How to Create Group By Queries With Django ORM">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tutorial/2016/12/06/how-to-create-group-by-queries.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2016/12/thumbnail-groupby.jpg">
+<meta property="og:description" content="This tutorial is about how to implement SQL-like group by queries using the Django ORM. It’s a fairly common operation,specially for those who are familiar w...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2016-12-06T12:48:00+02:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Create Group By Queries With Django ORM">
+<meta name="twitter:description" content="This tutorial is about how to implement SQL-like group by queries using the Django ORM. It’s a fairly common operation,specially for those who are familiar with SQL. The Django ORM is actually an a...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2016/12/thumbnail-groupby.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="orm">
+  
+    <meta property="article:tag" content="queryset">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tutorial
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Create Group By Queries With Django ORM</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Dec 6, 2016
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    9 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/tutorial/2016/12/06/how-to-create-group-by-queries">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="how-to-create-group-by-queries.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2016/12/featured-groupby.jpg" alt="How to Create Group By Queries With Django ORM" class="featured-image">
+    
+      <small>(Picture: <a href="https://unsplash.com/search/computer?photo=VHpDp_GkGgc" target="_blank">https://unsplash.com/search/computer?photo=VHpDp_GkGgc</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>This tutorial is about how to implement SQL-like group by queries using the Django ORM. It’s a fairly common operation,
+specially for those who are familiar with SQL. The Django ORM is actually an abstraction layer, that let us play with
+the database as it was object-oriented but in the end it’s just a relational database and all the operations are
+translated into SQL statements.</p>
+
+<p>Most of the work can be done retrieving the raw data from the database, and playing with it in the Python side,
+grouping the data in dictionaries, iterating through it, making sums, averages and what not. But the database is a very
+powerful tool and do much more than simply storing the data, and often you can do the work much faster directly in the
+database.</p>
+
+<p>Generally speaking, when you start doing group by queries, you are no longer interested in each model instances (or
+in a table row) details, but you want extract new information from your dataset, based on some common aspects shared
+between the model instances.</p>
+
+<p>Let’s have a look in an example:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">Country</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">City</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">30</span><span class="p">)</span>
+    <span class="n">country</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="n">Country</span><span class="p">)</span>
+    <span class="n">population</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">PositiveIntegerField</span><span class="p">()</span></code></pre></figure>
+
+<p>And the raw data stored in the database:</p>
+
+<div style="height: 300px; overflow-y: scroll; margin-bottom: 2.5rem; border: 1px dashed #e1e1e1; padding: 1em">
+  <div class="row">
+    <div class="seven columns" style="font-size: 14px; border-radius: 4px; background-color: #f1f1f1; border: 1px solid #e1e1e1; padding: 1rem 1.5rem">
+      <table class="u-full-width">
+        <thead>
+          <tr>
+            <th colspan="4">
+              <strong>cities</strong>
+            </th>
+          </tr>
+          <tr>
+            <th>id</th>
+            <th>name</th>
+            <th>country_id</th>
+            <th>population</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Tokyo</td><td>28</td><td>36,923,000</td></tr>
+          <tr><td>2</td><td>Shanghai</td><td>13</td><td>34,000,000</td></tr>
+          <tr><td>3</td><td>Jakarta</td><td>19</td><td>30,000,000</td></tr>
+          <tr><td>4</td><td>Seoul</td><td>21</td><td>25,514,000</td></tr>
+          <tr><td>5</td><td>Guangzhou</td><td>13</td><td>25,000,000</td></tr>
+          <tr><td>6</td><td>Beijing</td><td>13</td><td>24,900,000</td></tr>
+          <tr><td>7</td><td>Karachi</td><td>22</td><td>24,300,000</td></tr>
+          <tr><td>8</td><td>Shenzhen</td><td>13</td><td>23,300,000</td></tr>
+          <tr><td>9</td><td>Delhi</td><td>25</td><td>21,753,486</td></tr>
+          <tr><td>10</td><td>Mexico City</td><td>24</td><td>21,339,781</td></tr>
+          <tr><td>11</td><td>Lagos</td><td>9</td><td>21,000,000</td></tr>
+          <tr><td>12</td><td>São Paulo</td><td>1</td><td>20,935,204</td></tr>
+          <tr><td>13</td><td>Mumbai</td><td>25</td><td>20,748,395</td></tr>
+          <tr><td>14</td><td>New York City</td><td>20</td><td>20,092,883</td></tr>
+          <tr><td>15</td><td>Osaka</td><td>28</td><td>19,342,000</td></tr>
+          <tr><td>16</td><td>Wuhan</td><td>13</td><td>19,000,000</td></tr>
+          <tr><td>17</td><td>Chengdu</td><td>13</td><td>18,100,000</td></tr>
+          <tr><td>18</td><td>Dhaka</td><td>4</td><td>17,151,925</td></tr>
+          <tr><td>19</td><td>Chongqing</td><td>13</td><td>17,000,000</td></tr>
+          <tr><td>20</td><td>Tianjin</td><td>13</td><td>15,400,000</td></tr>
+          <tr><td>21</td><td>Kolkata</td><td>25</td><td>14,617,882</td></tr>
+          <tr><td>22</td><td>Tehran</td><td>11</td><td>14,595,904</td></tr>
+          <tr><td>23</td><td>Istanbul</td><td>2</td><td>14,377,018</td></tr>
+          <tr><td>24</td><td>London</td><td>26</td><td>14,031,830</td></tr>
+          <tr><td>25</td><td>Hangzhou</td><td>13</td><td>13,400,000</td></tr>
+          <tr><td>26</td><td>Los Angeles</td><td>20</td><td>13,262,220</td></tr>
+          <tr><td>27</td><td>Buenos Aires</td><td>8</td><td>13,074,000</td></tr>
+          <tr><td>28</td><td>Xi'an</td><td>13</td><td>12,900,000</td></tr>
+          <tr><td>29</td><td>Paris</td><td>6</td><td>12,405,426</td></tr>
+          <tr><td>30</td><td>Changzhou</td><td>13</td><td>12,400,000</td></tr>
+          <tr><td>31</td><td>Shantou</td><td>13</td><td>12,000,000</td></tr>
+          <tr><td>32</td><td>Rio de Janeiro</td><td>1</td><td>11,973,505</td></tr>
+          <tr><td>33</td><td>Manila</td><td>18</td><td>11,855,975</td></tr>
+          <tr><td>34</td><td>Nanjing</td><td>13</td><td>11,700,000</td></tr>
+          <tr><td>35</td><td>Rhine-Ruhr</td><td>16</td><td>11,470,000</td></tr>
+          <tr><td>36</td><td>Jinan</td><td>13</td><td>11,000,000</td></tr>
+          <tr><td>37</td><td>Bangalore</td><td>25</td><td>10,576,167</td></tr>
+          <tr><td>38</td><td>Harbin</td><td>13</td><td>10,500,000</td></tr>
+          <tr><td>39</td><td>Lima</td><td>7</td><td>9,886,647</td></tr>
+          <tr><td>40</td><td>Zhengzhou</td><td>13</td><td>9,700,000</td></tr>
+          <tr><td>41</td><td>Qingdao</td><td>13</td><td>9,600,000</td></tr>
+          <tr><td>42</td><td>Chicago</td><td>20</td><td>9,554,598</td></tr>
+          <tr><td>43</td><td>Nagoya</td><td>28</td><td>9,107,000</td></tr>
+          <tr><td>44</td><td>Chennai</td><td>25</td><td>8,917,749</td></tr>
+          <tr><td>45</td><td>Bangkok</td><td>15</td><td>8,305,218</td></tr>
+          <tr><td>46</td><td>Bogotá</td><td>27</td><td>7,878,783</td></tr>
+          <tr><td>47</td><td>Hyderabad</td><td>25</td><td>7,749,334</td></tr>
+          <tr><td>48</td><td>Shenyang</td><td>13</td><td>7,700,000</td></tr>
+          <tr><td>49</td><td>Wenzhou</td><td>13</td><td>7,600,000</td></tr>
+          <tr><td>50</td><td>Nanchang</td><td>13</td><td>7,400,000</td></tr>
+          <tr><td>51</td><td>Hong Kong</td><td>13</td><td>7,298,600</td></tr>
+          <tr><td>52</td><td>Taipei</td><td>29</td><td>7,045,488</td></tr>
+          <tr><td>53</td><td>Dallas–Fort Worth</td><td>20</td><td>6,954,330</td></tr>
+          <tr><td>54</td><td>Santiago</td><td>14</td><td>6,683,852</td></tr>
+          <tr><td>55</td><td>Luanda</td><td>23</td><td>6,542,944</td></tr>
+          <tr><td>56</td><td>Houston</td><td>20</td><td>6,490,180</td></tr>
+          <tr><td>57</td><td>Madrid</td><td>17</td><td>6,378,297</td></tr>
+          <tr><td>58</td><td>Ahmedabad</td><td>25</td><td>6,352,254</td></tr>
+          <tr><td>59</td><td>Toronto</td><td>5</td><td>6,055,724</td></tr>
+          <tr><td>60</td><td>Philadelphia</td><td>20</td><td>6,051,170</td></tr>
+          <tr><td>61</td><td>Washington, D.C.</td><td>20</td><td>6,033,737</td></tr>
+          <tr><td>62</td><td>Miami</td><td>20</td><td>5,929,819</td></tr>
+          <tr><td>63</td><td>Belo Horizonte</td><td>1</td><td>5,767,414</td></tr>
+          <tr><td>64</td><td>Atlanta</td><td>20</td><td>5,614,323</td></tr>
+          <tr><td>65</td><td>Singapore</td><td>12</td><td>5,535,000</td></tr>
+          <tr><td>66</td><td>Barcelona</td><td>17</td><td>5,445,616</td></tr>
+          <tr><td>67</td><td>Munich</td><td>16</td><td>5,203,738</td></tr>
+          <tr><td>68</td><td>Stuttgart</td><td>16</td><td>5,200,000</td></tr>
+          <tr><td>69</td><td>Ankara</td><td>2</td><td>5,150,072</td></tr>
+          <tr><td>70</td><td>Hamburg</td><td>16</td><td>5,100,000</td></tr>
+          <tr><td>71</td><td>Pune</td><td>25</td><td>5,049,968</td></tr>
+          <tr><td>72</td><td>Berlin</td><td>16</td><td>5,005,216</td></tr>
+          <tr><td>73</td><td>Guadalajara</td><td>24</td><td>4,796,050</td></tr>
+          <tr><td>74</td><td>Boston</td><td>20</td><td>4,732,161</td></tr>
+          <tr><td>75</td><td>Sydney</td><td>10</td><td>5,000,500</td></tr>
+          <tr><td>76</td><td>San Francisco</td><td>20</td><td>4,594,060</td></tr>
+          <tr><td>77</td><td>Surat</td><td>25</td><td>4,585,367</td></tr>
+          <tr><td>78</td><td>Phoenix</td><td>20</td><td>4,489,109</td></tr>
+          <tr><td>79</td><td>Monterrey</td><td>24</td><td>4,477,614</td></tr>
+          <tr><td>80</td><td>Inland Empire</td><td>20</td><td>4,441,890</td></tr>
+          <tr><td>81</td><td>Rome</td><td>3</td><td>4,321,244</td></tr>
+          <tr><td>82</td><td>Detroit</td><td>20</td><td>4,296,611</td></tr>
+          <tr><td>83</td><td>Milan</td><td>3</td><td>4,267,946</td></tr>
+          <tr><td>84</td><td>Melbourne</td><td>10</td><td>4,650,000</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="five columns" style="font-size: 14px; border-radius: 4px; background-color: #f1f1f1; border: 1px solid #e1e1e1; padding: 1rem 1.5rem">
+      <table class="u-full-width">
+        <thead>
+          <tr>
+            <th colspan="2">
+              <strong>countries</strong>
+            </th>
+          </tr>
+          <tr>
+            <th>id</th>
+            <th>name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>Brazil</td></tr>
+          <tr><td>2</td><td>Turkey</td></tr>
+          <tr><td>3</td><td>Italy</td></tr>
+          <tr><td>4</td><td>Bangladesh</td></tr>
+          <tr><td>5</td><td>Canada</td></tr>
+          <tr><td>6</td><td>France</td></tr>
+          <tr><td>7</td><td>Peru</td></tr>
+          <tr><td>8</td><td>Argentina</td></tr>
+          <tr><td>9</td><td>Nigeria</td></tr>
+          <tr><td>10</td><td>Australia</td></tr>
+          <tr><td>11</td><td>Iran</td></tr>
+          <tr><td>12</td><td>Singapore</td></tr>
+          <tr><td>13</td><td>China</td></tr>
+          <tr><td>14</td><td>Chile</td></tr>
+          <tr><td>15</td><td>Thailand</td></tr>
+          <tr><td>16</td><td>Germany</td></tr>
+          <tr><td>17</td><td>Spain</td></tr>
+          <tr><td>18</td><td>Philippines</td></tr>
+          <tr><td>19</td><td>Indonesia</td></tr>
+          <tr><td>20</td><td>United States</td></tr>
+          <tr><td>21</td><td>South Korea</td></tr>
+          <tr><td>22</td><td>Pakistan</td></tr>
+          <tr><td>23</td><td>Angola</td></tr>
+          <tr><td>24</td><td>Mexico</td></tr>
+          <tr><td>25</td><td>India</td></tr>
+          <tr><td>26</td><td>United Kingdom</td></tr>
+          <tr><td>27</td><td>Colombia</td></tr>
+          <tr><td>28</td><td>Japan</td></tr>
+          <tr><td>29</td><td>Taiwan</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<p>This data is from Wikipedia, and I don’t know to what extent it is correct, but for our example it doesn’t really
+matter.</p>
+
+<p>Considering the whole dataset, if we wanted to know the total of habitants in all the 84 cities, we could perhaps use
+an <code class="highlighter-rouge">aggregate</code> query:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Sum</span>
+
+<span class="n">City</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">'population'</span><span class="p">))</span>
+<span class="p">{</span><span class="s">'population__sum'</span><span class="p">:</span> <span class="mi">970880224</span><span class="p">}</span>  <span class="c"># 970,880,224</span></code></pre></figure>
+
+<p>Or the average population in the top 84 cities:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Avg</span>
+
+<span class="n">City</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Avg</span><span class="p">(</span><span class="s">'population'</span><span class="p">))</span>
+<span class="p">{</span><span class="s">'population__avg'</span><span class="p">:</span> <span class="mf">11558097.904761905</span><span class="p">}</span>  <span class="c"># 11,558,097.90</span></code></pre></figure>
+
+<p>What if we now wanted to see the total population, but aggregated by the country instead? Not the whole dataset. In
+this case we no longer can use <code class="highlighter-rouge">aggregate</code>, instead we will be using <code class="highlighter-rouge">annotate</code>.</p>
+
+<p>The <code class="highlighter-rouge">aggregate</code> clause is terminal, it returns a Python dictionary, meaning you can’t append any queryset methods.
+Also, it will always return a single result. So if you wanted to get the population sum by country, using <code class="highlighter-rouge">aggregate</code>,
+you would need to do something like this:</p>
+
+<div class="panel panel-danger">
+  <div class="panel-header">Don't</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db.models</span> <span class="kn">import</span> <span class="n">Sum</span>
+
+<span class="k">for</span> <span class="n">country</span> <span class="ow">in</span> <span class="n">Country</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">all</span><span class="p">():</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">City</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">country</span><span class="o">=</span><span class="n">country</span><span class="p">)</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">'population'</span><span class="p">))</span>
+    <span class="k">print</span> <span class="s">'{}: {}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">country</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">result</span><span class="p">[</span><span class="s">'population__sum'</span><span class="p">])</span>
+
+<span class="c"># Output:</span>
+<span class="c"># -------</span>
+<span class="c"># Brazil: 38676123</span>
+<span class="c"># Turkey: 19527090</span>
+<span class="c"># Italy: 8589190</span>
+<span class="c"># Bangladesh: 17151925</span>
+<span class="c"># Canada: 6055724</span>
+<span class="c"># France: 12405426</span>
+<span class="c"># Peru: 9886647</span>
+<span class="c"># Argentina: 13074000</span>
+<span class="c"># Nigeria: 21000000</span>
+<span class="c"># Australia: 9650500</span>
+<span class="c"># Iran: 14595904</span>
+<span class="c"># ...</span></code></pre></figure>
+
+</div>
+
+<p>While the result is correct, we needed to execute <strong>30</strong> different queries in the database. And we’ve lost some of the
+capabilities of the ORM, such as ordering this result set. Perhaps the data would be more interesting if we could order
+by the country with the most population for example.</p>
+
+<p>Now a better way to do it is using <code class="highlighter-rouge">annotate</code>, which will be translated as a <strong>group by</strong> query in the database:</p>
+
+<div class="panel panel-success">
+  <div class="panel-header">Do</div>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">City</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">'country__name'</span><span class="p">)</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">'population'</span><span class="p">))</span>
+
+<span class="p">[</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'Angola'</span><span class="p">,</span> <span class="s">'population__sum'</span><span class="p">:</span> <span class="mi">6542944</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'Argentina'</span><span class="p">,</span> <span class="s">'population__sum'</span><span class="p">:</span> <span class="mi">13074000</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'Australia'</span><span class="p">,</span> <span class="s">'population__sum'</span><span class="p">:</span> <span class="mi">9650500</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'Bangladesh'</span><span class="p">,</span> <span class="s">'population__sum'</span><span class="p">:</span> <span class="mi">17151925</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'Brazil'</span><span class="p">,</span> <span class="s">'population__sum'</span><span class="p">:</span> <span class="mi">38676123</span><span class="p">},</span>
+  <span class="s">'...(remaining elements truncated)...'</span>
+<span class="p">]</span></code></pre></figure>
+
+</div>
+
+<p>Much better, right?</p>
+
+<p>Now if we wanted to order by the country population, we can use an alias to make it look cleaner and to use in the
+<code class="highlighter-rouge">order_by()</code> clause:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">City</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">'country__name'</span><span class="p">)</span> \
+  <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">country_population</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s">'population'</span><span class="p">))</span> \
+  <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-country_population'</span><span class="p">)</span>
+
+<span class="p">[</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'China'</span><span class="p">,</span> <span class="s">'country_population'</span><span class="p">:</span> <span class="mi">309898600</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'United States'</span><span class="p">,</span> <span class="s">'country_population'</span><span class="p">:</span> <span class="mi">102537091</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'India'</span><span class="p">,</span> <span class="s">'country_population'</span><span class="p">:</span> <span class="mi">100350602</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'Japan'</span><span class="p">,</span> <span class="s">'country_population'</span><span class="p">:</span> <span class="mi">65372000</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'Brazil'</span><span class="p">,</span> <span class="s">'country_population'</span><span class="p">:</span> <span class="mi">38676123</span><span class="p">},</span>
+  <span class="s">'...(remaining elements truncated)...'</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Here is how the last SQL query looks like:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql">  <span class="k">SELECT</span> <span class="nv">"core_country"</span><span class="p">.</span><span class="nv">"name"</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="nv">"core_city"</span><span class="p">.</span><span class="nv">"population"</span><span class="p">)</span> <span class="k">AS</span> <span class="nv">"country_population"</span>
+    <span class="k">FROM</span> <span class="nv">"core_city"</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="nv">"core_country"</span> <span class="k">ON</span> <span class="p">(</span><span class="nv">"core_city"</span><span class="p">.</span><span class="nv">"country_id"</span> <span class="o">=</span> <span class="nv">"core_country"</span><span class="p">.</span><span class="nv">"id"</span><span class="p">)</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="nv">"core_country"</span><span class="p">.</span><span class="nv">"name"</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="nv">"country_population"</span> <span class="k">DESC</span></code></pre></figure>
+
+<p>Now an important thing to note here: it only makes sense adding in the <code class="highlighter-rouge">values()</code> clause, the data that can be grouped.
+Every field you add to the <code class="highlighter-rouge">values()</code> clause, will be used to create the group by query.</p>
+
+<p>Look at this queryset:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">City</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">'name'</span><span class="p">,</span> <span class="s">'country__name'</span><span class="p">)</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">'population'</span><span class="p">))</span></code></pre></figure>
+
+<p>The resulting SQL query would be:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql">  <span class="k">SELECT</span> <span class="nv">"core_city"</span><span class="p">.</span><span class="nv">"name"</span><span class="p">,</span> <span class="nv">"core_country"</span><span class="p">.</span><span class="nv">"name"</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="nv">"core_city"</span><span class="p">.</span><span class="nv">"population"</span><span class="p">)</span> <span class="k">AS</span> <span class="nv">"population__sum"</span>
+    <span class="k">FROM</span> <span class="nv">"core_city"</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="nv">"core_country"</span> <span class="k">ON</span> <span class="p">(</span><span class="nv">"core_city"</span><span class="p">.</span><span class="nv">"country_id"</span> <span class="o">=</span> <span class="nv">"core_country"</span><span class="p">.</span><span class="nv">"id"</span><span class="p">)</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="nv">"core_city"</span><span class="p">.</span><span class="nv">"name"</span><span class="p">,</span> <span class="nv">"core_country"</span><span class="p">.</span><span class="nv">"name"</span></code></pre></figure>
+
+<p>This would have no effect, because all the city names are unique, and they can’t be grouped (the database will try to
+group it, but each “group” will have only 1 row/instance). We can see it simply by performing a count on each queryset:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">City</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">'name'</span><span class="p">,</span> <span class="s">'country__name'</span><span class="p">)</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">'population'</span><span class="p">))</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="mi">84</span>
+
+<span class="n">City</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">'country__name'</span><span class="p">)</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">Sum</span><span class="p">(</span><span class="s">'population'</span><span class="p">))</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+<span class="mi">29</span></code></pre></figure>
+
+<p>That’s what I meant when I said in the beginning of the post that, you are no longer interested in the details of each
+row. When we group by country to get the sum of the population, we lost the details of the cities (at least in the
+query result).</p>
+
+<p>Sometimes it makes sense to have more than one value in the <code class="highlighter-rouge">values()</code> clause. For example if our database was composed
+by City / State / Country. Then we could group by using <code class="highlighter-rouge">.values('state__name', 'country__name')</code>. This way you would
+have the population by country. And you would avoid States from different countries (with the same name) to be grouped
+together.</p>
+
+<p>The values you generate on the database, using the <code class="highlighter-rouge">annotate</code> clause, can also be used to filter data. Usually in the
+database we use the <code class="highlighter-rouge">HAVING</code> function, which makes it very idiomatic. You can read the query like it was plain English.
+Now, in the Django side, it’s a simple <code class="highlighter-rouge">filter</code>.</p>
+
+<p>For example, let’s say we want to see the total population by country, but only those countries where the total
+population is greater than 50,000,000:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">City</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">values</span><span class="p">(</span><span class="s">'country__name'</span><span class="p">)</span> \
+  <span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">country_population</span><span class="o">=</span><span class="n">Sum</span><span class="p">(</span><span class="s">'population'</span><span class="p">))</span> \
+  <span class="o">.</span><span class="nb">filter</span><span class="p">(</span><span class="n">country_population__gt</span><span class="o">=</span><span class="mi">50000000</span><span class="p">)</span> \
+  <span class="o">.</span><span class="n">order_by</span><span class="p">(</span><span class="s">'-country_population'</span><span class="p">)</span>
+
+<span class="p">[</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'China'</span><span class="p">,</span> <span class="s">'country_population'</span><span class="p">:</span> <span class="mi">309898600</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'United States'</span><span class="p">,</span> <span class="s">'country_population'</span><span class="p">:</span> <span class="mi">102537091</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'India'</span><span class="p">,</span> <span class="s">'country_population'</span><span class="p">:</span> <span class="mi">100350602</span><span class="p">},</span>
+  <span class="p">{</span><span class="s">'country__name'</span><span class="p">:</span> <span class="s">u'Japan'</span><span class="p">,</span> <span class="s">'country_population'</span><span class="p">:</span> <span class="mi">65372000</span><span class="p">}</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>And finally the SQL query:</p>
+
+<figure class="highlight"><pre><code class="language-sql" data-lang="sql">  <span class="k">SELECT</span> <span class="nv">"core_country"</span><span class="p">.</span><span class="nv">"name"</span><span class="p">,</span> <span class="k">SUM</span><span class="p">(</span><span class="nv">"core_city"</span><span class="p">.</span><span class="nv">"population"</span><span class="p">)</span> <span class="k">AS</span> <span class="nv">"country_population"</span>
+    <span class="k">FROM</span> <span class="nv">"core_city"</span> <span class="k">INNER</span> <span class="k">JOIN</span> <span class="nv">"core_country"</span> <span class="k">ON</span> <span class="p">(</span><span class="nv">"core_city"</span><span class="p">.</span><span class="nv">"country_id"</span> <span class="o">=</span> <span class="nv">"core_country"</span><span class="p">.</span><span class="nv">"id"</span><span class="p">)</span>
+<span class="k">GROUP</span> <span class="k">BY</span> <span class="nv">"core_country"</span><span class="p">.</span><span class="nv">"name"</span> <span class="k">HAVING</span> <span class="k">SUM</span><span class="p">(</span><span class="nv">"core_city"</span><span class="p">.</span><span class="nv">"population"</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">50000000</span>
+<span class="k">ORDER</span> <span class="k">BY</span> <span class="nv">"country_population"</span> <span class="k">DESC</span></code></pre></figure>
+
+<p>I hope you found this small tutorial helpful! If you have any questions, please leave a comment below!</p>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../../series/2017/10/02/a-complete-beginners-guide-to-django-part-5.html">
+<img src="../../../../media/series/beginners-guide/1.11/part-5/featured.jpg" alt="A Complete Beginner's Guide to Django - Part 5" title="A Complete Beginner's Guide to Django - Part 5">
+A Complete Beginner's Guide to Django - Part 5
+</a>
+</div>
+<div class="four columns">
+<a href="../../11/28/how-to-filter-querysets-dynamically.html">
+<img src="../../../../media/2016/11/featured-filter.jpg" alt="How to Filter QuerySets Dynamically" title="How to Filter QuerySets Dynamically">
+How to Filter QuerySets Dynamically
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../tips/2016/08/23/django-tip-13-f-expressions.html">
+<img src="../../../../media/2016/08/featured-f-expressions.jpg" alt="Django Tips #13 Using F() Expressions" title="Django Tips #13 Using F() Expressions">
+Django Tips #13 Using F() Expressions
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/orm/index.html"><span class="tag">orm</span></a>
+    
+      <a href="../../../../tag/queryset/index.html"><span class="tag">queryset</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mYE3EJ"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Create%20Group%20By%20Queries%20With%20Django%20ORM&amp;url=http://sibt.co/2nDZcB2&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nDG6eC"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2mrDXCt&amp;title=How%20to%20Create%20Group%20By%20Queries%20With%20Django%20ORM&amp;summary=This%20tutorial%20is%20about%20how%20to%20implement%20SQL-like%20group%20by%20queries%20using%20the%20Django%20ORM.%20It%E2%80%99s%20a%20fairly%20common%20operation,specially%20for%20those%20who%20are%20familiar%20with%20SQL.%20The%20Django%20ORM%20is%20actually%20an%20a...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'how-to-create-group-by-queries.html';
+        this.page.identifier = '/tutorial/2016/12/06/how-to-create-group-by-queries';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tutorial/2016/12/06/how-to-create-group-by-queries.html",
+  "headline": "How to Create Group By Queries With Django ORM",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2016/12/featured-groupby.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2016-12-06T12:48:00+02:00",
+  "dateModified": "2016-12-06T12:48:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "This tutorial is about how to implement SQL-like group by queries using the Django ORM. It’s a fairly common operation,specially for those who are familiar with SQL. The Django ORM is actually an a..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2016/12/06/how-to-create-group-by-queries.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:46:01 GMT -->
+</html>

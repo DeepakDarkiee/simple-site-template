@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2017/08/20/how-to-use-celery-with-django.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:44:40 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Use Celery and RabbitMQ with Django</title>
+<meta name="description" content="Celery is an asynchronous task queue based on distributed message passing. Task queues are used as a strategy todistribute the workload between threads/machi...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="how-to-use-celery-with-django.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'how-to-use-celery-with-django.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="How to Use Celery and RabbitMQ with Django">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tutorial/2017/08/20/how-to-use-celery-with-django.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2017/08/thumbnail-celery.jpg">
+<meta property="og:description" content="Celery is an asynchronous task queue based on distributed message passing. Task queues are used as a strategy todistribute the workload between threads/machi...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2017-08-20T22:54:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Use Celery and RabbitMQ with Django">
+<meta name="twitter:description" content="Celery is an asynchronous task queue based on distributed message passing. Task queues are used as a strategy todistribute the workload between threads/machines. In this tutorial I will explain how...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2017/08/thumbnail-celery.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="celery">
+  
+    <meta property="article:tag" content="rabbitmq">
+  
+    <meta property="article:tag" content="async">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tutorial
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Use Celery and RabbitMQ with Django</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Aug 20, 2017
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    10 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/tutorial/2017/08/20/how-to-use-celery-with-django">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="how-to-use-celery-with-django.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2017/08/featured-celery.jpg" alt="How to Use Celery and RabbitMQ with Django" class="featured-image">
+    
+      <small>(Picture: <a href="https://www.pexels.com/photo/usb-technology-green-microchip-57007/" target="_blank">https://www.pexels.com/photo/usb-technology-green-microchip-57007/</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>Celery is an asynchronous task queue based on distributed message passing. Task queues are used as a strategy to
+distribute the workload between threads/machines. In this tutorial I will explain how to install and setup Celery +
+RabbitMQ to execute asynchronous in a Django application.</p>
+
+<p>To work with Celery, we also need to install RabbitMQ because Celery requires an external solution to send and receive
+messages. Those solutions are called <strong>message brokers</strong>. Currently, Celery supports RabbitMQ, Redis, and Amazon SQS
+as message broker solutions.</p>
+
+<h5 id="table-of-contents">Table of Contents</h5>
+
+<ul>
+  <li><a href="#why-should-i-use-celery">Why Should I Use Celery?</a></li>
+  <li><a href="#installation">Installation</a>
+    <ul>
+      <li><a href="#installing-rabbitmq-on-ubuntu-1604">Installing RabbitMQ on Ubuntu 16.04</a></li>
+      <li><a href="#installing-rabbitmq-on-mac">Installing RabbitMQ on Mac</a></li>
+      <li><a href="#installing-rabbitmq-on-windows-and-other-oss">Installing RabbitMQ on Windows and Other OSs</a></li>
+    </ul>
+  </li>
+  <li><a href="#celery-basic-setup">Celery Basic Setup</a></li>
+  <li><a href="#creating-our-first-celery-task">Creating Our First Celery Task</a></li>
+  <li><a href="#starting-the-worker-process">Starting The Worker Process</a></li>
+  <li><a href="#managing-the-worker-process-in-production-with-supervisord">Managing The Worker Process in Production with Supervisord</a></li>
+  <li><a href="#further-reading">Further Reading</a></li>
+</ul>
+
+<hr />
+
+<h4 id="why-should-i-use-celery">Why Should I Use Celery?</h4>
+
+<p>Web applications works with request and response cycles. When the user access a certain URL of your application the
+Web browser send a <strong>request</strong> to your server. Django receive this request and do something with it. Usually it
+involves executing queries in the database, processing data. While Django does his thing and process the request, the
+user have to wait. When Django finalize its job processing the request, it sends back a <strong>response</strong> to the user who
+finally will see something.</p>
+
+<p>Ideally this request and response cycle should be fast, otherwise we would leave the user waiting for way too long.
+And even worse, our Web server can only serve a certain number of users at a time. So, if this process is slow, it can
+limit the amount of pages your application can serve at a time.</p>
+
+<p>For the most part we can work around this issue using cache, optimizing database queries, and so on. But there are some
+cases that theres no other option: the heavy work have to be done. A report page, export of big amount of data,
+video/image processing are a few examples of cases where you may want to use Celery.</p>
+
+<p>We don’t use Celery through the whole project, but only for specific tasks that are time-consuming. The idea here is to
+respond to the user as quick as possible, and pass the time-consuming tasks to the queue so to be executed in the
+background, and always keep the server ready to respond to new requests.</p>
+
+<hr />
+
+<h4 id="installation">Installation</h4>
+
+<p>The easiest way to install Celery is using pip:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install Celery</code></pre></figure>
+
+<p>Now we have to install RabbitMQ.</p>
+
+<h5 id="installing-rabbitmq-on-ubuntu-1604">Installing RabbitMQ on Ubuntu 16.04</h5>
+
+<p>To install it on a newer Ubuntu version is very straightforward:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">apt-get install -y erlang
+apt-get install rabbitmq-server</code></pre></figure>
+
+<p>Then enable and start the RabbitMQ service:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">systemctl <span class="nb">enable </span>rabbitmq-server
+systemctl start rabbitmq-server</code></pre></figure>
+
+<p>Check the status to make sure everything is running smooth:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">systemctl status rabbitmq-server</code></pre></figure>
+
+<h5 id="installing-rabbitmq-on-mac">Installing RabbitMQ on Mac</h5>
+
+<p>Homebrew is the most straightforward option:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">brew install rabbitmq</code></pre></figure>
+
+<p>The RabbitMQ scripts are installed into <code class="highlighter-rouge">/usr/local/sbin</code>. You can add it to your <code class="highlighter-rouge">.bash_profile</code> or <code class="highlighter-rouge">.profile</code>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">vim ~/.bash_profile</code></pre></figure>
+
+<p>Then add it to the bottom of the file:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/local/sbin</code></pre></figure>
+
+<p>Restart the terminal to make sure the changes are in effect.</p>
+
+<p>Now you can start the RabbitMQ server using the following command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">rabbitmq-server</code></pre></figure>
+
+<p><img src="../../../../media/2017/08/rabbitmq-server.png" alt="rabbitmq-server" /></p>
+
+<h5 id="installing-rabbitmq-on-windows-and-other-oss">Installing RabbitMQ on Windows and Other OSs</h5>
+
+<p>Unfortunately I don’t have access to a Windows computer to try things out, but you can find the
+<a href="https://www.rabbitmq.com/install-windows.html" target="_blank">installation guide for Windows on RabbitMQ’s Website</a>.</p>
+
+<p>For other operating systems, check the
+<a href="https://www.rabbitmq.com/download.html" target="_blank">Downloading and Installing RabbitMQ on their Website</a>.</p>
+
+<hr />
+
+<h4 id="celery-basic-setup">Celery Basic Setup</h4>
+
+<p>First, consider the following Django project named <strong>mysite</strong> with an app named <strong>core</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">mysite/
+ |-- mysite/
+ |    |-- core/
+ |    |    |-- migrations/
+ |    |    |-- templates/
+ |    |    |-- apps.py
+ |    |    |-- models.py
+ |    |    +-- views.py
+ |    |-- templates/
+ |    |-- __init__.py
+ |    |-- settings.py
+ |    |-- urls.py
+ |    +-- wsgi.py
+ |-- manage.py
+ +-- requirements.txt</code></pre></figure>
+
+<p>Add the <code class="highlighter-rouge">CELERY_BROKER_URL</code> configuration to the <strong>settings.py</strong> file:</p>
+
+<p><strong>settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">CELERY_BROKER_URL</span> <span class="o">=</span> <span class="s">'amqp://localhost'</span></code></pre></figure>
+
+<p>Alongside with the <strong>settings.py</strong> and <strong>urls.py</strong> files, let’s create a new file named <strong>celery.py</strong>.</p>
+
+<p><strong>celery.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">Celery</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s">'DJANGO_SETTINGS_MODULE'</span><span class="p">,</span> <span class="s">'mysite.settings'</span><span class="p">)</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Celery</span><span class="p">(</span><span class="s">'mysite'</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">config_from_object</span><span class="p">(</span><span class="s">'django.conf:settings'</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="s">'CELERY'</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">autodiscover_tasks</span><span class="p">()</span></code></pre></figure>
+
+<p>Now edit the <strong>__init__.py</strong> file in the project root:</p>
+
+<p><strong>__init__.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">.celery</span> <span class="kn">import</span> <span class="n">app</span> <span class="k">as</span> <span class="n">celery_app</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s">'celery_app'</span><span class="p">]</span></code></pre></figure>
+
+<p>This will make sure our Celery app is important every time Django starts.</p>
+
+<hr />
+
+<h4 id="creating-our-first-celery-task">Creating Our First Celery Task</h4>
+
+<p>We can create a file named <strong>tasks.py</strong> inside a Django app and put all our Celery tasks into this file. The Celery app
+we created in the project root will collect all tasks defined across all Django apps listed in the <code class="highlighter-rouge">INSTALLED_APPS</code>
+configuration.</p>
+
+<p>Just for testing purpose, let’s create a Celery task that generates a number of random User accounts.</p>
+
+<p><strong>core/tasks.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">string</span>
+
+<span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.utils.crypto</span> <span class="kn">import</span> <span class="n">get_random_string</span>
+
+<span class="kn">from</span> <span class="nn">celery</span> <span class="kn">import</span> <span class="n">shared_task</span>
+
+<span class="nd">@shared_task</span>
+<span class="k">def</span> <span class="nf">create_random_user_accounts</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">total</span><span class="p">):</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="s">'user_{}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">get_random_string</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span><span class="p">))</span>
+        <span class="n">email</span> <span class="o">=</span> <span class="s">'{}@example.com'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+        <span class="n">password</span> <span class="o">=</span> <span class="n">get_random_string</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span>
+        <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">email</span><span class="o">=</span><span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="n">password</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s">'{} random users created with success!'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">total</span><span class="p">)</span></code></pre></figure>
+
+<p>The important bits here are:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">from celery import shared_task
+
+@shared_task
+def name_of_your_function<span class="o">(</span>optional_param<span class="o">)</span>:
+    pass  <span class="c"># do something heavy</span></code></pre></figure>
+
+<p>Then I defined a form and a view to process my Celery task:</p>
+
+<p><strong>forms.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">django.core.validators</span> <span class="kn">import</span> <span class="n">MinValueValidator</span><span class="p">,</span> <span class="n">MaxValueValidator</span>
+
+<span class="k">class</span> <span class="nc">GenerateRandomUserForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">Form</span><span class="p">):</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">forms</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span>
+        <span class="n">validators</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">MinValueValidator</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+            <span class="n">MaxValueValidator</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+        <span class="p">]</span>
+    <span class="p">)</span></code></pre></figure>
+
+<p>This form expects a positive integer field between 50 and 500. It looks like this:</p>
+
+<p><img src="../../../../media/2017/08/generate.png" alt="Generate random users form" /></p>
+
+<p>Then my view:</p>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.auth.models</span> <span class="kn">import</span> <span class="n">User</span>
+<span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">messages</span>
+<span class="kn">from</span> <span class="nn">django.views.generic.edit</span> <span class="kn">import</span> <span class="n">FormView</span>
+<span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">redirect</span>
+
+<span class="kn">from</span> <span class="nn">.forms</span> <span class="kn">import</span> <span class="n">GenerateRandomUserForm</span>
+<span class="kn">from</span> <span class="nn">.tasks</span> <span class="kn">import</span> <span class="n">create_random_user_accounts</span>
+
+<span class="k">class</span> <span class="nc">GenerateRandomUserView</span><span class="p">(</span><span class="n">FormView</span><span class="p">):</span>
+    <span class="n">template_name</span> <span class="o">=</span> <span class="s">'core/generate_random_users.html'</span>
+    <span class="n">form_class</span> <span class="o">=</span> <span class="n">GenerateRandomUserForm</span>
+
+    <span class="k">def</span> <span class="nf">form_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">form</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">'total'</span><span class="p">)</span>
+        <span class="n">create_random_user_accounts</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">total</span><span class="p">)</span>
+        <span class="n">messages</span><span class="o">.</span><span class="n">success</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">,</span> <span class="s">'We are generating your random users! Wait a moment and refresh this page.'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'users_list'</span><span class="p">)</span></code></pre></figure>
+
+<p>The important bit is here:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">create_random_user_accounts</span><span class="o">.</span><span class="n">delay</span><span class="p">(</span><span class="n">total</span><span class="p">)</span></code></pre></figure>
+
+<p>Instead of calling the <code class="highlighter-rouge">create_random_user_accounts</code> directly, I’m calling <code class="highlighter-rouge">create_random_user_accounts.delay()</code>. This
+way we are instructing Celery to execute this function in the background.</p>
+
+<p>Then Django keep processing my view <code class="highlighter-rouge">GenerateRandomUserView</code> and returns smoothly to the user.</p>
+
+<p>But before you try it, check the next section to learn how to start the Celery worker process.</p>
+
+<hr />
+
+<h4 id="starting-the-worker-process">Starting The Worker Process</h4>
+
+<p>Open a new terminal tab, and run the following command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">celery -A mysite worker -l info</code></pre></figure>
+
+<p>Change <strong>mysite</strong> to the name of your project. The result is something like this:</p>
+
+<p><img src="../../../../media/2017/08/celery.png" alt="Celery Worker" /></p>
+
+<p>Now we can test it. I submitted <strong>500</strong> in my form to create 500 random users.</p>
+
+<p>The response is immediate:</p>
+
+<p><img src="../../../../media/2017/08/random-1.png" alt="Random" /></p>
+
+<p>Meanwhile, checking the Celery Worker Process:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>2017-08-20 19:11:17,485: INFO/MainProcess] Received task:
+mysite.core.tasks.create_random_user_accounts[8799cfbd-deae-41aa-afac-95ed4cc859b0]</code></pre></figure>
+
+<p>Then after a few seconds, if we refresh the page, the users are there:</p>
+
+<p><img src="../../../../media/2017/08/random-2.png" alt="Random" /></p>
+
+<p>If we check the Celery Worker Process again, we can see it completed the execution:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>2017-08-20 19:11:45,721: INFO/ForkPoolWorker-2] Task
+mysite.core.tasks.create_random_user_accounts[8799cfbd-deae-41aa-afac-95ed4cc859b0] succeeded <span class="k">in
+</span>28.225658523035236s: <span class="s1">'500 random users created with success!'</span></code></pre></figure>
+
+<hr />
+
+<h4 id="managing-the-worker-process-in-production-with-supervisord">Managing The Worker Process in Production with Supervisord</h4>
+
+<p>If you are deploying your application to a VPS like <a href="https://m.do.co/c/074832454ff1" target="_blank" rel="nofollow">DigitalOcean</a>
+you will want to run the worker process in the background. In my tutorials I like to use Supervisord to manage the
+Gunicorn workers, so it’s usually a nice fit with Celery.</p>
+
+<p>First install it (on Ubuntu):</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo apt-get install supervisor</code></pre></figure>
+
+<p>Then create a file named <strong>mysite-celery.conf</strong> in the folder: <strong>/etc/supervisor/conf.d/mysite-celery.conf</strong>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="o">[</span>program:mysite-celery]
+<span class="nb">command</span><span class="o">=</span>/home/mysite/bin/celery worker -A mysite --loglevel<span class="o">=</span>INFO
+<span class="nv">directory</span><span class="o">=</span>/home/mysite/mysite
+<span class="nv">user</span><span class="o">=</span>nobody
+<span class="nv">numprocs</span><span class="o">=</span>1
+<span class="nv">stdout_logfile</span><span class="o">=</span>/home/mysite/logs/celery.log
+<span class="nv">stderr_logfile</span><span class="o">=</span>/home/mysite/logs/celery.log
+<span class="nv">autostart</span><span class="o">=</span><span class="nb">true
+</span><span class="nv">autorestart</span><span class="o">=</span><span class="nb">true
+</span><span class="nv">startsecs</span><span class="o">=</span>10
+
+; Need to <span class="nb">wait </span><span class="k">for </span>currently executing tasks to finish at shutdown.
+; Increase this <span class="k">if </span>you have very long running tasks.
+stopwaitsecs <span class="o">=</span> 600
+
+<span class="nv">stopasgroup</span><span class="o">=</span><span class="nb">true</span>
+
+; Set Celery priority higher than default <span class="o">(</span>999<span class="o">)</span>
+; so, <span class="k">if </span>rabbitmq is supervised, it will start first.
+<span class="nv">priority</span><span class="o">=</span>1000</code></pre></figure>
+
+<p>In the example below, I’m considering my Django project is inside a virtual environment. The path to my virtual
+environment is <strong>/home/mysite/</strong>.</p>
+
+<p>Now reread the configuration and add the new process:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">sudo supervisorctl reread
+sudo supervisorctl update</code></pre></figure>
+
+<p>If you are not familiar with deploying Django to a production server and working with Supervisord, maybe this part
+will make more sense if you check this post from the blog:
+<a href="../../../2016/10/14/how-to-deploy-to-digital-ocean.html">How to Deploy a Django Application to Digital Ocean</a>.</p>
+
+<hr />
+
+<h4 id="further-reading">Further Reading</h4>
+
+<p>Those are the basic steps. I hope this helped you to get started with Celery. I will leave here a few useful references
+to keep learning about Celery:</p>
+
+<ul>
+  <li><a href="http://docs.celeryproject.org/en/latest/getting-started/next-steps.html#calling-tasks" target="_blank">Calling Tasks</a></li>
+  <li><a href="http://docs.celeryproject.org/en/latest/getting-started/next-steps.html#calling-tasks" target="_blank">Celery Configuration and Defaults</a></li>
+  <li><a href="https://github.com/celery/celery" target="_blank">Celery GitHub Repository</a></li>
+</ul>
+
+<p>And as usual, the code examples used in this tutorial is available on GitHub:</p>
+
+<p><a href="https://github.com/sibtc/django-celery-example" target="_blank">github.com/sibtc/django-celery-example</a></p>
+
+<hr />
+
+<h4 id="referral-link">Referral Link</h4>
+
+<p>If you want to try this setup in a Ubuntu cloud server, you can use this referral link to get a
+<a href="https://m.do.co/c/074832454ff1" target="_blank" rel="nofollow">$10 free credit from Digital Ocean</a>.</p>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../2018/08/27/how-to-create-custom-django-management-commands.html">
+<img src="../../../../media/2018/08/featured-commands.jpg" alt="How to Create Custom Django Management Commands" title="How to Create Custom Django Management Commands">
+How to Create Custom Django Management Commands
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/celery/index.html"><span class="tag">celery</span></a>
+    
+      <a href="../../../../tag/rabbitmq/index.html"><span class="tag">rabbitmq</span></a>
+    
+      <a href="../../../../tag/async/index.html"><span class="tag">async</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2xgggSB"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Use%20Celery%20and%20RabbitMQ%20with%20Django&amp;url=http://sibt.co/2xg8jgn&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2xgggSv"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2xgy9AB&amp;title=How%20to%20Use%20Celery%20and%20RabbitMQ%20with%20Django&amp;summary=Celery%20is%20an%20asynchronous%20task%20queue%20based%20on%20distributed%20message%20passing.%20Task%20queues%20are%20used%20as%20a%20strategy%20todistribute%20the%20workload%20between%20threads/machines.%20In%20this%20tutorial%20I%20will%20explain%20how...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'how-to-use-celery-with-django.html';
+        this.page.identifier = '/tutorial/2017/08/20/how-to-use-celery-with-django';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tutorial/2017/08/20/how-to-use-celery-with-django.html",
+  "headline": "How to Use Celery and RabbitMQ with Django",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2017/08/featured-celery.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2017-08-20T22:54:00+03:00",
+  "dateModified": "2017-08-20T22:54:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "Celery is an asynchronous task queue based on distributed message passing. Task queues are used as a strategy todistribute the workload between threads/machines. In this tutorial I will explain how..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2017/08/20/how-to-use-celery-with-django.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:44:45 GMT -->
+</html>

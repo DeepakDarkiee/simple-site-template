@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/article/2016/10/03/effort-estimation.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:39:12 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>Estimating the Effort of Development of a Django Application</title>
+<meta name="description" content="This is a very common problem that every developer will eventually face at some point. Your boss or a client comes witha set of requirements and asks you to ...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="effort-estimation.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'effort-estimation.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="Estimating the Effort of Development of a Django Application">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/article/2016/10/03/effort-estimation.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2016/10/featured-estimation.jpg">
+<meta property="og:description" content="This is a very common problem that every developer will eventually face at some point. Your boss or a client comes witha set of requirements and asks you to ...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2016-10-03T10:44:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="Estimating the Effort of Development of a Django Application">
+<meta name="twitter:description" content="This is a very common problem that every developer will eventually face at some point. Your boss or a client comes witha set of requirements and asks you to estimate how long it will take to implem...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2016/10/featured-estimation.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="effort">
+  
+    <meta property="article:tag" content="estimation">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      article
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">Estimating the Effort of Development of a Django Application</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Oct 3, 2016
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    15 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/article/2016/10/03/effort-estimation">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="effort-estimation.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2016/10/featured-estimation.jpg" alt="Estimating the Effort of Development of a Django Application" class="featured-image">
+    
+      <small>(Picture: <a href="https://www.pexels.com/photo/sky-wind-north-weather-vane-36882/" target="_blank">https://www.pexels.com/photo/sky-wind-north-weather-vane-36882/</a>)</small>
+    
+  </div>
+
+
+            <article>
+              <p>This is a very common problem that every developer will eventually face at some point. Your boss or a client comes with
+a set of requirements and asks you to estimate how long it will take to implement them.</p>
+
+<p>How to precisely (as possible) estimate the effort of development of a Web application? That’s a really tough question.
+People in the academia have being conducting research on that topic for at least the past 40 years, and yet we fail
+to get it right.</p>
+
+<p>I wanted to write a little bit on that subject to try to highlight the challenges of making an accurate estimation and
+perhaps share some of my experience about it.</p>
+
+<p><a href="http://xkcd.com/612/" target="_blank"><img src="../../../../media/2016/10/estimation.png" alt="Estimation" /></a></p>
+
+<hr />
+
+<h4 id="the-chaos-report-2015">The Chaos Report 2015</h4>
+
+<p>Every year the <a href="https://www.standishgroup.com/" target="_blank">Standish Group</a> conducts a survey to investigate the
+cause of failure of software projects. In 2015, out of the 8,380 investigated projects, 16.2% (success) was delivered
+on-time and on-budget, 52.7% (challenged) faced challenges and was delivered over-budget and over the time estimate.
+The other 31.1% (impaired) was canceled at some point during the development cycle.</p>
+
+<p>Check this numbers in relation to the time overruns of the original estimates, from the <a href="../../../../media/2016/10/chaos-report.pdf">Chaos Report 2015</a>:</p>
+
+<blockquote>
+  <p><strong>Time Overruns</strong><br />
+For the same combined challenged and impaired projects, over one-third also experienced time overruns of 200 to 300%.
+The average overrun is 222% of the original time estimate. For large companies, the average is 230%; for medium
+companies, the average is 202%; and for small companies, the average is 239%.</p>
+</blockquote>
+
+<table>
+  <thead>
+    <tr>
+      <th>Time Overruns</th>
+      <th>% of Responses</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Under 20%</td>
+      <td>13.9%</td>
+    </tr>
+    <tr>
+      <td>21 - 50%</td>
+      <td>18.3%</td>
+    </tr>
+    <tr>
+      <td>51 - 100%</td>
+      <td>20.0%</td>
+    </tr>
+    <tr>
+      <td>101 - 200%</td>
+      <td>35.5%</td>
+    </tr>
+    <tr>
+      <td>201 - 400%</td>
+      <td>11.2%</td>
+    </tr>
+    <tr>
+      <td>Over 400%</td>
+      <td>1.1%</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Scary, right?</p>
+
+<p>Now, why does that happen? Mainly because every estimation involves uncertainty. An <em>estimation</em> is different from the
+<em>reality</em> because of the <em>uncertainties</em>. Make no mistake, every estimation will fail.</p>
+
+<p>The software domain is plagued by uncertainties: incomplete requirements, volatile requirements, incomplete
+understanding of the scope, human aspects, external factors, etc.</p>
+
+<p>We can’t help ourselves, we are not very good on forecasting things we don’t know.</p>
+
+<hr />
+
+<h4 id="how-uncertainty-behaves">How Uncertainty Behaves</h4>
+
+<p>There is an important aspect on how the uncertainty behaves. And this can help us a lot when estimating the effort.
+Let’s get back to the Chaos Report’s numbers. Out of the 8,380 applications analyzed by the Standish Group, 16.2% of
+them was delivered on time (possibly some of them took less effort than expected), while 83.8% required more effort
+than expected (when some of them wasn’t even concluded).</p>
+
+<p>To illustrate that phenomena, I will quote the article <a href="https://www.cprime.com/2010/02/how-uncertainty-works-by-kevin-thompson-phd-pmp-csp/">How Uncertainty Works</a>
+published by Kevin Thompson:</p>
+
+<blockquote>
+  <p>There is more room, in a mathematical sense, for work to grow beyond expectation than to shrink below expectation.</p>
+</blockquote>
+
+<p>Mathematically speaking, the effort the accomplish one task can’t go below zero hours. But in the other hand, it can
+grow…</p>
+
+<p><img src="../../../../media/2016/10/to-infinity-and-beyond.jpg" alt="To Infinity and Beyond" /></p>
+
+<p>Sorry for the silly joke. Anyway, check the example Kevin Thompson gave in his article:</p>
+
+<blockquote>
+  <p>Assume we estimate this work at three days. The actual time may be more than three days over this estimate, but
+cannot be more than three days under the estimate! <br />
+In mathematical terms, we cannot estimate a task as requiring
+“X plus or minus Y days,” because the estimate becomes meaningless if Y is greater than X. What we can do is replace
+the concept of an increment of uncertainty with that of an uncertainty factor, F. This means that we think that X is
+the most likely duration, but the range of values is between X divided by F, and X times F. For example, suppose we
+estimate “Paint Bedroom” at 3 days, with an uncertainty factor of 2.<br /><br />
+The most likely case is 3 days.<br />
+The best case is 1.5 days, which is 1.5 days under the estimate.<br />
+The worst case is 6 days, which is 3 days over the estimate.</p>
+</blockquote>
+
+<p>I think this simple example illustrates well the concept.</p>
+
+<p>Besides that, still, why are we so bad at making estimations? When it comes to estimating the effort of software
+development, we are over-optimistic. This is just one of the cognitive bias that affect our work.</p>
+
+<hr />
+
+<h4 id="the-cognitive-bias-in-software-engineering">The Cognitive Bias in Software Engineering</h4>
+
+<p>Actually, I know very little about that subject. But the little I read about it made lots of sense for me. Some of my
+collegues at the university study this subject in great detail, and listening to one of their presentations last year
+was the first time I came across that subject. And I thought it was fascinating.</p>
+
+<p>I grabbed the information below from a great presentation by <a href="https://twitter.com/juliaclavien">Julia Clavien</a> on <a href="https://vimeo.com/148311485">Cognitive Bias in Software Development</a>.</p>
+
+<p>So, what’s a Cognitive Bias?</p>
+
+<blockquote>
+  <p><strong>Cognitive Bias</strong><br />
+Systematic <strong>errors in judgment and decision making</strong> common to all human beings.<br />
+– Daniel Kahneman</p>
+</blockquote>
+
+<h5 id="the-planning-fallacy">The Planning Fallacy</h5>
+
+<p>The tendency of individuals to display an <strong>optimism bias</strong> and <strong>underestimate the time and resource</strong> required to
+complete a project.</p>
+
+<p><img src="../../../../media/2016/10/plan-reality.gif" alt="The Plan vs. Reality" /></p>
+
+<h5 id="the-known-knowns-known-unknowns-and-unknown-unknowns">The Known Knowns, Known Unknowns and Unknown Unknowns</h5>
+
+<p>The plan is usually very different from the reality because of the difficulties to estimate what we don’t know, and even
+worse, to estimate things we don’t know we don’t know.</p>
+
+<blockquote>
+  <p>There are known knowns. These are things we know that we know. There are known unknowns. That is to say, there are
+things that we know we don’t know. But there are also unknown unknowns. There are things we don’t know we don’t know.<br />
+– Donald Rumsfeld</p>
+</blockquote>
+
+<p>On the Wikipedia I found a very interesting citation of Jørgensen and Grimstad’s work, <a href="https://www.simula.no/file/simulase299pdf/download">The Impact of Irrelevant and Misleading Information on Software Development Effort Estimates: A Randomized Controlled Field Experiment</a>:</p>
+
+<ul>
+  <li>It’s easy to estimate what you know.</li>
+  <li>It’s hard to estimate what you know you don’t know. (known unknowns)</li>
+  <li>It’s very hard to estimate things that you don’t know you don’t know. (unknown unknowns)</li>
+</ul>
+
+<hr />
+
+<h4 id="minimizing-the-problems">Minimizing the Problems</h4>
+
+<p>Let’s summarize what we have so far:</p>
+
+<ul>
+  <li>Estimation is different from reality because of uncertainty;</li>
+  <li>There is more room for work to grow beyond expectation than to shrink below expectation;</li>
+  <li>We have the tendency to be over-optimistic when it comes to estimate;</li>
+  <li>It’s hard to estimate what we don’t know.</li>
+</ul>
+
+<p>It is all about uncertainty. We certainly can’t eliminate it, but sure thing we can reduce it.</p>
+
+<h5 id="decompose-the-problem">Decompose the Problem</h5>
+
+<p>Decompose the tasks into smaller ones. Try to look at them in great detail. Think about the underlying implications
+of the implementation of a given requirement.</p>
+
+<p>Let’s say we have a task to implement a <strong>Password reset functionality</strong>.</p>
+
+<p>We can decompose this task into several smaller tasks, and then estimate the effort of the small tasks. Naturally,
+putting them all together would give us the overall estimation of the initial task.</p>
+
+<ul>
+  <li>Create the HTML templates</li>
+  <li>Generate a one-time-use password reset link</li>
+  <li>Implement a view to process the password change request</li>
+  <li>Create the password reset email template</li>
+  <li>Add a re-captcha to prevent abuse</li>
+</ul>
+
+<p>The challenge here is to keep the smaller tasks in a level of granularity that actually makes sense, there is no point
+in reducing the size below a level where the relative uncertainty does not improve.</p>
+
+<p>As stated by Kevin Thompson, the important thing is to pick a granularity that (1) enables a tolerable level of
+uncertainty, and (2) produces a set of things to estimate that is small enough to be practical.</p>
+
+<h5 id="the-changing-requirements">The Changing Requirements</h5>
+
+<p>It is what it is. That’s what requirements do. They change. All the time. If they don’t change during the development,
+they will during the usage.</p>
+
+<p>There is only one circumstance where the requirements won’t change: It is when the software is no longer being used.</p>
+
+<p>Now, repeat after me:</p>
+
+<blockquote>
+  <p><em style="font-size: 125%; font-weight: 300">The requirements will change and I will not cry about that.</em></p>
+</blockquote>
+
+<p>What we can do about it? Deliver fast. You certainly have at least heard about Scrum, Minimum Viable Product (MVP) or Agile
+Development before.</p>
+
+<p>Break the whole project into small valuable deliverables. Get the client involved. Learn faster. The development of a
+software product should be dynamic.</p>
+
+<p>Besides all the benefits of a MVP, it will enable a more accurate estimation, because you will be dealing with a
+small chunk of the whole problem, and you will also be learning faster about the requirements and the domain.</p>
+
+<p><img src="../../../../media/2016/10/minimal-viable-product-henrik-kniberg.png" alt="Minimal Viable Product" /></p>
+
+<p>I know I’m deviating a little bit from the original subject of this article, but the point is: it is easier to give a
+better estimate when the scope is small.</p>
+
+<p>Your client will always need an overall estimation. After all, they need to plan the schedule and the budget. Besides,
+there are many factors to take into account when planning a release: the time-to-market, the return on investment, the
+end-user needs, etc.</p>
+
+<p>You can always give an overall estimation. But agree with the client that it’s an imperfect and error-prone estimation.
+Decompose the requirements into several small and <em>valuable deliverables</em>. Smaller scope means better estimate. After
+each interaction, each delivery, review the requirements with the client and update the overall estimation.</p>
+
+<p>Without mentioning it will improve the client’s understanding of the software needs. Also, they will eventually get to
+know some of the technical challenges.</p>
+
+<p>Despite all the effort you are putting to make things work, that’s how the client will perceive you and your work:</p>
+
+<p><img src="../../../../media/2016/10/monkey.jpg" alt="You" /></p>
+
+<p>Haha! Got the monkey idea from Julia Clavien’s presentation on Cognitive Bias in Software Development.</p>
+
+<h5 id="its-not-only-about-code">It’s Not Only About Code</h5>
+
+<p>Sometimes when we are doing estimates, it is common that we forget to take into account the time to write
+documentation, unit tests, functional tests, and so on.</p>
+
+<p>Bear in mind it is not only about code. And also important to note, the development estimate is different from a
+project estimate.</p>
+
+<h5 id="cope-with-the-uncertainties">Cope With the Uncertainties</h5>
+
+<p>After reducing the level of uncertainty to a minimum practical level, it’s time to cope with the remaining uncertainty.</p>
+
+<p>If it is a project with a real fixed scope, the client deeply understands what he wants to be done, ideally you
+already have some proof of concepts and prototypes – what you want to do is to add a buffer time to the schedule.</p>
+
+<p>How much is enough depends. Depends on how big, what’s the complexity of the project, your experience, how familiar you
+are with the domain.</p>
+
+<blockquote>
+  <p>Ask developers about the time they will take to implement the features (T). Multiply it by 2.5. If it is a very complex algorithmic type project multiply it by 3.0.<br /><br />
+In my experience that’s a pretty good approximation for total project time. Usually coding time is only 40% of total project time.<br /><br />
+<a href="http://nitinbhide.blogspot.com/" target="_blank">Nitin Bhide</a><br />
+Thursday, March 25, 2004<br />
+Reference: <a href="http://discuss.fogcreek.com/askjoel/default.asp?cmd=show&amp;ixPost=4164">http://discuss.fogcreek.com/askjoel/default.asp?cmd=show&amp;ixPost=4164</a></p>
+</blockquote>
+
+<p>Now, if we compare with the data from Chaos Report 2015, where the average overrun is 222% of the original time
+estimate. The numbers suggested by Nitin Bhide are about right.</p>
+
+<hr />
+
+<h4 id="hows-a-django-application-different">How’s a Django Application Different?</h4>
+
+<p>Well, depending on the effort estimation technique you are using, a Django application isn’t that different at all.
+For example, some agile estimating techniques use the concept of <em>velocity</em>. First you estimate the size of the
+features to be implemented. Then initially you try to guess the team’s velocity. After a first iteration of
+development, you are able to calculate the team’s velocity. Then the estimation of the remaining features/requirements
+are adjusted, based on the actual team’s velocity.</p>
+
+<p>So this velocity concept will eventually be impacted by the team’s experience, the framework that’s being used (Django
+ir our case) and all other technologies being used in the development.</p>
+
+<p>Nevertheless, I like to take a few factors into account when estimating the effort of the Django applications I
+develop. It is important to have a look in all the Python/Django Ecosystem to better understand what you can reuse,
+what can be integrated and what will need to be developed from scratch.</p>
+
+<h5 id="using-built-in-django-apps">Using Built-in Django Apps</h5>
+
+<p>Take a look at the requirements list and first try to think of what can be used out-of-the-box? That is, you can simply
+use what the Django framework offers as it is.</p>
+
+<p>Some examples are:</p>
+
+<ul>
+  <li>Authentication system
+    <ul>
+      <li>Login</li>
+      <li>Logout</li>
+      <li>Password reset</li>
+      <li>Password strength checking</li>
+      <li>Permissions</li>
+      <li>User groups</li>
+    </ul>
+  </li>
+  <li>Flat pages app
+    <ul>
+      <li>Store flat HTML pages in the database (and manage from Admin interface)</li>
+    </ul>
+  </li>
+  <li>Redirects app
+    <ul>
+      <li>Store simple redirects in the database (and manage from Admin interface)</li>
+    </ul>
+  </li>
+  <li>Syndication feed framework
+    <ul>
+      <li>RSS</li>
+      <li>Atom</li>
+    </ul>
+  </li>
+  <li>Sitemap framework
+    <ul>
+      <li>Automatically generate sitemaps</li>
+    </ul>
+  </li>
+</ul>
+
+<h5 id="using-django-admin">Using Django Admin</h5>
+
+<p>Now a special case is the <strong>Django Admin</strong>. If the Django Admin interface can be used without many customizations, then
+that means you will be saving lots of hours of development.</p>
+
+<p>Keep in mind that the Django Admin is not meant to be used by the end-users of a website. So don’t try to push it as a
+“member’s area”. It is meant for the administrator of the website to manage its content.</p>
+
+<h5 id="django-apps-supported-by-the-django-foundation">Django Apps Supported by The Django Foundation</h5>
+
+<p>There are also the projects <a href="https://github.com/django" target="_blank">hosted by Django Foundation</a>:</p>
+
+<ul>
+  <li><a href="https://github.com/django/django-contrib-comments" target="_blank">Comments</a></li>
+  <li><a href="https://github.com/django/django-localflavor" target="_blank">Local Flavors</a></li>
+  <li><a href="https://github.com/django/django-formtools" target="_blank">Form Tools</a></li>
+  <li><a href="https://github.com/django/channels" target="_blank">Channels</a></li>
+</ul>
+
+<h5 id="using-third-party-packages">Using Third-Party Packages</h5>
+
+<p>After that, try to find Third-Party Packages that solve your problems. The <a href="https://djangopackages.org/" target="_blank">Django Packages</a>
+is a great resource. Also don’t forget to look at <a href="https://pypi.python.org/pypi" target="_blank">PyPI</a> and of course Google.</p>
+
+<p>Some apps that can speed the development process:</p>
+
+<ul>
+  <li><a href="http://www.django-rest-framework.org/" target="_blank">Django REST Framework</a></li>
+  <li><a href="http://psa.matiasaguirre.net/" target="_blank">Python Social Auth</a></li>
+  <li><a href="https://github.com/django-haystack/django-haystack" target="_blank">Django Haystack</a></li>
+  <li><a href="https://github.com/celery/django-celery/" target="_blank">Django Celery</a></li>
+</ul>
+
+<p>And many others.</p>
+
+<p>The key concept here is to explore. Even if you are not gonna use, it is good to know what is out there. It is also
+important to note that you shouldn’t deliberately just add new dependencies to the project. It is always a trade-off.
+You must check if the third party app offers a suitable license, if it is being maintained, if the community is active,
+and so on.</p>
+
+<h5 id="djangos-lower-level-api">Django’s Lower Level API</h5>
+
+<p>It is not only about installing packages and using stuff out-of-the-box. When estimating the effort in a Django
+project, try also to think how the framework can assist in the development.</p>
+
+<p>For example, here is a few resources that Django offers that saves lots of implementation time:</p>
+
+<ul>
+  <li>Pagination</li>
+  <li>Middlewares</li>
+  <li>Cache system</li>
+  <li>Messages framework</li>
+  <li>Forms</li>
+  <li>Django ORM</li>
+  <li>Email interface</li>
+  <li>Internationalization</li>
+  <li>Localization</li>
+  <li>Geographic framework</li>
+</ul>
+
+<p>The <strong>views</strong> are a big part of a Django application. If you are able to use the <strong>Generic Class-Based Views</strong>, it will
+certainly reduce the implementation time:</p>
+
+<ul>
+  <li>DetailView</li>
+  <li>ListView</li>
+  <li>FormView</li>
+  <li>CreateView</li>
+  <li>UpdateView</li>
+  <li>DeleteView</li>
+  <li>Date Hierarchy Views (ArchiveIndexView, YearArchiveView, MonthArchiveView, etc)</li>
+</ul>
+
+<h5 id="refer-to-past-django-projects">Refer to Past Django Projects</h5>
+
+<p>Actually when I’m developing a new Django application, I use my old projects all the time. I reuse lots of work I’ve
+done in the past. Actually I have a repository of easy-to-reuse snippets, like pagination controls HTMLs, some reusable
+template filters, etc. From time to time I share them in the blog.</p>
+
+<p>More than reusing existing resource, compare the new requirements to things you have built in the past. This will give
+you insights of how long each tasks takes to be implemented. Measure everything that’s possible. After the project is
+delivered, review your initial estimates. Update it with the actual time.</p>
+
+<p>Even if you are working on a personal project, estimate first the effort. It is a good exercise, and it will help you
+in future estimates.</p>
+
+<hr />
+
+<h4 id="conclusions">Conclusions</h4>
+
+<p>I wanted to share some of my experience with effort estimation and also some valuable resources. Mainly because for me,
+the worst thing is having to work under time-pressure because of bad estimations.</p>
+
+<p>So, the takeaway message of this post:</p>
+
+<ul>
+  <li>Every estimation will eventually fail;</li>
+  <li>Probably it will require more work than expected;</li>
+  <li>Don’t be so optimistic;</li>
+  <li>While it is easier to estimate things you know, it is hard to estimate the things you don’t know;</li>
+  <li>Things that you don’t know you don’t know will happen, and it will affect your schedule;</li>
+  <li>Always add a time buffer to your estimates;</li>
+  <li>Break down big requirements so you can minimize the level of uncertainty;</li>
+  <li>Try to work with smaller scopes;</li>
+  <li>It’s not only about code, consider also the time to create documentation and testing;</li>
+  <li>The team experience and knowledge about the development tools and resources are very important!</li>
+</ul>
+
+<p>I hope you have enjoyed this post, and found it somehow helpful. If you want to discuss further, please leave a
+comment below.</p>
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/effort/index.html"><span class="tag">effort</span></a>
+    
+      <a href="../../../../tag/estimation/index.html"><span class="tag">estimation</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mSKbxI"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Estimating%20the%20Effort%20of%20Development%20of%20a%20Django%20Application&amp;url=http://sibt.co/2n2Wt75&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2ndEDz2"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nrtU4i&amp;title=Estimating%20the%20Effort%20of%20Development%20of%20a%20Django%20Application&amp;summary=This%20is%20a%20very%20common%20problem%20that%20every%20developer%20will%20eventually%20face%20at%20some%20point.%20Your%20boss%20or%20a%20client%20comes%20witha%20set%20of%20requirements%20and%20asks%20you%20to%20estimate%20how%20long%20it%20will%20take%20to%20implem...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'effort-estimation.html';
+        this.page.identifier = '/article/2016/10/03/effort-estimation';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/article/2016/10/03/effort-estimation.html",
+  "headline": "Estimating the Effort of Development of a Django Application",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2016/10/featured-estimation.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2016-10-03T10:44:00+03:00",
+  "dateModified": "2016-10-03T10:44:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "This is a very common problem that every developer will eventually face at some point. Your boss or a client comes witha set of requirements and asks you to estimate how long it will take to implem..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/article/2016/10/03/effort-estimation.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:39:20 GMT -->
+</html>

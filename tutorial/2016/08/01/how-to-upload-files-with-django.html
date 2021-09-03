@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:47:26 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>How to Upload Files With Django</title>
+<meta name="description" content="In this tutorial you will learn the concepts behind Django file upload and how to handle file upload using model forms. In the end of this post you will find...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="how-to-upload-files-with-django.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'how-to-upload-files-with-django.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="How to Upload Files With Django">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2016-08-01-how-to-upload-files-with-django/featured.jpg">
+<meta property="og:description" content="In this tutorial you will learn the concepts behind Django file upload and how to handle file upload using model forms. In the end of this post you will find...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2016-08-01T12:05:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="How to Upload Files With Django">
+<meta name="twitter:description" content="In this tutorial you will learn the concepts behind Django file upload and how to handle file upload using model forms. In the end of this post you will find the source code of the examples I used ...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2016-08-01-how-to-upload-files-with-django/featured.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="forms">
+  
+    <meta property="article:tag" content="media">
+  
+    <meta property="article:tag" content="upload">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tutorial
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">How to Upload Files With Django</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Aug 1, 2016
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    6 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/tutorial/2016/08/01/how-to-upload-files-with-django">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="how-to-upload-files-with-django.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2016-08-01-how-to-upload-files-with-django/featured.jpg" alt="How to Upload Files With Django" class="featured-image">
+    
+  </div>
+
+
+            <article>
+              <div class="info">
+    <strong><i class="fa fa-info-circle"></i> Updated at Nov 2, 2018:</strong>
+    As suggested by <a href="https://twitter.com/fapolloner/status/760075954874150912" target="_blank">@fapolloner</a>, I've removed the manual
+    file handling. Updated the example using FileSystemStorage instead. Thanks!
+</div>
+
+<p>In this tutorial you will learn the concepts behind Django file upload and how to handle file upload using model forms.
+In the end of this post you will find the source code of the examples I used so you can try and explore.</p>
+
+<p>This tutorial is also available in video format:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/videoseries?list=PLLxk3TkuAYnpm24Ma1XenNeq1oxxRcYFT" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+
+<hr />
+
+<h4 id="the-basics-of-file-upload-with-django">The Basics of File Upload With Django</h4>
+
+<p>When files are submitted to the server, the file data ends up placed in <code class="highlighter-rouge">request.FILES</code>.</p>
+
+<p>It is mandatory for the HTML form to have the attribute <code class="highlighter-rouge">enctype="multipart/form-data"</code> set correctly. Otherwise the
+<code class="highlighter-rouge">request.FILES</code> will be empty.</p>
+
+<p>The form must be submitted using the <strong>POST</strong> method.</p>
+
+<p>Django have proper model fields to handle uploaded files: <code class="highlighter-rouge">FileField</code> and <code class="highlighter-rouge">ImageField</code>.</p>
+
+<p>The files uploaded to <code class="highlighter-rouge">FileField</code> or <code class="highlighter-rouge">ImageField</code> are not stored in the database but in the filesystem.</p>
+
+<p><code class="highlighter-rouge">FileField</code> and <code class="highlighter-rouge">ImageField</code> are created as a string field in the database (usually VARCHAR), containing the reference
+to the actual file.</p>
+
+<p>If you delete a model instance containing <code class="highlighter-rouge">FileField</code> or <code class="highlighter-rouge">ImageField</code>, Django will <strong>not</strong> delete the physical file,
+but only the reference to the file.</p>
+
+<p>The <code class="highlighter-rouge">request.FILES</code> is a dictionary-like object. Each key in <code class="highlighter-rouge">request.FILES</code> is the name from the <code class="highlighter-rouge">&lt;input type="file" name="" /&gt;</code>.</p>
+
+<p>Each value in <code class="highlighter-rouge">request.FILES</code> is an <code class="highlighter-rouge">UploadedFile</code> instance.</p>
+
+<p>You will need to set <code class="highlighter-rouge">MEDIA_URL</code> and <code class="highlighter-rouge">MEDIA_ROOT</code> in your project’s <strong>settings.py</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">MEDIA_URL</span> <span class="o">=</span> <span class="s">'/media/'</span>
+<span class="n">MEDIA_ROOT</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">BASE_DIR</span><span class="p">,</span> <span class="s">'media'</span><span class="p">)</span></code></pre></figure>
+
+<p>In the development server you may serve the user uploaded files (media) using <strong>django.contrib.staticfiles.views.serve()</strong>
+view.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.conf.urls.static</span> <span class="kn">import</span> <span class="n">static</span>
+
+<span class="n">urlpatterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="c"># Project url patterns...</span>
+<span class="p">]</span>
+
+<span class="k">if</span> <span class="n">settings</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">:</span>
+    <span class="n">urlpatterns</span> <span class="o">+=</span> <span class="n">static</span><span class="p">(</span><span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_URL</span><span class="p">,</span> <span class="n">document_root</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">MEDIA_ROOT</span><span class="p">)</span></code></pre></figure>
+
+<p>To access the <code class="highlighter-rouge">MEDIA_URL</code> in template you must add <code class="highlighter-rouge">django.template.context_processors.media</code> to your
+<code class="highlighter-rouge">context_processeors</code> inside the <code class="highlighter-rouge">TEMPLATES</code> config.</p>
+
+<hr />
+
+<h4 id="simple-file-upload">Simple File Upload</h4>
+
+<p>Following is a minimal file upload example using <code class="highlighter-rouge">FileSystemStorage</code>. Use it just to learn about the flow of the
+process.</p>
+
+<p><strong>simple_upload.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"post"</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span><span class="nt">&gt;</span>
+    {% csrf_token %}
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"file"</span> <span class="na">name=</span><span class="s">"myfile"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Upload<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+
+  {% if uploaded_file_url %}
+    <span class="nt">&lt;p&gt;</span>File uploaded at: <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"{{ uploaded_file_url }}"</span><span class="nt">&gt;</span>{{ uploaded_file_url }}<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+  {% endif %}
+
+  <span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'home' %}"</span><span class="nt">&gt;</span>Return to home<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+{% endblock %}</code></pre></figure>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.shortcuts</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.core.files.storage</span> <span class="kn">import</span> <span class="n">FileSystemStorage</span>
+
+<span class="k">def</span> <span class="nf">simple_upload</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span> <span class="ow">and</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">[</span><span class="s">'myfile'</span><span class="p">]:</span>
+        <span class="n">myfile</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">[</span><span class="s">'myfile'</span><span class="p">]</span>
+        <span class="n">fs</span> <span class="o">=</span> <span class="n">FileSystemStorage</span><span class="p">()</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">myfile</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">myfile</span><span class="p">)</span>
+        <span class="n">uploaded_file_url</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">url</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/simple_upload.html'</span><span class="p">,</span> <span class="p">{</span>
+            <span class="s">'uploaded_file_url'</span><span class="p">:</span> <span class="n">uploaded_file_url</span>
+        <span class="p">})</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/simple_upload.html'</span><span class="p">)</span></code></pre></figure>
+
+<hr />
+
+<h4 id="file-upload-with-model-forms">File Upload With Model Forms</h4>
+
+<p>Now, this is a way more convenient way. Model forms perform validation, automatically builds the absolute path for the
+upload, treats filename conflicts and other common tasks.</p>
+
+<p><strong>models.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+<span class="k">class</span> <span class="nc">Document</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">document</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">'documents/'</span><span class="p">)</span>
+    <span class="n">uploaded_at</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DateTimeField</span><span class="p">(</span><span class="n">auto_now_add</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span></code></pre></figure>
+
+<p><strong>forms.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django</span> <span class="kn">import</span> <span class="n">forms</span>
+<span class="kn">from</span> <span class="nn">uploads.core.models</span> <span class="kn">import</span> <span class="n">Document</span>
+
+<span class="k">class</span> <span class="nc">DocumentForm</span><span class="p">(</span><span class="n">forms</span><span class="o">.</span><span class="n">ModelForm</span><span class="p">):</span>
+    <span class="k">class</span> <span class="nc">Meta</span><span class="p">:</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">Document</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="s">'description'</span><span class="p">,</span> <span class="s">'document'</span><span class="p">,</span> <span class="p">)</span></code></pre></figure>
+
+<p><strong>views.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">model_form_upload</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">'POST'</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">DocumentForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">,</span> <span class="n">request</span><span class="o">.</span><span class="n">FILES</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">form</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="s">'home'</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">DocumentForm</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">'core/model_form_upload.html'</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s">'form'</span><span class="p">:</span> <span class="n">form</span>
+    <span class="p">})</span></code></pre></figure>
+
+<p><strong>model_form_upload.html</strong></p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">{% extends 'base.html' %}
+
+{% block content %}
+  <span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"post"</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span><span class="nt">&gt;</span>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Upload<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;/form&gt;</span>
+
+  <span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">"{% url 'home' %}"</span><span class="nt">&gt;</span>Return to home<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+{% endblock %}</code></pre></figure>
+
+<hr />
+
+<h4 id="about-the-filefield-uploadto-parameter">About the FileField upload_to Parameter</h4>
+
+<p>See the example below:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">document</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">'documents/'</span><span class="p">)</span></code></pre></figure>
+
+<p>Note the <code class="highlighter-rouge">upload_to</code> parameter. The files will be automatically uploaded to <code class="highlighter-rouge">MEDIA_ROOT/documents/</code>.</p>
+
+<p>It is also possible to do something like:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">document</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">'documents/</span><span class="si">%</span><span class="s">Y/</span><span class="si">%</span><span class="s">m/</span><span class="si">%</span><span class="s">d/'</span><span class="p">)</span></code></pre></figure>
+
+<p>A file uploaded today would be uploaded to <code class="highlighter-rouge">MEDIA_ROOT/documents/2016/08/01/</code>.</p>
+
+<p>The <code class="highlighter-rouge">upload_to</code> can also be a callable that returns a string. This callable accepts two parameters, <strong>instance</strong> and
+<strong>filename</strong>.</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">user_directory_path</span><span class="p">(</span><span class="n">instance</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+    <span class="c"># file will be uploaded to MEDIA_ROOT/user_&lt;id&gt;/&lt;filename&gt;</span>
+    <span class="k">return</span> <span class="s">'user_{0}/{1}'</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">instance</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="nb">id</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">MyModel</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">upload</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">FileField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="n">user_directory_path</span><span class="p">)</span></code></pre></figure>
+
+<hr />
+
+<h4 id="download-the-examples">Download the Examples</h4>
+
+<p>The code used in this post is available on <a href="https://github.com/sibtc/simple-file-upload">Github</a>.</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">git clone https://github.com/sibtc/simple-file-upload.git</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">pip install django</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate</code></pre></figure>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py runserver</code></pre></figure>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../2019/01/02/how-to-implement-grouped-model-choice-field.html">
+<img src="../../../../media/2019/01/featured-grouped.jpg" alt="How to Implement Grouped Model Choice Field" title="How to Implement Grouped Model Choice Field">
+How to Implement Grouped Model Choice Field
+</a>
+</div>
+<div class="four columns">
+<a href="../../../2018/11/28/advanced-form-rendering-with-django-crispy-forms.html">
+<img src="../../../../media/2018/11/featured-forms.jpg" alt="Advanced Form Rendering with Django Crispy Forms" title="Advanced Form Rendering with Django Crispy Forms">
+Advanced Form Rendering with Django Crispy Forms
+</a>
+</div>
+<div class="four columns">
+<a href="../../../2018/08/13/how-to-use-bootstrap-4-forms-with-django.html">
+<img src="../../../../media/2018/08/featured-crispy.jpg" alt="How to Use Bootstrap 4 Forms With Django" title="How to Use Bootstrap 4 Forms With Django">
+How to Use Bootstrap 4 Forms With Django
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/forms/index.html"><span class="tag">forms</span></a>
+    
+      <a href="../../../../tag/media/index.html"><span class="tag">media</span></a>
+    
+      <a href="../../../../tag/upload/index.html"><span class="tag">upload</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2mLtcu6"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=How%20to%20Upload%20Files%20With%20Django&amp;url=http://sibt.co/2nGoW3S&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2nwvS3h"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2nizUvs&amp;title=How%20to%20Upload%20Files%20With%20Django&amp;summary=In%20this%20tutorial%20you%20will%20learn%20the%20concepts%20behind%20Django%20file%20upload%20and%20how%20to%20handle%20file%20upload%20using%20model%20forms.%20In%20the%20end%20of%20this%20post%20you%20will%20find%20the%20source%20code%20of%20the%20examples%20I%20used%20...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'how-to-upload-files-with-django.html';
+        this.page.identifier = '/tutorial/2016/08/01/how-to-upload-files-with-django';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html",
+  "headline": "How to Upload Files With Django",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2016-08-01-how-to-upload-files-with-django/featured.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2016-08-01T12:05:00+03:00",
+  "dateModified": "2018-11-02T16:00:00+02:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "In this tutorial you will learn the concepts behind Django file upload and how to handle file upload using model forms. In the end of this post you will find the source code of the examples I used ..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tutorial/2016/08/01/how-to-upload-files-with-django.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:47:26 GMT -->
+</html>

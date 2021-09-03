@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tips/2017/08/11/django-tip-21-redirects-app.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:43:41 GMT -->
+<head>
+  <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="ir-site-verification-token" value="-233745807">
+<title>Django Tips #21 Using The Redirects App</title>
+<meta name="description" content="Django comes with a few optional apps that can easily be installed. One of those apps is the Redirects App, which isparticularly useful in the cases where yo...">
+<link href="https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="../../../../css/main71de.css?v=34">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="canonical" href="django-tip-21-redirects-app.html">
+<link rel="alternate" type="application/rss+xml" title="Simple is Better Than Complex" href="../../../../feed.xml" />
+<link rel="icon" type="image/png" href="../../../../favicon.png">
+<link rel="mask-icon" href="../../../../safari-pinned-tab.svg" color="#5bbad5">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="../../../../js/site7b30.js?v=4"></script>
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','http://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-42049022-10', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script>
+    $(function () {
+      $("#ad").on("click", "#carbonads .carbon-wrap a", function () {
+        var page_id = 'django-tip-21-redirects-app.html';
+        ga('send', 'event', 'carbonads', 'click', page_id, {
+          'transport': 'beacon'
+        });
+      });
+    });
+  </script>
+  <script>
+  !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+  n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+  document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1689711451348257');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" alt="PageView"
+  src="https://www.facebook.com/tr?id=1689711451348257&amp;ev=PageView&amp;noscript=1"
+  /></noscript>
+  <script data-ad-client="ca-pub-5430683801108011" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
+
+  <meta property="og:title" content="Django Tips #21 Using The Redirects App">
+<meta property="og:url" content="https://simpleisbetterthancomplex.com/tips/2017/08/11/django-tip-21-redirects-app.html">
+<meta property="og:image" content="https://simpleisbetterthancomplex.com/media/2017/08/thumbnail-tip21.jpg">
+<meta property="og:description" content="Django comes with a few optional apps that can easily be installed. One of those apps is the Redirects App, which isparticularly useful in the cases where yo...">
+<meta property="og:site_name" content="Simple is Better Than Complex">
+<meta property="og:locale" content="en_US">
+
+  <meta property="article:published_time" content="2017-08-11T19:10:00+03:00">
+  <meta property="article:author" content="https://facebook.com/vitorfs">
+
+<meta property="fb:admins" content="100000024295617">
+<meta property="fb:app_id" content="1645747765697865">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="vitorfs">
+<meta name="twitter:creator" content="vitorfs">
+<meta name="twitter:title" content="Django Tips #21 Using The Redirects App">
+<meta name="twitter:description" content="Django comes with a few optional apps that can easily be installed. One of those apps is the Redirects App, which isparticularly useful in the cases where you want to update some existing URLs with...">
+<meta name="twitter:image" content="https://simpleisbetterthancomplex.com/media/2017/08/thumbnail-tip21.jpg">
+<meta name="p:domain_verify" content="e262845cb18e4c68b0cff535a0eaea5d">
+  <meta property="og:type" content="article">
+  
+    <meta property="article:tag" content="django">
+  
+    <meta property="article:tag" content="contrib">
+  
+    <meta property="article:tag" content="redirects">
+  
+    <meta property="article:tag" content="fixture">
+  
+  <style type="text/css">
+    @media (min-width: 750px) {
+      body {
+        /*padding-top:50px!important;*/
+      }
+    }
+  </style>
+  <script src="http://m.servedby-buysellads.com/monetization.js"></script>
+</head>
+<body>
+  <div id="top" style="visibility: hidden"></div>
+<header>
+  <div class="container">
+    <ul class="menu menu-right">
+      <li class="menu-item">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span>
+        </a>
+      </li>
+      <li class="toggle-menu">
+        <a href="javascript:void(0);">
+          <span class="fa fa-bars"></span>
+        </a>
+      </li>
+    </ul>
+    <ul class="menu menu-left">
+      <li class="logo">
+        <a href="../../../../index.html" style="font-weight: 900">simple<span class="brand">is</span>better<span class="brand">than</span>complex</a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../index.html">
+          <span class="fa fa-home" style="margin-right: 3px"></span>
+          Home
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../archive/index.html">
+          <span class="fa fa-archive" style="margin-right: 3px"></span>
+          Articles
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../videos/index.html">
+          <span class="fa fa-video-camera" style="margin-right: 3px"></span>
+          Videos
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../series/index.html">
+          <span class="fa fa-book" style="margin-right: 3px"></span>
+          Series
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../snippets/index.html">
+          <span class="fa fa-code" style="margin-right: 3px"></span>
+          Snippets
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../sponsor/index.html">
+          <span class="fa fa-bullhorn" style="margin-right: 3px"></span>
+          Sponsor
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="../../../../feed.xml" target="_blank">
+          <span class="fa fa-rss" style="margin-right: 3px"></span>
+          RSS
+        </a>
+      </li>
+      <li class="menu-item">
+        <a href="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" class="brand" target="_blank">
+          <span class="fa fa-send" style="margin-right: 3px"></span> Subscribe
+        </a>
+      </li>
+      <li class="menu-item hidden-mobile">
+        <a href="../../../../search/index.html">
+          <span class="fa fa-search"></span> Search
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>
+
+  <!--p style="text-align:center;font-size:1.4rem;margin-top:2rem;margin-bottom:2rem;">
+    <span style="background-color:#1eaedb;color:#fff;border-radius:3px;padding:3px 5px;font-size:1.2rem;margin-right:5px;">Sponsored</span>
+    <a href="/sponsor/" rel="noopener nofollow">
+      By You? Learn more about sponsorship of the blog.
+    </a>
+  </p-->
+
+  <main>
+    <div class="container">
+      <div class="row">
+        <div class="ten offset-by-one columns content post">
+          <div class="card post-author">
+  <div class="author-picture">
+    <img src="../../../../img/picture.jpg" alt="Vitor Freitas">
+  </div>
+  <div class="author-info">
+    <p class="name">By <strong>Vitor Freitas</strong></p>
+    <a href="https://www.digitalocean.com/?refcode=074832454ff1&amp;utm_campaign=Referral_Invite&amp;utm_medium=Referral_Program&amp;utm_source=badge" class="powered-by-do">
+      <img src="https://web-platforms.sfo2.cdn.digitaloceanspaces.com/WWW/Badge 1.svg" alt="DigitalOcean Referral Badge">
+    </a>
+    <p class="bio">
+      I'm a passionate software developer and researcher. I write about Python, Django and Web Development on a weekly basis. <a href="../../../../about/index.html" rel="author">Read more</a>.
+    </p>
+    <p class="contact">
+      <a href="https://www.youtube.com/VitorFreitas" rel="me noopener" target="_blank" title="YouTube"><i class="fa fa-youtube-play"></i></a>
+      <a href="https://github.com/vitorfs" rel="me noopener" target="_blank" title="GitHub"><i class="fa fa-github"></i></a>
+      <a href="https://twitter.com/vitorfs" rel="me noopener" target="_blank" title="Twitter"><i class="fa fa-twitter"></i></a>
+      <a href="https://facebook.com/vitorfs" rel="me noopener" target="_blank" title="Facebook"><i class="fa fa-facebook-official"></i></a>
+      <a href="https://linkedin.com/in/vitorfs" rel="me noopener" target="_blank" title="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+      <a href="https://instagram.com/vitorfs" rel="me noopener" target="_blank" title="Instagram"><i class="fa fa-instagram"></i></a>
+      <a href="../../../../contact/index.html" title="Contact"><i class="fa fa-envelope"></i></a>
+    </p>
+  </div>
+  
+  
+  <div class="row">
+    <div class="six columns">
+      <div id="ad">
+        <script async type="text/javascript" src="http://cdn.carbonads.com/carbon.js?serve=CKYIEKQM&amp;placement=simpleisbetterthancomplexcom" id="_carbonads_js"></script>
+      </div>
+    </div>
+
+
+    <!--div class="six columns">
+      <div id="ad2">
+        <div id="sponsored">
+          <a href="/sponsor/">
+            <img src="/media/sponsored/ad.png" alt="Advertise Here">
+            <span>Reach 90k+ Django developers every month. Learn more about sponsorship of the blog.</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+        </div>
+
+        <div id="sponsored">
+          <a href="https://click.linksynergy.com/link?id=phY4769lVwA&offerid=507388.567828&type=2&murl=https%3A%2F%2Fwww.udemy.com%2Fcomplete-python-bootcamp%2F" target="_blank" rel="noopener nofollow">
+            <img border="0" src="https://udemy-images.udemy.com/course/480x270/567828_67d0.jpg" alt="Complete Python Bootcamp: Go from zero to hero in Python 3">
+            <span>Complete Python Bootcamp: Go from zero to hero in Python 3</span>
+          </a>
+          <small>
+            <a href="/sponsor/">Sponsored</a>
+          </small>
+          <img border="0" width="1" height="1" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=507388.567828&type=2&subid=0" alt="LinkSynergy">
+        </div>
+
+      </div>
+    </div-->
+
+
+  </div>
+  
+</div>
+
+
+          <p style="text-align:center;font-size:1.4rem;margin-bottom:4rem;">
+            <i class="fa fa-youtube-play" style="color:#ff0000!important;"></i> <a href="https://www.youtube.com/VitorFreitas?sub_confirmation=1" target="_blank">Subscribe to our YouTube Channel!</a>
+            <br>
+            <a href="https://youtu.be/Udf4VbtM92Y" target="_blank">[Jul 12, 2021] New Video: How to Use Django Rest Framework Permissions (DRF Tutorial - Part 7)</a>
+          </p>
+
+          <div class="card">
+            
+  <h5 class="post-category">
+    
+      tips
+    
+  </h5>
+  <hr class="dashed">
+
+<h3 class="post-title">Django Tips #21 Using The Redirects App</h3>
+<ul class="post-meta">
+  <li>
+    <i class="fa fa-calendar"></i> Aug 11, 2017
+  </li>
+  <li>
+    <i class="fa fa-clock-o"></i>
+    4 minutes read
+  </li>
+  <li>
+    <i class="fa fa-comments"></i>
+    <a href="#disqus_thread" data-disqus-identifier="/tips/2017/08/11/django-tip-21-redirects-app">comments</a>
+  </li>
+  <li>
+    <i class="fa fa-eye"></i>
+    <span class="ga-page-views" data-ga-identifier="django-tip-21-redirects-app.html"></span> views
+  </li>
+  
+  
+</ul>
+
+  <div class="post-featured-image">
+    <img src="../../../../media/2017/08/featured-tip21.jpg" alt="Django Tips #21 Using The Redirects App" class="featured-image">
+    
+  </div>
+
+
+            <article>
+              <p>Django comes with a few optional apps that can easily be installed. One of those apps is the Redirects App, which is
+particularly useful in the cases where you want to update some existing URLs without compromising your Website SEO or
+in any case avoid 404 errors.</p>
+
+<p>It basically works by creating a table in the database with two columns, <code class="highlighter-rouge">old_path</code> and <code class="highlighter-rouge">new_path</code>. Every time your
+Website raises a 404 error, the Redirects App will intercept the response and check this particular table for a match.
+If the requested URL is found in the column <code class="highlighter-rouge">old_path</code>, instead of raising the 404 error, it will redirect the user
+to the <code class="highlighter-rouge">new_path</code> returning a 301 code (Moved Permanently).</p>
+
+<p>Alright, so let’s see how it works in practice.</p>
+
+<hr />
+
+<h4 id="installation">Installation</h4>
+
+<p>The Django Redirects App requires the <code class="highlighter-rouge">sites</code> framework to be installed. You can install them by adding the apps to
+your project’s <code class="highlighter-rouge">INSTALLED_APPS</code>:</p>
+
+<p><strong>settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">INSTALLED_APPS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'django.contrib.admin'</span><span class="p">,</span>
+    <span class="s">'django.contrib.auth'</span><span class="p">,</span>
+    <span class="s">'django.contrib.contenttypes'</span><span class="p">,</span>
+    <span class="s">'django.contrib.sessions'</span><span class="p">,</span>
+    <span class="s">'django.contrib.messages'</span><span class="p">,</span>
+    <span class="s">'django.contrib.staticfiles'</span><span class="p">,</span>
+
+    <span class="s">'django.contrib.sites'</span><span class="p">,</span>
+    <span class="s">'django.contrib.redirects'</span><span class="p">,</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Set a <code class="highlighter-rouge">SITE_ID</code> so the <strong>sites</strong> framework works properly.</p>
+
+<p><strong>settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">SITE_ID</span> <span class="o">=</span> <span class="mi">1</span></code></pre></figure>
+
+<p>Now, add the redirects middleware to the <code class="highlighter-rouge">MIDDLEWARE</code> configuration:</p>
+
+<p><strong>settings.py</strong></p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="n">MIDDLEWARE</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s">'django.middleware.security.SecurityMiddleware'</span><span class="p">,</span>
+    <span class="s">'django.contrib.sessions.middleware.SessionMiddleware'</span><span class="p">,</span>
+    <span class="s">'django.middleware.common.CommonMiddleware'</span><span class="p">,</span>
+    <span class="s">'django.middleware.csrf.CsrfViewMiddleware'</span><span class="p">,</span>
+    <span class="s">'django.contrib.auth.middleware.AuthenticationMiddleware'</span><span class="p">,</span>
+    <span class="s">'django.contrib.messages.middleware.MessageMiddleware'</span><span class="p">,</span>
+    <span class="s">'django.middleware.clickjacking.XFrameOptionsMiddleware'</span><span class="p">,</span>
+
+    <span class="s">'django.contrib.redirects.middleware.RedirectFallbackMiddleware'</span><span class="p">,</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>Make sure you run the <code class="highlighter-rouge">migrate</code> command to create the required tables:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py migrate</code></pre></figure>
+
+<hr />
+
+<h4 id="usage">Usage</h4>
+
+<p>The easiest way to use is through Django Admin. If you are not currently using the Django Admin app, and it’s a one
+time thing (for example you are migrating a site from other platform), you can use just the Python API via command line
+or creating a fixture. If you are not using Django Admin and still wants to add it as a functionality for the site
+administrator, then you will have to create your own views for it.</p>
+
+<h5 id="using-the-redirects-app-with-django-admin">Using the Redirects App with Django Admin</h5>
+
+<p>It will be automatically added to the Django Admin interface.</p>
+
+<p><img src="../../../../media/2017/08/redirects-admin.png" alt="Redirects Django Admin" /></p>
+
+<p>You will see, it’s very straightforward. Just add the paths and it will do all the hard work for you.</p>
+
+<p><img src="../../../../media/2017/08/redirects-admin-create.png" alt="Redirects Django Admin" /></p>
+
+<p>We can test it by typing the old path in the browser and see if redirects correctly. Another way is examining the
+response body in the terminal. You can easily do it by using <code class="highlighter-rouge">curl</code>:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">curl --head 127.0.0.1:8000/tips/2017/08/11/django-tip-21.html
+
+HTTP/1.0 301 Moved Permanently
+Date: Fri, 11 Aug 2017 15:42:27 GMT
+Server: WSGIServer/0.2 CPython/3.6.1
+Content-Type: text/html; <span class="nv">charset</span><span class="o">=</span>utf-8
+Location: /tips/redirects-app/
+X-Frame-Options: SAMEORIGIN
+Content-Length: 0</code></pre></figure>
+
+<h5 id="using-the-redirects-app-with-the-python-api">Using the Redirects App with the Python API</h5>
+
+<p>You can manually create the redirect records interacting directly with the <code class="highlighter-rouge">Redirect</code> model. It lives in
+<a href="https://github.com/django/django/blob/master/django/contrib/redirects/models.py" target="_blank">django/contrib/redirects/models.py</a></p>
+
+<p>You can start a Python shell with your project models loaded by running the following command:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py shell</code></pre></figure>
+
+<p>Here is how you can create a few redirect entries:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.contrib.redirects.models</span> <span class="kn">import</span> <span class="n">Redirect</span>
+<span class="kn">from</span> <span class="nn">django.contrib.sites.models</span> <span class="kn">import</span> <span class="n">Site</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="kn">import</span> <span class="n">settings</span>
+
+<span class="n">site</span> <span class="o">=</span> <span class="n">Site</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pk</span><span class="o">=</span><span class="n">settings</span><span class="o">.</span><span class="n">SITE_ID</span><span class="p">)</span>
+
+<span class="n">Redirect</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">site</span><span class="o">=</span><span class="n">site</span><span class="p">,</span> <span class="n">old_path</span><span class="o">=</span><span class="s">'/index.html'</span><span class="p">,</span> <span class="n">new_path</span><span class="o">=</span><span class="s">'/'</span><span class="p">)</span>
+<span class="n">Redirect</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">site</span><span class="o">=</span><span class="n">site</span><span class="p">,</span> <span class="n">old_path</span><span class="o">=</span><span class="s">'/tips/2017/08/11/django-tip-21.html'</span><span class="p">,</span> <span class="n">new_path</span><span class="o">=</span><span class="s">'/tips/redirects-app/'</span><span class="p">)</span></code></pre></figure>
+
+<h5 id="using-the-redirects-app-with-fixtures">Using the Redirects App with Fixtures</h5>
+
+<p>Just create a JSON file following the template of the example below:</p>
+
+<p><strong>redirects-fixture.json</strong></p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"model"</span><span class="p">:</span><span class="s2">"redirects.redirect"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"fields"</span><span class="p">:{</span><span class="w">
+         </span><span class="nt">"site"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"old_path"</span><span class="p">:</span><span class="s2">"/tips/2017/08/11/django-tip-21.html"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"new_path"</span><span class="p">:</span><span class="s2">"/tips/redirects-app/"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">},</span><span class="w">
+   </span><span class="p">{</span><span class="w">
+      </span><span class="nt">"model"</span><span class="p">:</span><span class="s2">"redirects.redirect"</span><span class="p">,</span><span class="w">
+      </span><span class="nt">"fields"</span><span class="p">:{</span><span class="w">
+         </span><span class="nt">"site"</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"old_path"</span><span class="p">:</span><span class="s2">"/index.html"</span><span class="p">,</span><span class="w">
+         </span><span class="nt">"new_path"</span><span class="p">:</span><span class="s2">"/"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+   </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span></code></pre></figure>
+
+<p>Then you can load it directly to your database by running the command below:</p>
+
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">python manage.py loaddata redirects-fixtures.json
+Installed 2 object<span class="o">(</span>s<span class="o">)</span> from 1 fixture<span class="o">(</span>s<span class="o">)</span></code></pre></figure>
+
+<p>And that’s it!</p>
+
+
+            </article>
+            
+            <hr>
+            <div class="popular-posts related-posts">
+  <h4>Related Posts</h4>
+    <div class="row">
+      <div class="four columns">
+<a href="../../../../article/2021/07/08/what-you-should-know-about-the-django-user-model.html">
+<img src="../../../../media/2021/07/featured-user.jpg" alt="What You Should Know About The Django User Model" title="What You Should Know About The Django User Model">
+What You Should Know About The Django User Model
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../tutorial/2016/10/04/how-to-use-django-flatpages-app.html">
+<img src="../../../../media/2016/10/featured-flatpages.jpg" alt="How to Use Django's Flatpages App" title="How to Use Django's Flatpages App">
+How to Use Django's Flatpages App
+</a>
+</div>
+<div class="four columns">
+<a href="../../../../tutorial/2016/09/19/how-to-create-password-reset-view.html">
+<img src="../../../../media/2016/09/featured-reset.jpg" alt="How to Create a Password Reset View" title="How to Create a Password Reset View">
+How to Create a Password Reset View
+</a>
+</div>
+    </div>
+</div>
+
+
+            <hr class="dashed">
+<div class="row">
+  <div class="six columns post-tags" style="padding-top: 4px">
+    
+      <a href="../../../../tag/django/index.html"><span class="tag">django</span></a>
+    
+      <a href="../../../../tag/contrib/index.html"><span class="tag">contrib</span></a>
+    
+      <a href="../../../../tag/redirects/index.html"><span class="tag">redirects</span></a>
+    
+      <a href="../../../../tag/fixture/index.html"><span class="tag">fixture</span></a>
+    
+  </div>
+  <div class="six columns post-share">
+    <div class="social">
+  Share this post
+  <a href="http://vk.com/share.php?url=http://sibt.co/2xe6Ab2"
+     rel="nofollow"
+     target="_blank"
+     title="Share on VK">
+    <i class="fa fa-vk"></i>
+  </a>
+  <a href="https://twitter.com/intent/tweet?text=Django%20Tips%20%2321%20Using%20The%20Redirects%20App&amp;url=http://sibt.co/2xe58FT&amp;via=vitorfs&amp;related=vitorfs"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Twitter">
+    <i class="fa fa-twitter"></i>
+  </a>
+  <a href="https://www.facebook.com/sharer/sharer.php?app_id=1645747765697865&amp;u=http://sibt.co/2xecitH"
+     rel="nofollow"
+     target="_blank"
+     title="Share on Facebook">
+    <i class="fa fa-facebook"></i>
+  </a>
+  <a href="http://www.linkedin.com/shareArticle?mini=true&amp;url=http://sibt.co/2xewA66&amp;title=Django%20Tips%20%2321%20Using%20The%20Redirects%20App&amp;summary=Django%20comes%20with%20a%20few%20optional%20apps%20that%20can%20easily%20be%20installed.%20One%20of%20those%20apps%20is%20the%20Redirects%20App,%20which%20isparticularly%20useful%20in%20the%20cases%20where%20you%20want%20to%20update%20some%20existing%20URLs%20with...&amp;source=https://simpleisbetterthancomplex.com"
+     rel="nofollow"
+     target="_blank"
+     title="Share on LinkedIn">
+    <i class="fa fa-linkedin"></i>
+  </a>
+</div>
+
+  </div>
+</div>
+
+          </div>
+          <!--div style="text-align:center;margin-bottom:20px">
+
+            <a href="//namecheap.pxf.io/c/477033/408288/5618" target="_blank" rel="noopener nofollow">
+              <img src="//a.impactradius-go.com/display-ad/5618-408288" border="0" alt="Search and buy domains from Namecheap. Lowest prices!" width="728" height="90" style="max-width:100%!important" />
+            </a>
+            <img height="0" width="0" src="//namecheap.pxf.io/i/477033/408288/5618" alt="Impact Radius" style="position:absolute;visibility:hidden;" border="0" />
+
+
+            <a href="https://click.linksynergy.com/fs-bin/click?id=phY4769lVwA&offerid=467035.415&subid=0&type=4" target="_blank" rel="noopener nofollow">
+              <img border="0" alt="Deep Learning Specialization on Coursera" src="https://ad.linksynergy.com/fs-bin/show?id=phY4769lVwA&bids=467035.415&subid=0&type=4&gridnum=16" style="max-width:100%!important">
+            </a>
+
+          </div-->
+
+          <div class="card">
+            
+  <div id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'django-tip-21-redirects-app.html';
+        this.page.identifier = '/tips/2017/08/11/django-tip-21-redirects-app';
+      };
+      (function() {
+      var d = document, s = d.createElement('script');
+      s.src = 'http://simpleisbetterthancomplex.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <script id="dsq-count-scr" src="http://simpleisbetterthancomplex.disqus.com/count.js" async></script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+          </div>
+          <div class="card subscribe">
+  <form action="https://colossus.simpleisbetterthancomplex.com/subscribe/d2320a41-0378-4aa8-8f4e-5bb1ffcd521d/" method="post" target="_blank" novalidate>
+    <h4>
+      <span class="fa fa-send" style="margin-right: 5px"></span> Subscribe to our Mailing List
+    </h4>
+    <h5>Receive updates from the Blog!</h5>
+    <div class="row">
+      <div class="eight columns">
+        <input class="u-full-width" placeholder="Your email address" type="email" name="email">
+      </div>
+      <div class="four columns">
+        <button type="submit" class="u-full-width">Subscribe</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+          <div class="card popular-posts">
+  <h4>Popular Posts</h4>
+  <div class="row">
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/07/22/how-to-extend-django-user-model.html">
+          <img src="../../../../media/2016-07-22-how-to-extend-django-user-model/featured-post-image.jpg" alt="How to Extend Django User Model" title="How to Extend Django User Model">
+          How to Extend Django User Model
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/05/11/how-to-setup-ssl-certificate-on-nginx-for-django-application.html">
+          <img src="../../../../media/2016-05-11-how-to-setup-ssl-certificate-on-nginx-for-django-application/featured-post-image.jpg" alt="How to Setup a SSL Certificate on Nginx for a Django Application" title="How to Setup a SSL Certificate on Nginx for a Django Application">
+          How to Setup a SSL Certificate on Nginx for a Django Application
+        </a>
+      </div>
+    
+      <div class="four columns">
+        <a href="../../../../tutorial/2016/10/14/how-to-deploy-to-digital-ocean.html">
+          <img src="../../../../media/2016/10/featured-do.jpg" alt="How to Deploy a Django Application to Digital Ocean" title="How to Deploy a Django Application to Digital Ocean">
+          How to Deploy a Django Application to Digital Ocean
+        </a>
+      </div>
+    
+  </div>
+</div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+  <div class="container">
+    <ul>
+      <li>© 2015-2021 simple complex</li>
+      <li><a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/3.0/" target="_blank">cc by-nc-sa 3.0</a></li>
+      <li>//</li>
+      <li><a href="../../../../about/index.html" rel="author">about</a></li>
+      <li><a href="../../../../contact/index.html">contact</a></li>
+      <li><a href="../../../../faq/index.html">faq</a></li>
+      <li><a href="../../../../cookies/index.html">cookies</a></li>
+      <li><a href="../../../../privacy/index.html">privacy policy</a></li>
+    </ul>
+  </div>
+</footer>
+<div class="overlay"></div>
+
+  
+  <script id="ga-page-views" src="../../../../js/page-views.js" async></script>
+  <script src="http://z-na.amazon-adsystem.com/widgets/onejs?MarketPlace=US&amp;adInstanceId=1d8c6a0f-2136-49ad-b0b3-0b09662b7e28"></script>
+
+
+<style>
+.related-posts .row {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.related-posts .four.columns {
+  width: 100%;
+}
+</style>
+
+<script>
+_bsa.init('recommended', 'CK7I4KJJ', 'placement:simpleisbetterthancomplexcom',
+    {
+      target: '.related-posts .columns',
+      template: `
+<div class="four columns">
+<a href="##link##" rel="noopener nofollow">
+<img src="##smallImage##" alt="##title##" title="##title##">[Sponsored] ##title##</a>
+</div>
+      `
+    }
+  );
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BlogPosting",
+  "mainEntityOfPage": "https://simpleisbetterthancomplex.com/tips/2017/08/11/django-tip-21-redirects-app.html",
+  "headline": "Django Tips #21 Using The Redirects App",
+  "image": {
+    "@type": "ImageObject",
+    "url": "https://simpleisbetterthancomplex.com/media/2017/08/featured-tip21.jpg",
+    "height": 370,
+    "width": 960
+  },
+  "datePublished": "2017-08-11T19:10:00+03:00",
+  "dateModified": "2017-08-11T19:10:00+03:00",
+  "author": {
+    "@type": "Person",
+    "name": "Vitor Freitas"
+  },
+   "publisher": {
+    "@type": "Organization",
+    "name": "Simple is Better Than Complex",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://simpleisbetterthancomplex.com/img/gplus_logo.png",
+      "height": 60,
+      "width": 600
+    }
+  },
+  "description": "Django comes with a few optional apps that can easily be installed. One of those apps is the Redirects App, which isparticularly useful in the cases where you want to update some existing URLs with..."
+}
+</script>
+
+</body>
+
+<!-- Mirrored from simpleisbetterthancomplex.com/tips/2017/08/11/django-tip-21-redirects-app.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 03 Sep 2021 12:43:45 GMT -->
+</html>
